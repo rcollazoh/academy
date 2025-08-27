@@ -1,0 +1,24 @@
+package cu.academy.person.mapper;
+
+import cu.academy.person.PersonEntity;
+import cu.academy.person.dto.PersonInsertDto;
+import cu.academy.person.dto.PersonProfileDto;
+import cu.academy.person.dto.PersonRegisterDTO;
+import cu.academy.person.dto.PersonUpdateDto;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+
+@Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+public interface PersonMapper {
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "dateCreation", ignore = true)
+    @Mapping(target = "dateModify", ignore = true)
+    @Mapping(target = "accountOperations", ignore = true)
+    PersonEntity toEntity(PersonInsertDto dto);
+    PersonEntity toEntity(PersonRegisterDTO dto);
+    PersonProfileDto toProfileDto(PersonEntity person);
+    void updateEntity(PersonUpdateDto dto, @MappingTarget PersonEntity entity);
+}

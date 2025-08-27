@@ -1,0 +1,8 @@
+server:
+  port: 7000
+
+application:
+  translation:
+    properties:
+      baseName: texts
+      defaultLocale: es
