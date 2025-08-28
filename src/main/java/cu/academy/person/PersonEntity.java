@@ -1,6 +1,8 @@
 package cu.academy.person;
 
 import cu.academy.accounto_operation.AccountOperationEntity;
+import cu.academy.nom.area.NomAreaEntity;
+import cu.academy.nom.practice.NomPracticeEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
@@ -75,25 +77,25 @@ public class PersonEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "area_id")
-    private NomArea area;
+    private NomAreaEntity area;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "practice_id")
-    private NomPractice practice;
+    private NomPracticeEntity practice;
 
-    public NomPractice getPractice() {
+    public NomPracticeEntity getPractice() {
         return practice;
     }
 
-    public void setPractice(NomPractice practice) {
+    public void setPractice(NomPracticeEntity practice) {
         this.practice = practice;
     }
 
-    public NomArea getArea() {
+    public NomAreaEntity getArea() {
         return area;
     }
 
-    public void setArea(NomArea area) {
+    public void setArea(NomAreaEntity area) {
         this.area = area;
     }
 

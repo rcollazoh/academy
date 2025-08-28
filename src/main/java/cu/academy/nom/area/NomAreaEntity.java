@@ -1,4 +1,4 @@
-package cu.academy.person;
+package cu.academy.nom.area;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -8,8 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 import java.time.Instant;
 
 @Entity
-@Table(name = "nom_practice")
-public class NomPractice {
+@Table(name = "nom_area")
+public class NomAreaEntity {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -23,11 +23,25 @@ public class NomPractice {
     @Column(name = "description")
     private String description;
 
+
     @Column(name = "created_at")
     private Instant createdAt;
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @NotNull
+    @ColumnDefault("1")
+    @Column(name = "active", nullable = false)
+    private Boolean active = false;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 
     public Integer getId() {
         return id;

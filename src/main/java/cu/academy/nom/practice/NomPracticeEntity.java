@@ -1,5 +1,6 @@
-package cu.academy.person;
+package cu.academy.nom.practice;
 
+import cu.academy.nom.area.NomAreaEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -8,8 +9,8 @@ import org.hibernate.annotations.ColumnDefault;
 import java.time.Instant;
 
 @Entity
-@Table(name = "nom_area")
-public class NomArea {
+@Table(name = "nom_practice")
+public class NomPracticeEntity {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -23,12 +24,36 @@ public class NomArea {
     @Column(name = "description")
     private String description;
 
-
     @Column(name = "created_at")
     private Instant createdAt;
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "area_id")
+    private NomAreaEntity area;
+
+    @NotNull
+    @ColumnDefault("1")
+    @Column(name = "active", nullable = false)
+    private Boolean active = false;
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public NomAreaEntity getArea() {
+        return area;
+    }
+
+    public void setArea(NomAreaEntity area) {
+        this.area = area;
+    }
 
     public Integer getId() {
         return id;
