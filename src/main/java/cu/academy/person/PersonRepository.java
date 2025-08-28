@@ -9,6 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface PersonRepository extends JpaSpecificationExecutor<PersonEntity>, JpaRepository<PersonEntity, Long> {
-    @Query("SELECT c FROM PersonEntity c WHERE c.phone= ?1")
-    Optional<PersonEntity> findByPhone(String phon);
+    Optional<PersonEntity> findByEmail(String email);
 }

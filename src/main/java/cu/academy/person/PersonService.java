@@ -1,13 +1,11 @@
 package cu.academy.person;
 
-import cu.academy.person.dto.PersonUpdateDto;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumTipoPersona;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +49,7 @@ public class PersonService {
 
     @Transactional
     public PersonEntity insertPerson(PersonEntity entity) {
-        checkCelularNotExist(entity);
+        checkEmailNotExist(entity);
 
         if (entity.getPassword() != null)
             entity.setPassword( passwordEncoder.encode(entity.getPassword()));
@@ -74,8 +72,8 @@ public class PersonService {
                 throw new ArgumentException(Translator.toLocale(TranslatorCode.INVALID_PERSON_TYPE));
     }
 
-    private void checkCelularNotExist(PersonEntity personaEntity) throws ArgumentException {
-        Optional<PersonEntity> persona = personRepository.findByPhone(personaEntity.getPhone());
+    private void checkEmailNotExist(PersonEntity personaEntity) throws ArgumentException {
+        Optional<PersonEntity> persona = personRepository.findByEmail(personaEntity.getEmail());
         if (persona.isPresent()) {
             throw new ArgumentException(Translator.toLocale(TranslatorCode.PERSON_EXISTE_NUM_CEL));
         }

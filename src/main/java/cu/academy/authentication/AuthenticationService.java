@@ -65,7 +65,7 @@ public class AuthenticationService {
             verifyIfConditionTrueThrowArgumentException(tipoPersona == null || username == null || password == null,
                     TranslatorCode.TIPO_PERSON_REQUERIDO);
 
-            PersonEntity user = personRepository.findByPhone(username)
+            PersonEntity user = personRepository.findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException(Translator.toLocale(TranslatorCode.NO_CLIENTE)));
 
             if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -116,7 +116,7 @@ public class AuthenticationService {
                     String origin = decodedJWT.getClaims().get("origin").asString();
                     String role = decodedJWT.getClaims().get("role").asString();
 
-                    PersonEntity person = personRepository.findByPhone(username)
+                    PersonEntity person = personRepository.findByEmail(username)
                             .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_CLIENTE)));
 
 //                    refreshAndSetNewAccessAndRefreshTokens(request, response, algorithm, person.getPhone(),
