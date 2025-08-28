@@ -60,10 +60,10 @@ public class AuthenticationService {
     public UserResponseDto login(String username, String password,
                                  LoginDetails loginDetails) throws ArgumentException {
         try {
-            EnumTipoPersona tipoPersona = loginDetails.getPersonType();
+//            EnumTipoPersona tipoPersona = loginDetails.getPersonType();
 
-            verifyIfConditionTrueThrowArgumentException(tipoPersona == null || username == null || password == null,
-                    TranslatorCode.TIPO_PERSON_REQUERIDO);
+//            verifyIfConditionTrueThrowArgumentException(tipoPersona == null || username == null || password == null,
+//                    TranslatorCode.TIPO_PERSON_REQUERIDO);
 
             PersonEntity user = personRepository.findByEmail(username)
                     .orElseThrow(() -> new UsernameNotFoundException(Translator.toLocale(TranslatorCode.NO_CLIENTE)));
@@ -75,8 +75,8 @@ public class AuthenticationService {
             if (user.getPassword() == null)
                 throw new BadCredentialsException(Translator.toLocale(TranslatorCode.NO_PASSWORD));
 
-            // Verifica que el usuario sea del tipo de persona especificado
-            personaService.validatePersonTypeForPerson(user, tipoPersona);
+//            // Verifica que el usuario sea del tipo de persona especificado
+//            personaService.validatePersonTypeForPerson(user, tipoPersona);
 
             Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
 // crear traza

@@ -18,7 +18,6 @@ public interface PersonMapper {
     @Mapping(target = "dateModify", ignore = true)
     @Mapping(target = "accountOperations", ignore = true)
     PersonEntity toEntity(PersonInsertDto dto);
-    @Mapping(target = "isUser", source = "isUser")
     PersonEntity toEntity(PersonRegisterDTO dto);
     PersonProfileDto toProfileDto(PersonEntity person);
     @Mapping(target = "idNumber", source = "idNumber")

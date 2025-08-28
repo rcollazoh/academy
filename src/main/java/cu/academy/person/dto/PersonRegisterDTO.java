@@ -6,7 +6,6 @@ public record PersonRegisterDTO (
      String lastName,
      String email,
      String phone,
-    Boolean isUser,
     String id_number,
     Integer areaId,
     Integer practiceId,
