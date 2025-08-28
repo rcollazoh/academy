@@ -15,5 +15,7 @@ public record PersonUpdateDto(
         String photo,
         String aboutMe,
         Boolean isUser,
-        Boolean isClient
+        Boolean isClient,
+        String idNumber,
+        String password
 ) {}

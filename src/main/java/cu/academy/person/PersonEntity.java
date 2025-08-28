@@ -35,10 +35,10 @@ public class PersonEntity {
 
     @Basic
     @Column(name = "is_user", nullable = false)
-    protected Boolean IsUser = false;
+    private Boolean isUser = false;
     @Basic
     @Column(name = "is_client", nullable = false)
-    protected Boolean IsClient = false;
+    private Boolean isClient = false;
     @Lob
     @Column(name = "gender")
     private String gender;
@@ -218,27 +218,38 @@ public class PersonEntity {
         this.password = password;
     }
 
-    public Boolean getUser() {
-        return IsUser;
-    }
-
-    public void setUser(Boolean user) {
-        IsUser = user;
-    }
-
-    public Boolean getClient() {
-        return IsClient;
-    }
-
-    public void setClient(Boolean client) {
-        IsClient = client;
-    }
-
     public String getLastName() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public Boolean getIsUser() {
+        return isUser;
+    }
+
+    public void setIsUser(Boolean user) {
+        isUser = user;
+    }
+
+    public Boolean getIsClient() {
+        return isClient;
+    }
+
+    public void setIsClient(Boolean client) {
+        isClient = client;
+    }
+
+    @PrePersist
+    protected void preInsert() {
+        if (isClient == null) {
+            isClient = false;
+        }
+        if (isUser == null) {
+            isUser = false;
+        }
+
     }
 }

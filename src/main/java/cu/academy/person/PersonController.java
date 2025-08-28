@@ -6,7 +6,9 @@ import cu.academy.person.dto.PersonProfileDto;
 import cu.academy.person.dto.PersonRegisterDTO;
 import cu.academy.person.dto.PersonUpdateDto;
 import cu.academy.person.mapper.PersonMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +20,8 @@ public class PersonController {
 
     private final PersonService service;
     private final PersonMapper mapper;
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     public PersonController(PersonService service, PersonMapper mapper) {
         this.service = service;
@@ -56,6 +60,10 @@ public class PersonController {
             return ResponseEntity.notFound().build();
         }
         mapper.updateEntity(dto,entity);
-        return ResponseEntity.ok(mapper.toProfileDto(service.insertPerson(entity)));
+
+        if (dto.password() != null)
+            entity.setPassword( passwordEncoder.encode(dto.password()));
+
+        return ResponseEntity.ok(mapper.toProfileDto(service.updatePerson(id,entity)));
     }
 }
