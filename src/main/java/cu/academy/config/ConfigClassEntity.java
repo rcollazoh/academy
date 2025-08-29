@@ -1,5 +1,6 @@
 package cu.academy.config;
 
+import cu.academy.config.module.ConfigModuleEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

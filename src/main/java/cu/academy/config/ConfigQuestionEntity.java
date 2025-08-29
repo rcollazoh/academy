@@ -1,5 +1,6 @@
 package cu.academy.config;
 
+import cu.academy.config.module.ConfigModuleEntity;
 import cu.academy.nom.area.NomAreaEntity;
 import cu.academy.nom.practice.NomPracticeEntity;
 import jakarta.persistence.*;

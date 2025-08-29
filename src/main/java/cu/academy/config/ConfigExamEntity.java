@@ -1,5 +1,6 @@
 package cu.academy.config;
 
+import cu.academy.config.module.ConfigModuleEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 

@@ -1,6 +1,6 @@
 package cu.academy.student;
 
-import cu.academy.config.ConfigCourseEntity;
+import cu.academy.config.course.ConfigCourseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;

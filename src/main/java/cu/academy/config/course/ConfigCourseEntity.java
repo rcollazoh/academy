@@ -1,4 +1,4 @@
-package cu.academy.config;
+package cu.academy.config.course;
 
 import cu.academy.nom.area.NomAreaEntity;
 import cu.academy.nom.practice.NomPracticeEntity;
