@@ -46,7 +46,7 @@ public class SpringSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/academy/persons/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**","/academy/person/**", "/academy/area/**","/academy/practice/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterAfter(new SimpleCORSFilter(), CsrfFilter.class)
