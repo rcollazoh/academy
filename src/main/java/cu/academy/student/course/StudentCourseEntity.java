@@ -1,6 +1,7 @@
-package cu.academy.student;
+package cu.academy.student.course;
 
 import cu.academy.config.course.ConfigCourseEntity;
+import cu.academy.shared.enum_types.CourseStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
@@ -18,7 +19,7 @@ public class StudentCourseEntity {
 
     @NotNull
     @Column(name = "person_id", nullable = false)
-    private Integer personId;
+    private Long personId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
@@ -30,9 +31,9 @@ public class StudentCourseEntity {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private CourseStatus status;
 
     @ColumnDefault("0")
     @Column(name = "requires_invoice")
@@ -62,11 +63,11 @@ public class StudentCourseEntity {
         this.id = id;
     }
 
-    public Integer getPersonId() {
+    public Long getPersonId() {
         return personId;
     }
 
-    public void setPersonId(Integer personId) {
+    public void setPersonId(Long personId) {
         this.personId = personId;
     }
 
@@ -94,11 +95,11 @@ public class StudentCourseEntity {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
+    public CourseStatus  getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(CourseStatus status) {
         this.status = status;
     }
 
