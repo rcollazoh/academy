@@ -12,6 +12,9 @@ public class TranslatorCode {
     public static final String X_NO_EXISTE = "X_NO_EXISTE";
     public static final String INPUT_ERROR = "INPUT_ERROR";
 
+    public static final String NO_PARAMETER_X = "NO_PARAMETER_NAME_X";
+    public static final String NO_ARGUMENT = "NO_ARGUMENT"; // Parameter name must not be empty
+
     //Textos de LoginRequest
     public static final String NO_CONTRASENNA = "NO_CONTRASENNA";
     public static final String NO_NOMBRE_DE_USUARIO = "NO_NOMBRE_DE_USUARIO";

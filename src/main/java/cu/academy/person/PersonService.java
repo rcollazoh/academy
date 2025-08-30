@@ -1,5 +1,6 @@
 package cu.academy.person;
 
+import cu.academy.email.EmailService;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumTipoPersona;
 import cu.academy.shared.exceptions.ArgumentException;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class PersonService {
     private final PersonRepository repository;
     private final PersonRepository personRepository;
+    private final EmailService  emailService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 //    private final ModelMapper modelMapper;
@@ -24,9 +26,10 @@ public class PersonService {
 //    }.getType();
 
     @Autowired
-    public PersonService(PersonRepository repository, PersonRepository personRepository) {
+    public PersonService(PersonRepository repository, PersonRepository personRepository, EmailService emailService) {
         this.repository = repository;
         this.personRepository = personRepository;
+        this.emailService = emailService;
     }
 
     public PersonEntity getById(Long id) throws ArgumentException {
@@ -54,6 +57,7 @@ public class PersonService {
         if (entity.getPassword() != null)
             entity.setPassword( passwordEncoder.encode(entity.getPassword()));
 
+        emailService.sendMessage(entity.getEmail(), "Prod Acedemy", "We are testing new functionality", null);
         return repository.save(entity);
     }
 
