@@ -1,7 +1,6 @@
 package cu.academy.person;
 
 
-import cu.academy.person.dto.PersonInsertDto;
 import cu.academy.person.dto.PersonProfileDto;
 import cu.academy.person.dto.PersonRegisterDTO;
 import cu.academy.person.dto.PersonUpdateDto;
@@ -42,14 +41,15 @@ public class PersonController {
         return person != null ? ResponseEntity.ok(mapper.toProfileDto(person)) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public PersonProfileDto create(@RequestBody PersonInsertDto dto) {
-        PersonEntity saved = service.insertPerson(mapper.toEntity(dto));
-        return mapper.toProfileDto(saved);
-    }
+//    @PostMapping
+//    public PersonProfileDto create(@RequestBody PersonInsertDto dto) {
+//        PersonEntity saved = service.insertPerson(dto);
+//        return mapper.toProfileDto(saved);
+//    }
+
     @PostMapping(path = "register")
     public PersonProfileDto register(@RequestBody PersonRegisterDTO dto) {
-        PersonEntity saved = service.insertPerson(mapper.toEntity(dto));
+        PersonEntity saved = service.registerPerson(dto);
         return mapper.toProfileDto(saved);
     }
 

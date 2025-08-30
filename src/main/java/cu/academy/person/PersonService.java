@@ -1,6 +1,12 @@
 package cu.academy.person;
 
 import cu.academy.email.EmailService;
+import cu.academy.nom.area.NomAreaEntity;
+import cu.academy.nom.area.NomAreaRepository;
+import cu.academy.nom.practice.NomPracticeEntity;
+import cu.academy.nom.practice.NomPracticeRepository;
+import cu.academy.person.dto.PersonRegisterDTO;
+import cu.academy.person.mapper.PersonMapper;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumTipoPersona;
 import cu.academy.shared.exceptions.ArgumentException;
@@ -17,8 +23,11 @@ import java.util.Optional;
 @Service
 public class PersonService {
     private final PersonRepository repository;
-    private final PersonRepository personRepository;
+    private final NomAreaRepository nomAreaRepository;
+    private final NomPracticeRepository nomPracticeRepository;
+
     private final EmailService  emailService;
+    private final PersonMapper mapper;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 //    private final ModelMapper modelMapper;
@@ -26,10 +35,12 @@ public class PersonService {
 //    }.getType();
 
     @Autowired
-    public PersonService(PersonRepository repository, PersonRepository personRepository, EmailService emailService) {
+    public PersonService(PersonRepository repository, EmailService emailService, NomAreaRepository nomAreaRepository, NomPracticeRepository nomPracticeRepository, PersonMapper mapper) {
         this.repository = repository;
-        this.personRepository = personRepository;
         this.emailService = emailService;
+        this.nomAreaRepository = nomAreaRepository;
+        this.nomPracticeRepository = nomPracticeRepository;
+        this.mapper = mapper;
     }
 
     public PersonEntity getById(Long id) throws ArgumentException {
@@ -51,13 +62,24 @@ public class PersonService {
     }
 
     @Transactional
-    public PersonEntity insertPerson(PersonEntity entity) {
-        checkEmailNotExist(entity);
+    public PersonEntity registerPerson(PersonRegisterDTO dto) {
 
+        checkEmailNotExist(dto.email());
+
+        PersonEntity entity = mapper.toEntity(dto);
+
+        NomAreaEntity area = nomAreaRepository.findById(dto.areaId())
+                .orElseThrow(() -> new ArgumentException("Area not found"));
+
+        NomPracticeEntity practice = nomPracticeRepository.findById(dto.practiceId())
+                .orElseThrow(() -> new ArgumentException("Practice not found"));
+
+        entity.setArea(area);
+        entity.setPractice(practice);
         if (entity.getPassword() != null)
             entity.setPassword( passwordEncoder.encode(entity.getPassword()));
 
-        emailService.sendMessage(entity.getEmail(), "Prod Acedemy", "We are testing new functionality", null);
+      //  emailService.sendMessage(entity.getEmail(), "Prod Acedemy", "We are testing new functionality", null);
         return repository.save(entity);
     }
 
@@ -76,8 +98,8 @@ public class PersonService {
                 throw new ArgumentException(Translator.toLocale(TranslatorCode.INVALID_PERSON_TYPE));
     }
 
-    private void checkEmailNotExist(PersonEntity personaEntity) throws ArgumentException {
-        Optional<PersonEntity> persona = personRepository.findByEmail(personaEntity.getEmail());
+    private void checkEmailNotExist(String email) throws ArgumentException {
+        Optional<PersonEntity> persona = repository.findByEmail(email);
         if (persona.isPresent()) {
             throw new ArgumentException(Translator.toLocale(TranslatorCode.PERSON_EXISTE_NUM_CEL));
         }
