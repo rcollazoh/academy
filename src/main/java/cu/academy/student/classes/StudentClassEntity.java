@@ -1,9 +1,12 @@
-package cu.academy.student;
+package cu.academy.student.classes;
 
 import cu.academy.config.ConfigClassEntity;
-import cu.academy.student.course.StudentCourseEntity;
+import cu.academy.student.module.StudentModuleEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.Instant;
 
@@ -13,11 +16,7 @@ public class StudentClassEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "student_course_id")
-    private StudentCourseEntity studentCourse;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id")
@@ -35,20 +34,26 @@ public class StudentClassEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public Integer getId() {
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "student_cmodule_id", nullable = false)
+    private StudentModuleEntity studentCmodule;
+
+    public StudentModuleEntity getStudentCmodule() {
+        return studentCmodule;
+    }
+
+    public void setStudentCmodule(StudentModuleEntity studentCmodule) {
+        this.studentCmodule = studentCmodule;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public StudentCourseEntity getStudentCourse() {
-        return studentCourse;
-    }
-
-    public void setStudentCourse(StudentCourseEntity studentCourse) {
-        this.studentCourse = studentCourse;
     }
 
     public ConfigClassEntity getClassField() {

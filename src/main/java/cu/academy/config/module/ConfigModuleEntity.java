@@ -14,7 +14,7 @@ public class ConfigModuleEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Size(max = 150)
     @NotNull
@@ -44,11 +44,11 @@ public class ConfigModuleEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

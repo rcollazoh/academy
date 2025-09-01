@@ -1,7 +1,9 @@
-package cu.academy.config;
+package cu.academy.config.exam;
 
 import cu.academy.config.module.ConfigModuleEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
@@ -12,7 +14,7 @@ public class ConfigExamEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "module_id")
@@ -26,11 +28,36 @@ public class ConfigExamEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public Integer getId() {
+    @Size(max = 255)
+    @NotNull
+    @Column(name = "title", nullable = false)
+    private String title;
+
+    @Size(max = 255)
+    @Column(name = "recourse_url")
+    private String recourseUrl;
+
+    public String getRecourseUrl() {
+        return recourseUrl;
+    }
+
+    public void setRecourseUrl(String recourseUrl) {
+        this.recourseUrl = recourseUrl;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

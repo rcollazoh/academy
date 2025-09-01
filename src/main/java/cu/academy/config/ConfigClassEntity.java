@@ -45,6 +45,18 @@ public class ConfigClassEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @NotNull
+    @Column(name = "order_num", nullable = false)
+    private Integer orderNum;
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
     public Integer getId() {
         return id;
     }
