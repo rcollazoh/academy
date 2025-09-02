@@ -3,10 +3,8 @@ package cu.academy.student.course;
 import cu.academy.student.course.dto.StudentCourseDto;
 import cu.academy.student.course.mapper.StudentCourseMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +28,7 @@ public class StudentCourseController {
                 .map(mapper::toDto)
                 .collect(Collectors.toList());
     }
+
     @GetMapping("/by-person/{personId}")
     public List<StudentCourseDto> getAllStudentCourseByPerson(@PathVariable Long personId) {
         return service.getFindByPersonId(personId)
@@ -49,7 +48,16 @@ public class StudentCourseController {
             @PathVariable Long personId,
             @PathVariable Long areaId,
             @PathVariable Long practiceId) {
-        StudentCourseEntity courseResponse = service.getStudentCourseByAreaAndPractice(personId,areaId, practiceId);
+        StudentCourseEntity courseResponse = service.getStudentCourseByAreaAndPractice(personId, areaId, practiceId);
         return courseResponse != null ? ResponseEntity.ok(mapper.toDto(courseResponse)) : ResponseEntity.notFound().build();
+    }
+
+    @PostMapping("apply, consumes = multipart/form-data")
+    public ResponseEntity<StudentCourseDto> applyStudentCourse(@RequestParam("personId") Long personId,
+                                                               @RequestParam("courseId") Long courseId,
+                                                               @RequestParam("paymentMethod") Long paymentMethod,
+                                                               @RequestParam(value = "payment") MultipartFile paymentPhoto) {
+service.applyStudentCourse( personId, courseId, paymentMethod, paymentPhoto);
+        return null;
     }
 }

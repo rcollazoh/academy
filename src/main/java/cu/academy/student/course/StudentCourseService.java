@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -91,4 +92,13 @@ public class StudentCourseService {
         }
         return repository.save(entity);
     }
+
+   private void applyStudentCourse(Long personId, Long courseId, Long paymentMethod, MultipartFile paymentPhoto){
+       StudentCourseEntity entity = new StudentCourseEntity();
+       entity.setPersonId(personId);
+       entity.setCourse(configCourseService.getById(courseId));
+       entity.setStatus(CourseStatus.PENDING);
+       entity.setStartDate(LocalDate.now());
+       entity.setPaymentMethod(paymentMethod);
+   }
 }
