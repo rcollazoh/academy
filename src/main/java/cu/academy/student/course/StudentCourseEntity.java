@@ -2,6 +2,7 @@ package cu.academy.student.course;
 
 import cu.academy.config.course.ConfigCourseEntity;
 import cu.academy.shared.enum_types.CourseStatus;
+import cu.academy.shared.enum_types.EnumPaymentMethod;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;
@@ -43,9 +44,9 @@ public class StudentCourseEntity {
     @Column(name = "receipt_url")
     private String receiptUrl;
 
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "payment_method")
-    private String paymentMethod;
+    private EnumPaymentMethod paymentMethod;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
@@ -119,11 +120,11 @@ public class StudentCourseEntity {
         this.receiptUrl = receiptUrl;
     }
 
-    public String getPaymentMethod() {
+    public EnumPaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(EnumPaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 

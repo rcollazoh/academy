@@ -4,6 +4,7 @@ import cu.academy.config.course.ConfigCourseEntity;
 import cu.academy.config.course.ConfigCourseService;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.CourseStatus;
+import cu.academy.shared.enum_types.EnumPaymentMethod;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,12 +94,15 @@ public class StudentCourseService {
         return repository.save(entity);
     }
 
-   private void applyStudentCourse(Long personId, Long courseId, Long paymentMethod, MultipartFile paymentPhoto){
+   private void applyStudentCourse(Long personId, Long courseId, EnumPaymentMethod paymentMethod, MultipartFile paymentPhoto){
        StudentCourseEntity entity = new StudentCourseEntity();
        entity.setPersonId(personId);
        entity.setCourse(configCourseService.getById(courseId));
        entity.setStatus(CourseStatus.PENDING);
        entity.setStartDate(LocalDate.now());
        entity.setPaymentMethod(paymentMethod);
+
+       insertFotoTransferencia(depositoInserted, fotoTransferencia);
+
    }
 }

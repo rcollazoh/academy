@@ -1,5 +1,6 @@
 package cu.academy.student.course;
 
+import cu.academy.shared.enum_types.EnumPaymentMethod;
 import cu.academy.student.course.dto.StudentCourseDto;
 import cu.academy.student.course.mapper.StudentCourseMapper;
 import org.springframework.http.ResponseEntity;
@@ -55,7 +56,7 @@ public class StudentCourseController {
     @PostMapping("apply, consumes = multipart/form-data")
     public ResponseEntity<StudentCourseDto> applyStudentCourse(@RequestParam("personId") Long personId,
                                                                @RequestParam("courseId") Long courseId,
-                                                               @RequestParam("paymentMethod") Long paymentMethod,
+                                                               @RequestParam("paymentMethod") EnumPaymentMethod paymentMethod,
                                                                @RequestParam(value = "payment") MultipartFile paymentPhoto) {
 service.applyStudentCourse( personId, courseId, paymentMethod, paymentPhoto);
         return null;
