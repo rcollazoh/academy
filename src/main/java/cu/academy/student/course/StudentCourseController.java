@@ -3,6 +3,7 @@ package cu.academy.student.course;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import cu.academy.student.course.dto.StudentCourseDto;
 import cu.academy.student.course.mapper.StudentCourseMapper;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ public class StudentCourseController {
 
     private final StudentCourseService service;
     private final StudentCourseMapper mapper;
+
 
     public StudentCourseController(StudentCourseService service, StudentCourseMapper mapper) {
         this.service = service;
@@ -53,12 +55,19 @@ public class StudentCourseController {
         return courseResponse != null ? ResponseEntity.ok(mapper.toDto(courseResponse)) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("apply, consumes = multipart/form-data")
+    @PostMapping(value = "/apply", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<StudentCourseDto> applyStudentCourse(@RequestParam("personId") Long personId,
                                                                @RequestParam("courseId") Long courseId,
                                                                @RequestParam("paymentMethod") EnumPaymentMethod paymentMethod,
                                                                @RequestParam(value = "payment") MultipartFile paymentPhoto) {
-service.applyStudentCourse( personId, courseId, paymentMethod, paymentPhoto);
+        service.applyStudentCourse(personId, courseId, paymentMethod, paymentPhoto);
+        return null;
+    }
+
+    @PostMapping(value = "/active")
+    public ResponseEntity<StudentCourseDto> activeStudentCourse(@RequestParam("personId") Long personId,
+                                                               @RequestParam("courseId") Long courseId) {
+        service.activeStudentCourse(personId, courseId);
         return null;
     }
 }

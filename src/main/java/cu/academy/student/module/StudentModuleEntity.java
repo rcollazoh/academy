@@ -1,6 +1,7 @@
 package cu.academy.student.module;
 
 import cu.academy.config.module.ConfigModuleEntity;
+import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.student.course.StudentCourseEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -24,9 +25,9 @@ public class StudentModuleEntity {
     @JoinColumn(name = "module_id")
     private ConfigModuleEntity module;
 
-    @Lob
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private String status;
+    private EnumModuleStatus status;
 
     @Column(name = "fecha_exam")
     private LocalDate fechaExam;
@@ -42,6 +43,20 @@ public class StudentModuleEntity {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+
+    @PrePersist
+    protected void onCreate() {
+        Instant now = Instant.now();
+        createdAt = now;
+        updatedAt = now;
+        status =  EnumModuleStatus.NEW;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Instant.now();
+    }
 
     public Long getId() {
         return id;
@@ -67,11 +82,11 @@ public class StudentModuleEntity {
         this.module = module;
     }
 
-    public String getStatus() {
+    public EnumModuleStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EnumModuleStatus status) {
         this.status = status;
     }
 

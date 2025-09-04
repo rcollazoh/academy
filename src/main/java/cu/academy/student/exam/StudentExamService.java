@@ -1,45 +1,44 @@
-package cu.academy.student.classes;
+package cu.academy.student.exam;
 
-import cu.academy.config.classes.ConfigClassEntity;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
+import cu.academy.student.classes.StudentClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
 @Service
-public class StudentClassService {
-    private final StudentClassRepository repository;
+public class StudentExamService {
+    private final StudentExamRepository repository;
+    private final StudentExamRepository examRepository;
+    private final StudentClassService studentClassService;
 
 //    private final ModelMapper modelMapper;
 //    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
 //    }.getType();
 
     @Autowired
-    public StudentClassService(StudentClassRepository repository) {
+    public StudentExamService(StudentExamRepository repository, StudentExamRepository examRepository, StudentClassService studentClassService) {
         this.repository = repository;
+        this.examRepository = examRepository;
+        this.studentClassService = studentClassService;
     }
 
     @Transactional
-    public StudentClassEntity insert(StudentClassEntity entity) {
+    public StudentExamEntity insert(StudentExamEntity entity) {
         return repository.save(entity);
     }
 
 
-    public StudentClassEntity getById(Long id) throws ArgumentException {
+    public StudentExamEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
                 .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
     }
 
-    public List<StudentClassEntity> getAllSort() {
+    public List<StudentExamEntity> getAllSort() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
-    }
-
-    public List<StudentClassEntity> getAllByModuleId(long classId) {
-        return repository.findByModuleId(classId);
     }
 }

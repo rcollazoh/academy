@@ -1,8 +1,6 @@
 package cu.academy.student.module;
 
-import cu.academy.config.exam.ConfigExamEntity;
 import cu.academy.config.course.ConfigCourseService;
-import cu.academy.config.exam.ConfigExamRepository;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
@@ -16,6 +14,7 @@ import cu.academy.student.module.dto.StudentModuleDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +39,12 @@ public class StudentModuleService {
         this.configCourseService = configCourseService;
     }
 
+    @Transactional
+    public StudentModuleEntity insert(StudentModuleEntity entity) {
+        return repository.save(entity);
+    }
+
+
     public StudentModuleEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
                 .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
@@ -60,8 +65,8 @@ public class StudentModuleService {
             List<StudentClassDto> classDtos = new ArrayList<>();
             for (StudentClassEntity classEntity : classes) {
                 classDtos.add(new StudentClassDto(classEntity.getId(),
-                        classEntity.getViewed(), classEntity.getClassField().getId(),
-                        classEntity.getClassField().getTitle(), classEntity.getClassField().getType(), classEntity.getClassField().getRecourseUrl()));
+                        classEntity.getViewed(), classEntity.getConfigClass().getId(),
+                        classEntity.getConfigClass().getTitle(), classEntity.getConfigClass().getType(), classEntity.getConfigClass().getRecourseUrl()));
             }
 
             StudentExamDto examDto = null;

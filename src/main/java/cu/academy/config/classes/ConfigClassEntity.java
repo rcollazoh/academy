@@ -1,4 +1,4 @@
-package cu.academy.config;
+package cu.academy.config.classes;
 
 import cu.academy.config.module.ConfigModuleEntity;
 import jakarta.persistence.*;

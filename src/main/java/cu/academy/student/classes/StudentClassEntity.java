@@ -1,6 +1,6 @@
 package cu.academy.student.classes;
 
-import cu.academy.config.ConfigClassEntity;
+import cu.academy.config.classes.ConfigClassEntity;
 import cu.academy.student.module.StudentModuleEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +20,7 @@ public class StudentClassEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "class_id")
-    private ConfigClassEntity classField;
+    private ConfigClassEntity configClass;
 
     @ColumnDefault("0")
     @Column(name = "viewed")
@@ -38,14 +38,27 @@ public class StudentClassEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "student_cmodule_id", nullable = false)
-    private StudentModuleEntity studentCmodule;
+    private StudentModuleEntity studentModule;
 
-    public StudentModuleEntity getStudentCmodule() {
-        return studentCmodule;
+    @PrePersist
+    protected void onCreate() {
+        Instant now = Instant.now();
+        createdAt = now;
+        updatedAt = now;
+        viewed =  false;
     }
 
-    public void setStudentCmodule(StudentModuleEntity studentCmodule) {
-        this.studentCmodule = studentCmodule;
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Instant.now();
+    }
+
+    public StudentModuleEntity getStudentModule() {
+        return studentModule;
+    }
+
+    public void setStudentModule(StudentModuleEntity studentCmodule) {
+        this.studentModule = studentCmodule;
     }
 
     public Long getId() {
@@ -56,12 +69,12 @@ public class StudentClassEntity {
         this.id = id;
     }
 
-    public ConfigClassEntity getClassField() {
-        return classField;
+    public ConfigClassEntity getConfigClass() {
+        return configClass;
     }
 
-    public void setClassField(ConfigClassEntity classField) {
-        this.classField = classField;
+    public void setConfigClass(ConfigClassEntity classField) {
+        this.configClass = classField;
     }
 
     public Boolean getViewed() {

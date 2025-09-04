@@ -1,6 +1,7 @@
 package cu.academy.student.exam;
 
 import cu.academy.config.exam.ConfigExamEntity;
+import cu.academy.shared.enum_types.EnumExamStatus;
 import cu.academy.student.module.StudentModuleEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -36,10 +37,10 @@ public class StudentExamEntity {
     @Column(name = "viewed", nullable = false)
     private Boolean viewed = false;
 
-    @Size(max = 20)
-    @ColumnDefault("'PENDING'")
-    @Column(name = "status", length = 20)
-    private String status;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private EnumExamStatus status;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")
@@ -48,6 +49,20 @@ public class StudentExamEntity {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @PrePersist
+    protected void onCreate() {
+        Instant now = Instant.now();
+        createdAt = now;
+        updatedAt = now;
+        viewed = false;
+        status = EnumExamStatus.NEW;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = Instant.now();
+    }
 
     public Long getId() {
         return id;
@@ -81,11 +96,11 @@ public class StudentExamEntity {
         this.viewed = viewed;
     }
 
-    public String getStatus() {
+    public EnumExamStatus getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(EnumExamStatus status) {
         this.status = status;
     }
 
