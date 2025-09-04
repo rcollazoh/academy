@@ -8,6 +8,8 @@ import cu.academy.config.exam.ConfigExamEntity;
 import cu.academy.config.exam.ConfigExamRepository;
 import cu.academy.config.module.ConfigModuleEntity;
 import cu.academy.config.module.ConfigModuleService;
+import cu.academy.config.parameter.ConfigParameterRepository;
+import cu.academy.config.parameter.ConfigParameterService;
 import cu.academy.email.EmailService;
 import cu.academy.person.PersonRepository;
 import cu.academy.shared.configs.text_messages.Translator;
@@ -44,6 +46,8 @@ public class StudentCourseService {
     private final ConfigClassService configClassService;
     private final EmailService emailService;
     private final ConfigExamRepository configExamRepository;
+    private final ConfigParameterService parameterService;
+
 
 
 //    private final ModelMapper modelMapper;
@@ -51,7 +55,7 @@ public class StudentCourseService {
 //    }.getType();
 
     @Autowired
-    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleService studentModuleService, StudentClassService studentClassService, StudentExamService studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository) {
+    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleService studentModuleService, StudentClassService studentClassService, StudentExamService studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService) {
         this.studentCourserepository = repository;
         this.personRepository = personRepository;
         this.configCourseService = configCourseService;
@@ -62,6 +66,7 @@ public class StudentCourseService {
         this.configClassService = configClassService;
         this.emailService = emailService;
         this.configExamRepository = configExamRepository;
+        this.parameterService = parameterService;
     }
 
     public StudentCourseEntity getById(Long id) throws ArgumentException {
@@ -144,6 +149,13 @@ public class StudentCourseService {
                 null
         );
 
+        // crear notificacion  y correo para Acedemy.
+        emailService.sendMessage(
+                parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
+                "Confirmación de aplicación a curso",
+                "Aplico un estudiante",
+                null
+        );
 //       insertFotoTransferencia(depositoInserted, fotoTransferencia);
 
     }
