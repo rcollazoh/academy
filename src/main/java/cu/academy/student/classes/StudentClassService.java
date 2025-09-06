@@ -2,6 +2,7 @@ package cu.academy.student.classes;
 
 import cu.academy.config.classes.ConfigClassEntity;
 import cu.academy.shared.configs.text_messages.Translator;
+import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,10 @@ public class StudentClassService {
         return repository.save(entity);
     }
 
+    @Transactional
+    public void updateViewed(Long id, boolean status) {
+        repository.updateViewedById(id, status);
+    }
 
     public StudentClassEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))

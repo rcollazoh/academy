@@ -1,0 +1,47 @@
+@startuml
+|Estudiante|
+start
+:Accede al sitio;
+:Se muestra Landing Page con info de cursos;
+if (¿Está registrado?) then (Sí)
+  :Inicia sesión;
+else (No)
+  :Se registra;
+endif
+:Sistema muestra curso disponible;
+:Aplica al curso;
+:Selecciona método de pago;
+:Sube recibo de pago;
+
+|Sistema|
+:Notifica al profesor sobre el pago;
+
+|Profesor|
+:Revisa recibo;
+if (¿Pago aprobado?) then (Sí)
+  :Activa curso para el estudiante;
+  |Sistema|
+  :Envía correo de confirmación;
+else (No)
+  |Sistema|
+  :Envía correo solicitando corrección;
+endif
+
+|Estudiante|
+:Comienza el curso;
+:Realiza exámenes por módulo;
+:Tiempo límite: 14 días;
+
+|Sistema|
+:Notifica al profesor que el curso ha finalizado;
+
+|Profesor|
+:Evalúa desempeño;
+if (¿Aprobado?) then (Sí)
+  :Envía certificación por correo;
+else (No)
+  :Ofrece atención personalizada;
+endif
+
+stop
+@enduml

@@ -24,7 +24,7 @@ public class StudentClassEntity {
 
     @ColumnDefault("0")
     @Column(name = "viewed")
-    private Boolean viewed;
+    private Boolean viewed = false;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "created_at")

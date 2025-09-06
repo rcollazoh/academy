@@ -1,13 +1,12 @@
 package cu.academy.student.module;
 
+import cu.academy.shared.enum_types.EnumModuleStatus;
+import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.student.module.dto.StudentModuleDto;
 import cu.academy.student.module.dto.StudentModuleSimpleDto;
 import cu.academy.student.module.mapper.StudentModuleMapper;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -32,5 +31,11 @@ public class StundentModuleController {
     @GetMapping("/by-course/{courseId}")
     public List<StudentModuleDto> getModuleByCourseId(@PathVariable Long courseId) {
         return service.getAllModuleByCourseId(courseId);
+    }
+
+    @PutMapping(path = "/{id}/{status}")
+    public void updateStatus(@PathVariable("id") Long id,
+                       @PathVariable EnumModuleStatus status) throws ArgumentException {
+        service.updateStatus(id, status);
     }
 }

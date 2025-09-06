@@ -2,6 +2,7 @@ package cu.academy.student.module;
 
 import cu.academy.config.course.ConfigCourseService;
 import cu.academy.shared.configs.text_messages.Translator;
+import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassEntity;
@@ -44,6 +45,10 @@ public class StudentModuleService {
         return repository.save(entity);
     }
 
+    @Transactional
+    public void updateStatus(Long id, EnumModuleStatus status) {
+        repository.updateStatusById(id, status);
+    }
 
     public StudentModuleEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
@@ -73,7 +78,8 @@ public class StudentModuleService {
             if (exam.isPresent()) {
                 examDto = new StudentExamDto(exam.get().getId(), exam.get().getViewed(), exam.get().getStatus(),
                         exam.get().getConfigExam().getId(), exam.get().getConfigExam().getTitle(), exam.get().getConfigExam().getRecourseUrl());
-            } ;
+            }
+            ;
 
             // 5. Construir el DTO del módulo
             StudentModuleDto dto = new StudentModuleDto(
