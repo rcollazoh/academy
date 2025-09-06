@@ -1,6 +1,8 @@
 package cu.academy.student.exam;
 
 import cu.academy.shared.configs.text_messages.Translator;
+import cu.academy.shared.enum_types.EnumExamStatus;
+import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassService;
@@ -25,6 +27,11 @@ public class StudentExamService {
         this.repository = repository;
         this.examRepository = examRepository;
         this.studentClassService = studentClassService;
+    }
+
+    @Transactional
+    public void updateStatus(Long id, EnumExamStatus status) {
+        repository.updateStatusById(id, status);
     }
 
     @Transactional

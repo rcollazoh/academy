@@ -1,9 +1,10 @@
 package cu.academy.shared.enum_types;
 
-public enum CourseStatus {
+public enum EnumCourseStatus {
     NEW,
     PENDING,
-    ACTIVE,
+    ACTIVATED,
+    REJECTED,
     APPROVED,
     NOT_APPROVED
 }

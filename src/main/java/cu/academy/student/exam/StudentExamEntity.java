@@ -32,12 +32,6 @@ public class StudentExamEntity {
     @JoinColumn(name = "student_module_id", nullable = false)
     private StudentModuleEntity studentModule;
 
-    @NotNull
-    @ColumnDefault("0")
-    @Column(name = "viewed", nullable = false)
-    private Boolean viewed = false;
-
-
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private EnumExamStatus status;
@@ -55,7 +49,6 @@ public class StudentExamEntity {
         Instant now = Instant.now();
         createdAt = now;
         updatedAt = now;
-        viewed = false;
         status = EnumExamStatus.NEW;
     }
 
@@ -86,14 +79,6 @@ public class StudentExamEntity {
 
     public void setStudentModule(StudentModuleEntity studentModule) {
         this.studentModule = studentModule;
-    }
-
-    public Boolean getViewed() {
-        return viewed;
-    }
-
-    public void setViewed(Boolean viewed) {
-        this.viewed = viewed;
     }
 
     public EnumExamStatus getStatus() {

@@ -76,7 +76,7 @@ public class StudentModuleService {
 
             StudentExamDto examDto = null;
             if (exam.isPresent()) {
-                examDto = new StudentExamDto(exam.get().getId(), exam.get().getViewed(), exam.get().getStatus(),
+                examDto = new StudentExamDto(exam.get().getId(), exam.get().getStatus(),
                         exam.get().getConfigExam().getId(), exam.get().getConfigExam().getTitle(), exam.get().getConfigExam().getRecourseUrl());
             }
             ;

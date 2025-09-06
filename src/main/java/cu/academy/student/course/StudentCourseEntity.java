@@ -1,7 +1,7 @@
 package cu.academy.student.course;
 
 import cu.academy.config.course.ConfigCourseEntity;
-import cu.academy.shared.enum_types.CourseStatus;
+import cu.academy.shared.enum_types.EnumCourseStatus;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -34,7 +34,7 @@ public class StudentCourseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private CourseStatus status;
+    private EnumCourseStatus status;
 
     @ColumnDefault("0")
     @Column(name = "requires_invoice")
@@ -110,11 +110,11 @@ public class StudentCourseEntity {
         this.endDate = endDate;
     }
 
-    public CourseStatus  getStatus() {
+    public EnumCourseStatus getStatus() {
         return status;
     }
 
-    public void setStatus(CourseStatus status) {
+    public void setStatus(EnumCourseStatus status) {
         this.status = status;
     }
 

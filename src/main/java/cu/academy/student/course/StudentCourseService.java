@@ -8,12 +8,11 @@ import cu.academy.config.exam.ConfigExamEntity;
 import cu.academy.config.exam.ConfigExamRepository;
 import cu.academy.config.module.ConfigModuleEntity;
 import cu.academy.config.module.ConfigModuleService;
-import cu.academy.config.parameter.ConfigParameterRepository;
 import cu.academy.config.parameter.ConfigParameterService;
 import cu.academy.email.EmailService;
 import cu.academy.person.PersonRepository;
 import cu.academy.shared.configs.text_messages.Translator;
-import cu.academy.shared.enum_types.CourseStatus;
+import cu.academy.shared.enum_types.EnumCourseStatus;
 import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import cu.academy.shared.exceptions.ArgumentException;
@@ -84,7 +83,7 @@ public class StudentCourseService {
 
     public StudentCourseEntity getStudentCourseByAreaAndPractice(long personId, long areaId, long practiceId) {
         // Define the valid statuses to check for existing enrollments
-        List<CourseStatus> validStatuses = List.of(CourseStatus.PENDING, CourseStatus.ACTIVE);
+        List<EnumCourseStatus> validStatuses = List.of(EnumCourseStatus.PENDING, EnumCourseStatus.ACTIVATED);
 
         // Look for any existing student course with matching personId and valid status
         List<StudentCourseEntity> existing = studentCourserepository.findByPersonIdAndStatusIn(personId, validStatuses);
@@ -104,7 +103,7 @@ public class StudentCourseService {
             result = new StudentCourseEntity();
             result.setPersonId(personId);
             result.setCourse(course);
-            result.setStatus(CourseStatus.NEW); // Simulated status, it is a flag
+            result.setStatus(EnumCourseStatus.NEW); // Simulated status, it is a flag
             result.setStartDate(LocalDate.now());
         }
         return result;
@@ -138,7 +137,7 @@ public class StudentCourseService {
 
         studentEntity.setPersonId(personId);
         studentEntity.setCourse(configCourseService.getById(courseId));
-        studentEntity.setStatus(CourseStatus.PENDING);
+        studentEntity.setStatus(EnumCourseStatus.PENDING);
         studentEntity.setPaymentMethod(paymentMethod);
         insert(studentEntity);
 
@@ -163,7 +162,7 @@ public class StudentCourseService {
     @Transactional
     public void activeStudentCourse(Long personId, Long courseId) {
         StudentCourseEntity studentEntity = getById(courseId);
-        studentEntity.setStatus(CourseStatus.ACTIVE);
+        studentEntity.setStatus(EnumCourseStatus.ACTIVATED);
         studentEntity.setStartDate(LocalDate.now());
         StudentCourseEntity studentCourseinsert = insert(studentEntity);
 
@@ -202,4 +201,17 @@ public class StudentCourseService {
                 null
         );
     }
+
+    @Transactional
+    public void rejectCourse(long id, long personId) {
+        studentCourserepository.updateStatusById(id, EnumCourseStatus.REJECTED);
+
+        emailService.sendMessage(
+                personRepository.getReferenceById(personId).getEmail(),
+                "Su curso fue rechazado",
+                "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prod Academy",
+                null
+        );
+    }
+
 }

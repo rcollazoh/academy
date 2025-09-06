@@ -1,5 +1,6 @@
 package cu.academy.student.course;
 
+import cu.academy.shared.enum_types.EnumCourseStatus;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import cu.academy.student.course.dto.StudentCourseDto;
 import cu.academy.student.course.mapper.StudentCourseMapper;
@@ -68,6 +69,13 @@ public class StudentCourseController {
     public ResponseEntity<StudentCourseDto> activeStudentCourse(@RequestParam("personId") Long personId,
                                                                @RequestParam("courseId") Long courseId) {
         service.activeStudentCourse(personId, courseId);
+        return null;
+    }
+
+    @PostMapping(value = "/reject")
+    public ResponseEntity<StudentCourseDto> rejectStudentCourse(@RequestParam("personId") Long personId,
+                                                                @RequestParam("courseId") Long courseId) {
+        service.rejectCourse(personId, courseId);
         return null;
     }
 }
