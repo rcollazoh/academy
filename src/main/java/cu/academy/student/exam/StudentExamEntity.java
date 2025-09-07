@@ -5,7 +5,6 @@ import cu.academy.shared.enum_types.EnumExamStatus;
 import cu.academy.student.module.StudentModuleEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;

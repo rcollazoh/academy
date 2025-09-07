@@ -6,6 +6,7 @@ import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassService;
+import cu.academy.student.module.StudentModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,23 +16,27 @@ import java.util.List;
 @Service
 public class StudentExamService {
     private final StudentExamRepository repository;
-    private final StudentExamRepository examRepository;
-    private final StudentClassService studentClassService;
+    private final StudentModuleService studentModuleService;
 
 //    private final ModelMapper modelMapper;
 //    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
 //    }.getType();
 
     @Autowired
-    public StudentExamService(StudentExamRepository repository, StudentExamRepository examRepository, StudentClassService studentClassService) {
+    public StudentExamService(StudentExamRepository repository, StudentModuleService studentModuleService) {
         this.repository = repository;
-        this.examRepository = examRepository;
-        this.studentClassService = studentClassService;
+        this.studentModuleService = studentModuleService;
     }
 
     @Transactional
     public void updateStatus(Long id, EnumExamStatus status) {
         repository.updateStatusById(id, status);
+    }
+
+    @Transactional
+    public void updateStatusAndModule(Long id, EnumExamStatus status) {
+        updateStatus(id, status);
+        studentModuleService.updateModuleAndEvaluateCourse(getById(id).getStudentModule(), status);
     }
 
     @Transactional

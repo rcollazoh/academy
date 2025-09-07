@@ -36,6 +36,6 @@ public class StundentExamController {
     @PutMapping(path = "/{id}/{status}")
     public void updateStatus(@PathVariable("id") Long id,
                        @PathVariable EnumExamStatus status) throws ArgumentException {
-        service.updateStatus(id, status);
+        service.updateStatusAndModule(id, status);
     }
 }

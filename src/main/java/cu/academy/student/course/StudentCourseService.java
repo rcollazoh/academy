@@ -20,9 +20,9 @@ import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassEntity;
 import cu.academy.student.classes.StudentClassService;
 import cu.academy.student.exam.StudentExamEntity;
-import cu.academy.student.exam.StudentExamService;
+import cu.academy.student.exam.StudentExamRepository;
 import cu.academy.student.module.StudentModuleEntity;
-import cu.academy.student.module.StudentModuleService;
+import cu.academy.student.module.StudentModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -37,9 +37,9 @@ import java.util.Optional;
 public class StudentCourseService {
     private final StudentCourseRepository studentCourserepository;
     private final PersonRepository personRepository;
-    private final StudentModuleService studentModuleService;
+    private final StudentModuleRepository studentModuleRepository;
     private final StudentClassService studentClassService;
-    private final StudentExamService studentExamService;
+    private final StudentExamRepository studentExamRepository;
     private final ConfigCourseService configCourseService;
     private final ConfigModuleService configModuleService;
     private final ConfigClassService configClassService;
@@ -54,13 +54,13 @@ public class StudentCourseService {
 //    }.getType();
 
     @Autowired
-    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleService studentModuleService, StudentClassService studentClassService, StudentExamService studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService) {
+    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService) {
         this.studentCourserepository = repository;
         this.personRepository = personRepository;
         this.configCourseService = configCourseService;
-        this.studentModuleService = studentModuleService;
+        this.studentModuleRepository = studentModuleService;
         this.studentClassService = studentClassService;
-        this.studentExamService = studentExamService;
+        this.studentExamRepository = studentExamService;
         this.configModuleService = configModuleService;
         this.configClassService = configClassService;
         this.emailService = emailService;
@@ -173,7 +173,7 @@ public class StudentCourseService {
             entityModuleTemp.setStudentCourse(studentCourseinsert);
             entityModuleTemp.setModule(moduleEntity);
             entityModuleTemp.setStatus(EnumModuleStatus.NEW);
-            StudentModuleEntity studentModuleInsert = studentModuleService.insert(entityModuleTemp);
+            StudentModuleEntity studentModuleInsert = studentModuleRepository.save(entityModuleTemp);
 
             // Aqui van las claseses del modulo
             List<ConfigClassEntity> classByModule = configClassService.getClassByModule(moduleEntity.getId());
@@ -190,7 +190,7 @@ public class StudentCourseService {
                 StudentExamEntity studentExamEntity = new StudentExamEntity();
                 studentExamEntity.setStudentModule(studentModuleInsert);
                 studentExamEntity.setConfigExam(byConfigModuleId.get());
-                studentExamService.insert(studentExamEntity);
+                studentExamRepository.save(studentExamEntity);
             }
         }
 

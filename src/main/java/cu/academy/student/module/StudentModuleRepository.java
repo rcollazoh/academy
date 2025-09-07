@@ -15,6 +15,8 @@ import java.util.List;
 public interface StudentModuleRepository extends JpaSpecificationExecutor<StudentModuleEntity>, JpaRepository<StudentModuleEntity, Long> {
     @Query("SELECT sm FROM StudentModuleEntity sm WHERE sm.studentCourse.id = :studentCourseId")
     List<StudentModuleEntity> findFullModulesByStudentCourseId(@Param("studentCourseId") long studentCourseId);
+    @Query("SELECT m.status FROM StudentModuleEntity m WHERE m.studentCourse.id = :courseId")
+    List<EnumModuleStatus> findStatusesByCourseId(@Param("courseId") Long courseId);
 
     @Modifying
     @Transactional
