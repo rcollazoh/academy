@@ -81,7 +81,7 @@ public class AuthenticationService {
 // crear traza
 
             return new UserResponseDto(username, password, grantedAuthorities, user.getId(),
-                    user.getName(), user.getLastName(), user.getEmail(), user.getPhone());
+                    user.getName().concat(" ").concat(user.getLastName()) , user.getEmail(), user.getPhone());
         } catch (Exception ex) {
 //            trazaLogSistemaService.insertLog(className, methodName, "Error en el loging: " + username + " " + loginDetails.toString(), ex,
 //                    EnumTipoPersona.CLIENTE.equals(loginDetails.getTipoPersona()) ? 1 : EnumTipoPersona.CHOFER.equals(loginDetails.getTipoPersona()) ? 2 : 3);

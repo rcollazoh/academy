@@ -7,22 +7,20 @@ import java.util.Collection;
 
 public class UserResponseDto extends User {
     private Long id;
-    private String name;
-    private String lastName;
+    private String surnames;
     private String email;
     private String mobilePhone;
 //    private List<AccionDto> acciones;
 
 
     public UserResponseDto(String username, String password, Collection<? extends GrantedAuthority> authorities,
-                           Long id, String name, String lastName, String email,
+                           Long id, String surnames, String email,
                            String mobilePhone
 //            , Boolean esVip, Boolean habilitado, EnumChoferEstado estado, Double geoLatitud, Double geoLongitud
     ) {
         super(username, password, authorities);
         this.id = id;
-        this.name = name;
-        this.lastName = lastName;
+        this.surnames = surnames;
         this.email = email;
         this.mobilePhone = mobilePhone;
     }
@@ -36,12 +34,8 @@ public class UserResponseDto extends User {
 //    }
 
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setSurnames(String surnames) {
+        this.surnames = surnames;
     }
 
     public void setEmail(String email) {
@@ -60,12 +54,8 @@ public class UserResponseDto extends User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getLastName() {
-        return lastName;
+    public String getSurnames() {
+        return surnames;
     }
 
     public String getEmail() {
