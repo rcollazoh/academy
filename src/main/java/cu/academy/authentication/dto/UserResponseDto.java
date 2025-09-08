@@ -7,22 +7,22 @@ import java.util.Collection;
 
 public class UserResponseDto extends User {
     private Long id;
-    private String nombreUsuario;
-    private String nombreApellidos;
+    private String name;
+    private String lastName;
     private String email;
     private String mobilePhone;
 //    private List<AccionDto> acciones;
 
 
     public UserResponseDto(String username, String password, Collection<? extends GrantedAuthority> authorities,
-                           Long id, String nombreUsuario, String nombreApellidos, String email,
+                           Long id, String name, String lastName, String email,
                            String mobilePhone
 //            , Boolean esVip, Boolean habilitado, EnumChoferEstado estado, Double geoLatitud, Double geoLongitud
     ) {
         super(username, password, authorities);
         this.id = id;
-        this.nombreUsuario = nombreUsuario;
-        this.nombreApellidos = nombreApellidos;
+        this.name = name;
+        this.lastName = lastName;
         this.email = email;
         this.mobilePhone = mobilePhone;
     }
@@ -36,12 +36,12 @@ public class UserResponseDto extends User {
 //    }
 
 
-    public void setNombreUsuario(String nombreUsuario) {
-        this.nombreUsuario = nombreUsuario;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public void setNombreApellidos(String nombreApellidos) {
-        this.nombreApellidos = nombreApellidos;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public void setEmail(String email) {
@@ -60,12 +60,12 @@ public class UserResponseDto extends User {
         this.id = id;
     }
 
-    public String getNombreUsuario() {
-        return nombreUsuario;
+    public String getName() {
+        return name;
     }
 
-    public String getNombreApellidos() {
-        return nombreApellidos;
+    public String getLastName() {
+        return lastName;
     }
 
     public String getEmail() {

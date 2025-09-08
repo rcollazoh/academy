@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping(path = "academy/imagenes")
+@RequestMapping(path = "academy/image")
 public class ImagesController {
 
     private final FilesStorageService storageService;

@@ -1,8 +1,6 @@
 package cu.academy.images;
 
-
-
-import cu.academy.shared.enum_types.EnumTipoDuenoImagen;
+import cu.academy.shared.enum_types.EnumImagenType;
 import cu.academy.shared.exceptions.ImageNotFoundException;
 import cu.academy.trace.TraceService;
 import org.apache.commons.io.FileUtils;
@@ -33,14 +31,10 @@ import static java.util.stream.Collectors.toList;
 public class FilesStorageServiceImpl implements FilesStorageService {
 
     //    private final Map<EnumTipoDuenoImagen, Path> paths = new HashMap<>();
-    private final Path docsPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumTipoDuenoImagen.DOCUMENTO);
-    private final Path persPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumTipoDuenoImagen.PERSONA);
-    private final Path vjesPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumTipoDuenoImagen.VIAJE);
-    private final Path gastosPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumTipoDuenoImagen.GASTOS);
-    private final Path operacionesPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumTipoDuenoImagen.OPERACIONES);
-    private final Path incidenciasPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumTipoDuenoImagen.INCIDENCIAS);
-    private final Path utilesHerramientasPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumTipoDuenoImagen.UTILES_HERRAMIENTAS);
-    private final Path logo = Paths.get(this.rootPath.toAbsolutePath() + File.separator + "logo" +  File.separator + "logo-rene-chico.jpg");
+    private final Path docsPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumImagenType.DOCUMENT);
+    private final Path persPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumImagenType.PERSON);
+    private final Path gastosPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumImagenType.GASTOS);
+    private final Path logo = Paths.get(this.rootPath.toAbsolutePath() + File.separator + "logo" +  File.separator + "logo.jpg");
 
     private final TraceService traceService;
     private static final String className = "FilesStorageServiceImpl";
@@ -70,11 +64,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         try {
             String fileName = file.getOriginalFilename();
             String imagePathNameAndExt;
-            if (pathAndName.contains(EnumTipoDuenoImagen.VIAJE.toString())) {
-                imagePathNameAndExt = pathAndName + File.separator + fileName;
-                if (!Files.exists(this.rootPath.resolve(pathAndName)))
-                    Files.createDirectories(this.rootPath.resolve(pathAndName));
-            } else
                 imagePathNameAndExt = pathAndName + "." + FilenameUtils.getExtension(fileName);
             Path path = this.rootPath.resolve(imagePathNameAndExt);
             if (!Files.exists(this.rootPath)) {
@@ -83,16 +72,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
                 createDocDirectories();
             } else if (!Files.exists(this.persPath)) {
                 createPerDirectories();
-            } else if (!Files.exists(this.vjesPath)) {
-                createViajeDirectories();
-            } else if (!Files.exists(this.gastosPath)) {
-                createGastosDirectories();
-            } else if (!Files.exists(this.operacionesPath)) {
-                createOperacionesDirectories();
-            } else if (!Files.exists(this.incidenciasPath)) {
-                createIncidenciasDirectories();
-            } else if (!Files.exists(this.utilesHerramientasPath)) {
-                createUtilesHerramientas();
             }
 
             deleteAllFilesWithSameName(pathAndName);
@@ -105,7 +84,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
            // trazaLogSistemaService.insertLog(className, methodName, "Error al guardar imagen.", e, 3);
             throw new RuntimeException("No se pudo guardar la imagen. Error: " + e.getMessage());
         }
-
     }
 
     public String getRutaLogoAgencia(){
@@ -181,14 +159,6 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
-    public List<String> getFilesInsideTravelFolder(String folderName) {
-        try {
-            File folder = new File(this.rootPath + File.separator + EnumTipoDuenoImagen.VIAJE + File.separator + folderName);
-            return Arrays.stream(Objects.requireNonNull(folder.listFiles())).map(File::getName).collect(toList());
-        } catch (Exception e) {
-            return null;
-        }
-    }
 
     private File searchFileWithTypeAndName(String imageType, String imageName) {
         File image = null;
@@ -228,15 +198,21 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         }
     }
 
+    @Override
+    public List<String> getFilesInsideTravelFolder(String folderName) {
+        try {
+            File folder = new File(this.rootPath + File.separator + EnumImagenType.OPERATIONS + File.separator + folderName);
+            return Arrays.stream(Objects.requireNonNull(folder.listFiles())).map(File::getName).collect(toList());
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     private void createDefaultDirectories() throws IOException {
         Files.createDirectories(this.rootPath);
         Files.createDirectories(this.docsPath);
         Files.createDirectories(this.persPath);
-        Files.createDirectories(this.vjesPath);
         Files.createDirectories(this.gastosPath);
-        Files.createDirectories(this.operacionesPath);
-        Files.createDirectories(this.incidenciasPath);
-        Files.createDirectories(this.utilesHerramientasPath);
     }
 
     private void createDocDirectories() throws IOException {
@@ -247,24 +223,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
         Files.createDirectories(this.persPath);
     }
 
-    private void createViajeDirectories() throws IOException {
-        Files.createDirectories(this.vjesPath);
-    }
-
     private void createGastosDirectories() throws IOException {
         Files.createDirectories(this.gastosPath);
     }
-
-    private void createOperacionesDirectories() throws IOException {
-        Files.createDirectories(this.operacionesPath);
-    }
-
-    private void createIncidenciasDirectories() throws IOException {
-        Files.createDirectories(this.incidenciasPath);
-    }
-
-    private void createUtilesHerramientas() throws IOException {
-        Files.createDirectories(this.utilesHerramientasPath);
-    }
-
 }
