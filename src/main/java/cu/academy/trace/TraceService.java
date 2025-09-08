@@ -74,6 +74,7 @@ public class TraceService {
             TraceCreationDto traceCreationDto = mapper.fromUserPerson(personLogout);
             create(traceCreationDto.withPersonId(personLogout.getId())
                     .withActionId(1L)
+                    .withMobilePhone(personLogout.getPhone())
                     .withFullName(personLogout.getName().concat(" ").concat(personLogout.getLastName()))
                     .withDetails("User logout"), request);
         } catch (Exception e) {

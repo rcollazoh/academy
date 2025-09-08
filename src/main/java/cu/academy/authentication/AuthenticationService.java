@@ -12,7 +12,6 @@ import cu.academy.person.PersonEntity;
 import cu.academy.person.PersonRepository;
 import cu.academy.person.PersonService;
 import cu.academy.shared.configs.text_messages.Translator;
-import cu.academy.shared.enum_types.EnumTipoPersona;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.security.SecurityUtils;
 import cu.academy.shared.utils.EndpointResult;
@@ -98,7 +97,7 @@ public class AuthenticationService {
 
     @Transactional(rollbackFor = RuntimeException.class)
     public void logout(LogoutRequest logoutRequest, HttpServletRequest request) {
-        traceService.insertTraceLogout(personaService.getById(logoutRequest.getIdUsuario()),request);
+        traceService.insertTraceLogout(personaService.getById(logoutRequest.getPersonId()),request);
     }
 
     @Transactional
