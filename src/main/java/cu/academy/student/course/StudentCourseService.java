@@ -10,12 +10,15 @@ import cu.academy.config.module.ConfigModuleEntity;
 import cu.academy.config.module.ConfigModuleService;
 import cu.academy.config.parameter.ConfigParameterService;
 import cu.academy.email.EmailService;
+import cu.academy.images.FilesStorageService;
 import cu.academy.person.PersonRepository;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumCourseStatus;
+import cu.academy.shared.enum_types.EnumImagenType;
 import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import cu.academy.shared.exceptions.ArgumentException;
+import cu.academy.shared.utils.DateUtils;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassEntity;
 import cu.academy.student.classes.StudentClassService;
@@ -46,6 +49,7 @@ public class StudentCourseService {
     private final EmailService emailService;
     private final ConfigExamRepository configExamRepository;
     private final ConfigParameterService parameterService;
+    private final FilesStorageService filesStorageService;
 
 
 
@@ -54,7 +58,7 @@ public class StudentCourseService {
 //    }.getType();
 
     @Autowired
-    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService) {
+    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService) {
         this.studentCourserepository = repository;
         this.personRepository = personRepository;
         this.configCourseService = configCourseService;
@@ -66,6 +70,7 @@ public class StudentCourseService {
         this.emailService = emailService;
         this.configExamRepository = configExamRepository;
         this.parameterService = parameterService;
+        this.filesStorageService = filesStorageService;
     }
 
     public StudentCourseEntity getById(Long id) throws ArgumentException {
@@ -134,12 +139,23 @@ public class StudentCourseService {
     @Transactional
     public void applyStudentCourse(Long personId, Long courseId, EnumPaymentMethod paymentMethod, MultipartFile paymentPhoto) {
         StudentCourseEntity studentEntity = new StudentCourseEntity();
-
+        String extension = filesStorageService.getExtension(paymentPhoto);
+        String receiptUrl = EnumImagenType.PAYMENT.name().
+                concat("/").
+                concat(DateUtils.getCurrentDateFormat("yyyyMMddHHmmss")).
+                concat("-").
+                concat(EnumImagenType.PAYMENT.name()).
+                concat(personId.toString());
         studentEntity.setPersonId(personId);
         studentEntity.setCourse(configCourseService.getById(courseId));
         studentEntity.setStatus(EnumCourseStatus.PENDING);
         studentEntity.setPaymentMethod(paymentMethod);
+        studentEntity.setReceiptUrl(receiptUrl.
+                concat(".").
+                concat(extension));
         insert(studentEntity);
+
+        filesStorageService.save(paymentPhoto, receiptUrl);
 
         emailService.sendMessage(
                 personRepository.getReferenceById(personId).getEmail(),

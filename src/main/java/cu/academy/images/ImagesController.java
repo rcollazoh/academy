@@ -18,12 +18,12 @@ public class ImagesController {
         this.storageService = service;
     }
 
-    @GetMapping(produces = "multipart/form-data")
-    public ResponseEntity<byte[]> getImage(@RequestParam("type") String type, @RequestParam("filename") String filename) {
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(storageService.getFile(type, filename));
+    @GetMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<byte[]> getImage(@RequestParam("filename") String filename) {
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(storageService.getFile(filename));
     }
 
-    @PostMapping(consumes = "multipart/form-data")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<EndpointResult> saveImage(@RequestParam("filePathname") String imagePath,
                                                     @RequestParam("image") MultipartFile file) {
         String result = storageService.save(file, imagePath);

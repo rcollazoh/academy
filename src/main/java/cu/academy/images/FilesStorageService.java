@@ -18,7 +18,7 @@ public interface FilesStorageService {
 
     Resource load(String filename);
 
-    byte[] getFile(String imageType, String imageName);
+    byte[] getFile(String imageName);
 
     void deleteAll();
 

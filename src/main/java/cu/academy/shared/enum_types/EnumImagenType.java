@@ -1,7 +1,7 @@
 package cu.academy.shared.enum_types;
 
 public enum EnumImagenType {
-    PERSON, DOCUMENT,GASTOS,OPERATIONS;
+    PERSON, DOCUMENT,GASTOS,OPERATIONS, PAYMENT;
 
 
     @Override

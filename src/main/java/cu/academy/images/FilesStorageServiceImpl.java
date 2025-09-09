@@ -148,11 +148,11 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 //    }
 
     @Override
-    public byte[] getFile(String imageType, String imageName) {
+    public byte[] getFile(String imageName) {
         String methodName = "getFile";
 
         try {
-            return FileUtils.readFileToByteArray(searchFileWithTypeAndName(imageType, imageName));
+            return FileUtils.readFileToByteArray(searchFileWithTypeAndName(imageName));
         } catch (IOException e) {
        //     trazaLogSistemaService.insertLog(className, methodName, "Error al leer el fichero.", e, 3);
             throw new ImageNotFoundException();
@@ -160,19 +160,19 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     }
 
 
-    private File searchFileWithTypeAndName(String imageType, String imageName) {
-        File image = null;
-        try {
-            File folder = new File(this.rootPath + File.separator + imageType);
-            File[] listOfFiles = folder.listFiles();
-            if (listOfFiles != null)
-                image = Arrays.stream(listOfFiles)
-                        .filter(file -> file.getName().substring(0, file.getName().indexOf(".")).equalsIgnoreCase(imageName))
-                        .collect(toList())
-                        .get(0);
-        } catch (IndexOutOfBoundsException e) {
-            throw new ImageNotFoundException();
-        }
+    private File searchFileWithTypeAndName(String imageName) {
+        File image = new File(this.rootPath + File.separator + imageName);;
+//        try {
+//            File folder = new File(this.rootPath + File.separator + imageType);
+//            File[] listOfFiles = folder.listFiles();
+//            if (listOfFiles != null)
+//                image = Arrays.stream(listOfFiles)
+//                        .filter(file -> file.getName().substring(0, file.getName().indexOf(".")).equalsIgnoreCase(imageName))
+//                        .collect(toList())
+//                        .get(0);
+//        } catch (IndexOutOfBoundsException e) {
+//            throw new ImageNotFoundException();
+//        }
         return image;
     }
 
@@ -183,7 +183,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
 
     @Override
     public void delete(String type, String filename) {
-        FileSystemUtils.deleteRecursively(searchFileWithTypeAndName(type, filename));
+        FileSystemUtils.deleteRecursively(searchFileWithTypeAndName(filename));
     }
 
     @Override
