@@ -62,7 +62,7 @@ public class TraceService {
             TraceCreationDto traceCreationDto = mapper.fromUserResponseDto(userDto);
             create(traceCreationDto.withPersonId(userDto.getId())
                     .withActionId(3L)
-                    .withFullName(userDto.getName().concat(" ").concat(userDto.getLastName()))
+                    .withFullName(userDto.getSurnames())
                     .withDetails("User login"), request);
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -74,6 +74,7 @@ public class TraceService {
             TraceCreationDto traceCreationDto = mapper.fromUserPerson(personLogout);
             create(traceCreationDto.withPersonId(personLogout.getId())
                     .withActionId(1L)
+                    .withMobilePhone(personLogout.getPhone())
                     .withFullName(personLogout.getName().concat(" ").concat(personLogout.getLastName()))
                     .withDetails("User logout"), request);
         } catch (Exception e) {
