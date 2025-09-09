@@ -75,11 +75,11 @@ public class PersonEntity {
     @Column(name = "id_number", length = 45)
     private String idNumber;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "area_id")
     private NomAreaEntity area;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "practice_id")
     private NomPracticeEntity practice;
 

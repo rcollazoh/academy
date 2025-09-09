@@ -1,6 +1,7 @@
 package cu.academy.nom.practice;
 
 import cu.academy.nom.area.NomAreaEntity;
+import cu.academy.person.PersonEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -13,7 +14,7 @@ import java.time.Instant;
 public class NomPracticeEntity {
     @Id
     @Column(name = "id", nullable = false)
-    private Integer id;
+    private Long id;
 
     @Size(max = 100)
     @NotNull
@@ -39,6 +40,10 @@ public class NomPracticeEntity {
     @Column(name = "active", nullable = false)
     private Boolean active = false;
 
+    @OneToOne(mappedBy = "practice", fetch = FetchType.LAZY)
+    private PersonEntity persona;
+
+
     public Boolean getActive() {
         return active;
     }
@@ -55,11 +60,11 @@ public class NomPracticeEntity {
         this.area = area;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
