@@ -2,7 +2,7 @@ package cu.academy.shared.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cu.academy.shared.configs.text_messages.Translator;
-import cu.academy.shared.enum_types.EnumRol;
+import cu.academy.shared.enum_types.EnumRole;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.shared.enum_types.EnumTipoPersona;
 import cu.academy.shared.utils.EndpointResult;
@@ -37,7 +37,7 @@ public class BasicRolAuthorizationFilter extends OncePerRequestFilter {
                     String origin = (String) request.getAttribute("origin");
                     if (EnumTipoPersona.CLIENT.name().equals(origin)) {
                         String role = (String) request.getAttribute("role");
-                        EnumRol enumRol = EnumRol.valueOf(role);
+                        EnumRole enumRol = EnumRole.valueOf(role);
                     }
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {

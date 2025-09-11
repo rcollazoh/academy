@@ -78,6 +78,7 @@ public class AuthenticationService {
 //            personaService.validatePersonTypeForPerson(user, tipoPersona);
 
             Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
+            grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
 // crear traza
 
             return new UserResponseDto(username, password, grantedAuthorities, user.getId(),

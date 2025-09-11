@@ -1,11 +1,14 @@
 package cu.academy.role;
 
+import cu.academy.person.PersonEntity;
 import cu.academy.person.person_role.PersonRoleEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -34,6 +37,9 @@ public class RoleEntity {
 
     @OneToMany(mappedBy = "role")
     private Set<PersonRoleEntity> personRoles = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "role")
+    private List<PersonEntity> personEntities;
 
     public Long getId() {
         return id;
@@ -91,4 +97,11 @@ public class RoleEntity {
         this.personRoles = personRoles;
     }
 
+    public List<PersonEntity> getPersonEntities() {
+        return personEntities;
+    }
+
+    public void setPersonEntities(List<PersonEntity> personEntities) {
+        this.personEntities = personEntities;
+    }
 }

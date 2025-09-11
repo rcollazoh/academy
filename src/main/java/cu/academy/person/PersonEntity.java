@@ -3,6 +3,7 @@ package cu.academy.person;
 import cu.academy.accounto_operation.AccountOperationEntity;
 import cu.academy.nom.area.NomAreaEntity;
 import cu.academy.nom.practice.NomPracticeEntity;
+import cu.academy.role.RoleEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
@@ -82,6 +83,10 @@ public class PersonEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "practice_id")
     private NomPracticeEntity practice;
+
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
 
     public NomPracticeEntity getPractice() {
         return practice;
@@ -242,6 +247,14 @@ public class PersonEntity {
 
     public void setIsClient(Boolean client) {
         isClient = client;
+    }
+
+    public RoleEntity getRole() {
+        return role;
+    }
+
+    public void setRole(RoleEntity role) {
+        this.role = role;
     }
 
     @PrePersist

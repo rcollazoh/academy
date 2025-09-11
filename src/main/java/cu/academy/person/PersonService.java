@@ -7,7 +7,9 @@ import cu.academy.nom.practice.NomPracticeEntity;
 import cu.academy.nom.practice.NomPracticeRepository;
 import cu.academy.person.dto.PersonRegisterDTO;
 import cu.academy.person.mapper.PersonMapper;
+import cu.academy.role.RoleRepository;
 import cu.academy.shared.configs.text_messages.Translator;
+import cu.academy.shared.enum_types.EnumRole;
 import cu.academy.shared.enum_types.EnumTipoPersona;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
@@ -25,6 +27,7 @@ public class PersonService {
     private final PersonRepository repository;
     private final NomAreaRepository nomAreaRepository;
     private final NomPracticeRepository nomPracticeRepository;
+    private final RoleRepository roleRepository;
 
     private final EmailService  emailService;
     private final PersonMapper mapper;
@@ -35,11 +38,12 @@ public class PersonService {
 //    }.getType();
 
     @Autowired
-    public PersonService(PersonRepository repository, EmailService emailService, NomAreaRepository nomAreaRepository, NomPracticeRepository nomPracticeRepository, PersonMapper mapper) {
+    public PersonService(PersonRepository repository, EmailService emailService, NomAreaRepository nomAreaRepository, NomPracticeRepository nomPracticeRepository, RoleRepository roleRepository, PersonMapper mapper) {
         this.repository = repository;
         this.emailService = emailService;
         this.nomAreaRepository = nomAreaRepository;
         this.nomPracticeRepository = nomPracticeRepository;
+        this.roleRepository = roleRepository;
         this.mapper = mapper;
     }
 
@@ -76,6 +80,7 @@ public class PersonService {
 
         entity.setArea(area);
         entity.setPractice(practice);
+        entity.setRole(roleRepository.findByName(EnumRole.STUDENT.name()).get());
         if (entity.getPassword() != null)
             entity.setPassword( passwordEncoder.encode(entity.getPassword()));
 
