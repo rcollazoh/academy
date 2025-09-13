@@ -13,6 +13,7 @@ import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -32,6 +33,7 @@ public class EmailService {
         this.javaMailSender = javaMailSender;
     }
 
+    @Async
     public void sendMessage(String to, String subject, String content, String ccEmails) {
         String methodName = "sendMessaje";
         try {
@@ -89,7 +91,8 @@ public class EmailService {
         javaMailSender.send(message);
     }
 
-    public void sendMessageAndAttachmentWithFile(String to, String subject, String content, MultipartFile file, String ccEmails) throws ArgumentException {
+    @Async
+    public void sendMessageAndAttachmentWithFile(String to, String subject, String content, MultipartFile file, String nameFile) throws ArgumentException {
         String methodName = "sendMenssajeAndAttachment";
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper;
@@ -99,19 +102,19 @@ public class EmailService {
             helper.setSubject(subject);
             helper.setText(content);
 
-            // Add CC emails if provided
-            if (ccEmails != null && !ccEmails.trim().isEmpty()) {
-                // Split the CC emails by comma and trim whitespace
-                String[] ccArray = ccEmails.split(",");
-                for (String cc : ccArray) {
-                    helper.addCc(cc.trim()); // Add each CC email
-                }
-            }
+//            // Add CC emails if provided
+//            if (ccEmails != null && !ccEmails.trim().isEmpty()) {
+//                // Split the CC emails by comma and trim whitespace
+//                String[] ccArray = ccEmails.split(",");
+//                for (String cc : ccArray) {
+//                    helper.addCc(cc.trim()); // Add each CC email
+//                }
+//            }
 
             // Adjuntar el archivo
             if (file != null) {
                 MultipartFileInputStreamSource inputStreamSource = new MultipartFileInputStreamSource(file);
-                helper.addAttachment("Horario.pdf", inputStreamSource);
+                helper.addAttachment(nameFile, inputStreamSource);
 
             }
 

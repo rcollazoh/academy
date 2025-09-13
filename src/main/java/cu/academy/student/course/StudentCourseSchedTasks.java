@@ -19,4 +19,9 @@ public class StudentCourseSchedTasks {
     public void checkAndUpdateExpiredCourses() {
         studentCourseService.findExpiredActivatedCourses();
     }
+
+    @Scheduled(cron = "0 0 1 * * *") // Ejecuta todos los días a las 2:00 AM
+    public void sendEmailByApplyCourses() {
+        studentCourseService.findExpiredActivatedCourses();
+    }
 }

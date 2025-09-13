@@ -170,6 +170,14 @@ public class StudentCourseService {
     public void applyStudentCourse(Long personId, Long courseId, EnumPaymentMethod paymentMethod, MultipartFile paymentPhoto) {
         StudentCourseEntity studentEntity = new StudentCourseEntity();
         String extension = filesStorageService.getExtension(paymentPhoto);
+        emailService.sendMessageAndAttachmentWithFile(
+                parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
+                "Confirmación de aplicación a curso",
+                "Aplico un estudiante",
+                paymentPhoto,
+                EnumImagenType.PAYMENT.name().concat(".").concat(extension)
+        );
+
         String receiptUrl = EnumImagenType.PAYMENT.name().
                 concat("/").
                 concat(DateUtils.getCurrentDateFormat("yyyyMMddHHmmss")).
@@ -187,26 +195,34 @@ public class StudentCourseService {
 
         filesStorageService.save(paymentPhoto, receiptUrl);
 
-        emailService.sendMessage(
-                personRepository.getReferenceById(personId).getEmail(),
-                "Confirmación de aplicación a curso",
-                "Estimado/a estudiante,\n\nUsted ha aplicado exitosamente a un nuevo curso en Prod Academy.\n\nPor favor, espere un próximo correo de confirmación una vez que el profesor haya aprobado su solicitud.\n\nGracias por confiar en nosotros.\n\nAtentamente,\nEl equipo de Prod Academy",
-                null
-        );
+//        emailService.sendMessage(
+//                personRepository.getReferenceById(personId).getEmail(),
+//                "Confirmación de aplicación a curso",
+//                "Estimado/a estudiante,\n\nUsted ha aplicado exitosamente a un nuevo curso en Prod Academy.\n\nPor favor, espere un próximo correo de confirmación una vez que el profesor haya aprobado su solicitud.\n\nGracias por confiar en nosotros.\n\nAtentamente,\nEl equipo de Prod Academy",
+//                null
+//        );
 
         // crear notificacion  y correo para Acedemy.
-        emailService.sendMessage(
-                parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-                "Confirmación de aplicación a curso",
-                "Aplico un estudiante",
-                null
-        );
+//        emailService.sendMessageAndAttachmentWithFile(
+//                parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
+//                "Confirmación de aplicación a curso",
+//                "Aplico un estudiante",
+//                paymentPhoto,
+//                EnumImagenType.PAYMENT.name().concat(".").concat(extension)
+//        );
 //       insertFotoTransferencia(depositoInserted, fotoTransferencia);
 
     }
 
     @Transactional
     public void activeStudentCourse(Long personId, Long courseId) {
+        emailService.sendMessage(
+                personRepository.getReferenceById(personId).getEmail(),
+                "Confirmación de aprobación de curso",
+                "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prod Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prod Academy",
+                null
+        );
+
         StudentCourseEntity studentEntity = getById(courseId);
         studentEntity.setStatus(EnumCourseStatus.ACTIVATED);
         studentEntity.setStartDate(LocalDate.now());
@@ -239,13 +255,6 @@ public class StudentCourseService {
                 studentExamRepository.save(studentExamEntity);
             }
         }
-
-        emailService.sendMessage(
-                personRepository.getReferenceById(personId).getEmail(),
-                "Confirmación de aprobación de curso",
-                "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prod Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prod Academy",
-                null
-        );
     }
 
     @Transactional
@@ -276,4 +285,24 @@ public class StudentCourseService {
         }
         studentCourserepository.saveAll(resultCourses);
     }
+
+//    public void testEmail() {
+//
+//
+//        emailService.sendMessage(
+//                personRepository.getReferenceById(personId).getEmail(),
+//                "Confirmación de aplicación a curso",
+//                "Estimado/a estudiante,\n\nUsted ha aplicado exitosamente a un nuevo curso en Prod Academy.\n\nPor favor, espere un próximo correo de confirmación una vez que el profesor haya aprobado su solicitud.\n\nGracias por confiar en nosotros.\n\nAtentamente,\nEl equipo de Prod Academy",
+//                null
+//        );
+//
+//        // crear notificacion  y correo para Acedemy.
+//        emailService.sendMessageAndAttachmentWithFile(
+//                parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
+//                "Confirmación de aplicación a curso",
+//                "Aplico un estudiante",
+//                paymentPhoto,
+//                EnumImagenType.PAYMENT.name().concat(".").concat(extension)
+//        );
+//    }
 }
