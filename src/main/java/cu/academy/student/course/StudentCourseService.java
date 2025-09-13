@@ -13,6 +13,7 @@ import cu.academy.email.EmailService;
 import cu.academy.images.FilesStorageService;
 import cu.academy.person.PersonRepository;
 import cu.academy.shared.configs.text_messages.Translator;
+import cu.academy.shared.dto.PagingResponseList;
 import cu.academy.shared.enum_types.EnumCourseStatus;
 import cu.academy.shared.enum_types.EnumImagenType;
 import cu.academy.shared.enum_types.EnumModuleStatus;
@@ -22,12 +23,20 @@ import cu.academy.shared.utils.DateUtils;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassEntity;
 import cu.academy.student.classes.StudentClassService;
+import cu.academy.student.course.dto.StudentCourseDto;
+import cu.academy.student.course.mapper.StudentCourseMapper;
 import cu.academy.student.exam.StudentExamEntity;
 import cu.academy.student.exam.StudentExamRepository;
 import cu.academy.student.module.StudentModuleEntity;
 import cu.academy.student.module.StudentModuleRepository;
+import cu.academy.trace.TraceEntity;
+import cu.academy.trace.dto.TraceDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +59,7 @@ public class StudentCourseService {
     private final ConfigExamRepository configExamRepository;
     private final ConfigParameterService parameterService;
     private final FilesStorageService filesStorageService;
-
+    private final StudentCourseMapper mapper;
 
 
 //    private final ModelMapper modelMapper;
@@ -58,7 +67,7 @@ public class StudentCourseService {
 //    }.getType();
 
     @Autowired
-    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService) {
+    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService, StudentCourseMapper mapper) {
         this.studentCourserepository = repository;
         this.personRepository = personRepository;
         this.configCourseService = configCourseService;
@@ -71,6 +80,7 @@ public class StudentCourseService {
         this.configExamRepository = configExamRepository;
         this.parameterService = parameterService;
         this.filesStorageService = filesStorageService;
+        this.mapper = mapper;
     }
 
     public StudentCourseEntity getById(Long id) throws ArgumentException {
@@ -80,6 +90,26 @@ public class StudentCourseService {
 
     public List<StudentCourseEntity> getAllSort() {
         return studentCourserepository.findAll(Sort.by(Sort.Direction.ASC, "name"));
+    }
+
+    public PagingResponseList<StudentCourseEntity> getAll(Specification<StudentCourseEntity> spec, int page, int size, Sort sort) {
+        if (sort != null)
+            return get(spec, PageRequest.of(page, size, sort));
+        return get(spec, PageRequest.of(page, size));
+    }
+
+    /**
+     * Retrieve logs using specifications (filter parameters) along with pagination and sorting data.
+     *
+     * @param spec     parameters used for filtering
+     * @param pageable pagination and sorting information
+     * @return returns the logs, paginated, sorted, and filtered according to the specified parameters
+     */
+    public PagingResponseList<StudentCourseEntity> get(Specification<StudentCourseEntity> spec, Pageable pageable) {
+        Page<StudentCourseEntity> page = studentCourserepository.findAll(spec, pageable);
+        List<StudentCourseEntity> content = page.getContent();
+        return new PagingResponseList<>((int)page.getTotalElements(), page.getNumber(),
+                page.getNumberOfElements(), (int)pageable.getOffset(), page.getTotalPages(), content);
     }
 
     public List<StudentCourseEntity> getFindByPersonId(long personId) {

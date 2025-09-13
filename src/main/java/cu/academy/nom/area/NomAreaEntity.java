@@ -7,6 +7,7 @@ import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(name = "nom_area")
@@ -36,8 +37,8 @@ public class NomAreaEntity {
     @Column(name = "active", nullable = false)
     private Boolean active = false;
 
-    @OneToOne(mappedBy = "area", fetch = FetchType.LAZY)
-    private PersonEntity persona;
+    @OneToMany(mappedBy = "area", fetch = FetchType.LAZY)
+    private List<PersonEntity> persons;
 
 
     public Boolean getActive() {
@@ -88,6 +89,11 @@ public class NomAreaEntity {
         this.updatedAt = updatedAt;
     }
 
+    public List<PersonEntity> getPersons() {
+        return persons;
+    }
 
-
+    public void setPersons(List<PersonEntity> persons) {
+        this.persons = persons;
+    }
 }

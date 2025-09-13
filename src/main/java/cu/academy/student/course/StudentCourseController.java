@@ -1,16 +1,28 @@
 package cu.academy.student.course;
 
-import cu.academy.shared.enum_types.EnumCourseStatus;
+import com.google.gson.reflect.TypeToken;
+import cu.academy.shared.dto.PagingResponseList;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
+import cu.academy.shared.utils.EndpointResult;
 import cu.academy.student.course.dto.StudentCourseDto;
 import cu.academy.student.course.mapper.StudentCourseMapper;
+import cu.academy.trace.dto.TraceDto;
+import net.kaczmarzyk.spring.data.jpa.domain.Equal;
+import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/academy/student_course")
@@ -19,19 +31,61 @@ public class StudentCourseController {
     private final StudentCourseService service;
     private final StudentCourseMapper mapper;
 
-
     public StudentCourseController(StudentCourseService service, StudentCourseMapper mapper) {
         this.service = service;
         this.mapper = mapper;
     }
 
     @GetMapping
-    public List<StudentCourseDto> getAll() {
-        return service.getAllSort()
-                .stream()
-                .map(mapper::toDto)
-                .collect(Collectors.toList());
+    public ResponseEntity<EndpointResult> getCourses(
+            @Join(path = "course", alias = "configCourse")
+            @Or({
+                    @Spec(path = "status", params = "status", spec = Equal.class),
+                    @Spec(path = "configCourse.name", params = "courseName", spec = Equal.class)
+            }) Specification<StudentCourseEntity> statusSpec,
+//            @Or({
+//            @Spec(path = "name", params = "search", spec = Like.class)
+//            }) Specification<StudentCourseEntity> nameSpec,
+
+            @RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
+            @RequestParam(value = "pageSize", defaultValue = "10", required = false) Integer pageSize,
+            Sort sort
+    ) {
+        try {
+//            Specification<StudentCourseEntity> spec = Specification.allOf(statusSpec);
+
+            Specification<StudentCourseEntity> spec = Stream.of(statusSpec)
+                    .filter(Objects::nonNull)
+                    .reduce(Specification::and)
+                    .orElse(null);
+
+
+            PagingResponseList<StudentCourseEntity> pagingResponseCourses = service.getAll(spec, pageNumber, pageSize, sort);
+
+            PagingResponseList<StudentCourseDto> pagingResponseDtos = new PagingResponseList<>(
+                    pagingResponseCourses.getCount(),
+                    pagingResponseCourses.getPageNumber(),
+                    pagingResponseCourses.getPageSize(),
+                    pagingResponseCourses.getPageOffset(),
+                    pagingResponseCourses.getPageTotal(),
+                    pagingResponseCourses.getElements().stream().map(mapper::toDto).collect(Collectors.toList())
+            );
+
+            return ResponseEntity.ok(new EndpointResult(pagingResponseDtos, null));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().body(new EndpointResult(null, ex.getMessage()));
+        }
     }
+
+
+
+//    @GetMapping
+//    public List<StudentCourseDto> getAll() {
+//        return service.getAllSort()
+//                .stream()
+//                .map(mapper::toDto)
+//                .collect(Collectors.toList());
+//    }
 
     @GetMapping("/by-person/{personId}")
     public List<StudentCourseDto> getAllStudentCourseByPerson(@PathVariable Long personId) {

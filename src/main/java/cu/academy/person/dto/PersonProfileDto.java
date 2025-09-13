@@ -7,10 +7,7 @@ public record PersonProfileDto(Long id,
                                String lastName,
                                String email,
                                String phone,
-                               Boolean isUser,
-                               Boolean isClient,
                                String status,
                                LocalDate birthday,
-                               String workplace,
-                               String photo) {
+                               String workplace) {
 }
