@@ -9,6 +9,7 @@ import cu.academy.student.course.mapper.StudentCourseMapper;
 import cu.academy.trace.dto.TraceDto;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.domain.Like;
+import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
@@ -39,9 +40,9 @@ public class StudentCourseController {
     @GetMapping
     public ResponseEntity<EndpointResult> getCourses(
             @Join(path = "course", alias = "configCourse")
-            @Or({
+            @And({
                     @Spec(path = "status", params = "status", spec = Equal.class),
-                    @Spec(path = "configCourse.name", params = "courseName", spec = Equal.class)
+                    @Spec(path = "configCourse.id", params = "courseId", spec = Equal.class)
             }) Specification<StudentCourseEntity> statusSpec,
 //            @Or({
 //            @Spec(path = "name", params = "search", spec = Like.class)
