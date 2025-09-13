@@ -260,4 +260,20 @@ public class StudentCourseService {
         );
     }
 
+    public void findExpiredActivatedCourses(){
+        List<StudentCourseEntity> resultCourses = studentCourserepository.findExpiredActivatedCourses();
+        for (StudentCourseEntity expiredActivatedCours : resultCourses) {
+            List<EnumModuleStatus> statuses = studentModuleRepository.findStatusesByCourseId(expiredActivatedCours.getId().longValue());
+            expiredActivatedCours.setEndDate(LocalDate.now());
+
+            boolean allApproved = !statuses.isEmpty() && statuses.stream()
+                    .allMatch(status -> status == EnumModuleStatus.APPROVED);
+            if (allApproved) {
+                expiredActivatedCours.setStatus(EnumCourseStatus.APPROVED);
+            } else  {
+                expiredActivatedCours.setStatus(EnumCourseStatus.NOT_APPROVED);
+            }
+        }
+        studentCourserepository.saveAll(resultCourses);
+    }
 }
