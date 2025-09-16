@@ -1,6 +1,7 @@
 package cu.academy.student.course;
 
 import cu.academy.config.course.ConfigCourseEntity;
+import cu.academy.person.PersonEntity;
 import cu.academy.shared.enum_types.EnumCourseStatus;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import jakarta.persistence.*;
@@ -21,6 +22,11 @@ public class StudentCourseEntity {
     @NotNull
     @Column(name = "person_id", nullable = false)
     private Long personId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "person_id", insertable = false, updatable = false)
+    private PersonEntity person;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_id")
@@ -158,4 +164,7 @@ public class StudentCourseEntity {
         this.updatedAt = updatedAt;
     }
 
+    public PersonEntity getPerson() {
+        return person;
+    }
 }

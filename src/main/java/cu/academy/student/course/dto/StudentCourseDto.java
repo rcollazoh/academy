@@ -6,6 +6,9 @@ import java.time.LocalDate;
 
 public record StudentCourseDto(Long id,
                                Long personId,
+                               String personName,             // 👈 ejemplo: nombre de la persona
+                               String personLastName,             // 👈 ejemplo: nombre de la persona
+                               String personEmail,
                                ConfigCourseDto course,
                                LocalDate startDate,
                                LocalDate endDate,
