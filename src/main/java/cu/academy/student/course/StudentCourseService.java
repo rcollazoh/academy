@@ -258,8 +258,8 @@ public class StudentCourseService {
     }
 
     @Transactional
-    public void rejectCourse(long id, long personId) {
-        studentCourserepository.updateStatusById(id, EnumCourseStatus.REJECTED);
+    public void rejectCourse(long personId, long courseId) {
+        studentCourserepository.updateStatusById(courseId, EnumCourseStatus.REJECTED);
 
         emailService.sendMessage(
                 personRepository.getReferenceById(personId).getEmail(),
