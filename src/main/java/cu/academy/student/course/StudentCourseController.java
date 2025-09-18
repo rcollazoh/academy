@@ -1,17 +1,13 @@
 package cu.academy.student.course;
 
-import com.google.gson.reflect.TypeToken;
 import cu.academy.shared.dto.PagingResponseList;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import cu.academy.shared.utils.EndpointResult;
 import cu.academy.student.course.dto.StudentCourseDto;
 import cu.academy.student.course.mapper.StudentCourseMapper;
-import cu.academy.trace.dto.TraceDto;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
-import net.kaczmarzyk.spring.data.jpa.domain.Like;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Join;
-import net.kaczmarzyk.spring.data.jpa.web.annotation.Or;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.Spec;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
