@@ -4,6 +4,7 @@ import cu.academy.shared.dto.PagingResponseList;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import cu.academy.shared.utils.EndpointResult;
 import cu.academy.student.course.dto.StudentCourseDto;
+import cu.academy.student.course.dto.StudentCourseForMyselfDto;
 import cu.academy.student.course.mapper.StudentCourseMapper;
 import net.kaczmarzyk.spring.data.jpa.domain.Equal;
 import net.kaczmarzyk.spring.data.jpa.web.annotation.And;
@@ -85,10 +86,10 @@ public class StudentCourseController {
 //    }
 
     @GetMapping("/by-person/{personId}")
-    public List<StudentCourseDto> getAllStudentCourseByPerson(@PathVariable Long personId) {
+    public List<StudentCourseForMyselfDto> getAllStudentCourseByPerson(@PathVariable Long personId) {
         return service.getFindByPersonId(personId)
                 .stream()
-                .map(mapper::toDto)
+                .map(mapper::toDtoMyself)
                 .collect(Collectors.toList());
     }
 
