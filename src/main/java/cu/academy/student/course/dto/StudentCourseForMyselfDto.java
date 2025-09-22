@@ -1,7 +1,5 @@
 package cu.academy.student.course.dto;
 
-import cu.academy.config.course.dto.ConfigCourseDto;
-
 import java.time.LocalDate;
 
 public record StudentCourseForMyselfDto(Long id,

@@ -1,7 +1,5 @@
 package cu.academy.config.module;
 
-import cu.academy.config.course.ConfigCourseEntity;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ConfigModuleRepository extends JpaSpecificationExecutor<ConfigModuleEntity>, JpaRepository<ConfigModuleEntity, Long> {
-    @Query("SELECT c FROM ConfigModuleEntity c WHERE c.course.id = :courseId")
+    @Query("SELECT c FROM ConfigModuleEntity c WHERE c.course.id = :courseId or c.isCommon = true order by c.orderNum")
     List<ConfigModuleEntity> findModulesByCourse(@Param("courseId") long courseId);
 
 }
