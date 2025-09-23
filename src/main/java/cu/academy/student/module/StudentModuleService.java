@@ -92,12 +92,11 @@ public class StudentModuleService {
                 examDto = new StudentExamDto(exam.get().getId(), exam.get().getStatus(),
                         exam.get().getConfigExam().getId(), exam.get().getConfigExam().getTitle(), exam.get().getConfigExam().getRecourseUrl());
             }
-            ;
 
-            // 5. Construir el DTO del módulo
+            // 5. create dto module
             StudentModuleDto dto = new StudentModuleDto(
                     module.getId(),
-                    module.getModule().getId(), // Asegúrate que este getter exista
+                    module.getModule().getId(),
                     module.getStatus(),
                     module.getModule().getName(),
                     module.getModule().getOrderNum(),

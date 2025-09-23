@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface StudentClassRepository extends JpaSpecificationExecutor<StudentClassEntity>, JpaRepository<StudentClassEntity, Long> {
-    @Query("SELECT sc FROM StudentClassEntity sc WHERE sc.studentModule.id = :studentModuleId")
+    @Query("SELECT sc FROM StudentClassEntity sc WHERE sc.studentModule.id = :moduleId")
         List<StudentClassEntity> findByModuleId(long moduleId);
 
         @Modifying

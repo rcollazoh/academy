@@ -13,7 +13,7 @@ import java.util.List;
 
 @Repository
 public interface StudentModuleRepository extends JpaSpecificationExecutor<StudentModuleEntity>, JpaRepository<StudentModuleEntity, Long> {
-    @Query("SELECT sm FROM StudentModuleEntity sm WHERE sm.studentCourse.id = :studentCourseId")
+    @Query("SELECT sm FROM StudentModuleEntity sm WHERE sm.studentCourse.id = :studentCourseId order by sm.module.orderNum")
     List<StudentModuleEntity> findFullModulesByStudentCourseId(@Param("studentCourseId") long studentCourseId);
     @Query("SELECT m.status FROM StudentModuleEntity m WHERE m.studentCourse.id = :courseId")
     List<EnumModuleStatus> findStatusesByCourseId(@Param("courseId") Long courseId);
