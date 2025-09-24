@@ -1,6 +1,7 @@
 package cu.academy.config.classes.image;
 
 
+import cu.academy.config.classes.image.dto.ClassImageNavigationDto;
 import cu.academy.config.course.ConfigCourseEntity;
 import cu.academy.config.course.ConfigCourseService;
 import cu.academy.config.course.dto.ConfigCourseDto;
@@ -29,20 +30,18 @@ public class ConfigClassImageController {
         this.service = service;
         this.mapper = mapper;
     }
-//
-//    @GetMapping
-//    public List<ConfigCourseDto> getAll() {
-//        return service.getAllSort()
-//                .stream()
-//                .map(mapper::toDto)
-//                .collect(Collectors.toList());
-//    }
 
-//    @GetMapping("/{id}")
-//    public ResponseEntity<ConfigCourseDto> getById(@PathVariable Long id) {
-//        ConfigCourseEntity person = service.getById(id);
-//        return person != null ? ResponseEntity.ok(mapper.toDto(person)) : ResponseEntity.notFound().build();
-//    }
+    @GetMapping("/class_navegation/{classId}")
+    public ResponseEntity<ClassImageNavigationDto> getClassWithNavigation(@PathVariable Long classId) {
+        ClassImageNavigationDto image = service.getClassWithNavigation(classId);
+        return image != null ? ResponseEntity.ok(image) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/image_navegation/{classId}/{id}")
+    public ResponseEntity<ClassImageNavigationDto> getImageWithNavigation(@PathVariable Long classId,@PathVariable Long id) {
+        ClassImageNavigationDto image = service.getImageWithNavigation(classId,id);
+        return image != null ? ResponseEntity.ok(image) : ResponseEntity.notFound().build();
+    }
 //
 //    @GetMapping("/by-area/{areaId}/by-practice/{practiceId}")
 //    public ResponseEntity<ConfigCourseDto> getCourseByAreaAndPractice(
