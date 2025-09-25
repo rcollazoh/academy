@@ -1,7 +1,7 @@
 package cu.academy.student.exam.answer;
 
-import cu.academy.config.ConfigOptionEntity;
-import cu.academy.config.ConfigQuestionEntity;
+import cu.academy.config.exam.option.ConfigOptionEntity;
+import cu.academy.config.exam.question.ConfigQuestionEntity;
 import cu.academy.student.module.StudentModuleEntity;
 import jakarta.persistence.*;
 import org.hibernate.annotations.ColumnDefault;

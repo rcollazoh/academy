@@ -1,5 +1,6 @@
-package cu.academy.config;
+package cu.academy.config.exam.option;
 
+import cu.academy.config.exam.question.ConfigQuestionEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.ColumnDefault;

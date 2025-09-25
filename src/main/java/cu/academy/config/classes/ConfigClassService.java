@@ -38,20 +38,6 @@ public class ConfigClassService {
     }
 
     @Transactional
-    public void delete(Long id) throws ArgumentException {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-        } else {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
-        }
-    }
-
-    @Transactional
-    public ConfigClassEntity insert(ConfigClassEntity entity) {
-        return repository.save(entity);
-    }
-
-    @Transactional
     public ConfigClassEntity update(Long id, ConfigClassEntity entity) throws ArgumentException {
         if (!repository.existsById(id)) {
             throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
