@@ -18,9 +18,9 @@ public class ImagesController {
         this.storageService = service;
     }
 
-    @GetMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @GetMapping
     public ResponseEntity<byte[]> getImage(@RequestParam("filename") String filename) {
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(storageService.getFile(filename));
+        return ResponseEntity.ok().contentType(MediaType.valueOf("image/svg+xml")).body(storageService.getFile(filename));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
