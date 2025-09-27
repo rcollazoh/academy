@@ -234,7 +234,11 @@ public class StudentCourseService {
             StudentModuleEntity entityModuleTemp = new StudentModuleEntity();
             entityModuleTemp.setStudentCourse(studentCourseinsert);
             entityModuleTemp.setModule(moduleEntity);
-            entityModuleTemp.setStatus(EnumModuleStatus.NEW);
+            if (moduleEntity.getOrderNum() == 0)
+                entityModuleTemp.setStatus(EnumModuleStatus.APPROVED);
+            else
+                entityModuleTemp.setStatus(EnumModuleStatus.NEW);
+
             StudentModuleEntity studentModuleInsert = studentModuleRepository.save(entityModuleTemp);
 
             // Aqui van las claseses del modulo

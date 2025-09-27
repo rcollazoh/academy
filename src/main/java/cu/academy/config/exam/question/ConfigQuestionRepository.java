@@ -1,13 +1,14 @@
 package cu.academy.config.exam.question;
 
-
-import cu.academy.config.classes.image.dto.ClassImageNavigationView;
 import cu.academy.config.exam.question.dto.ExamQuestionNavigationView;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface ConfigQuestionRepository extends JpaSpecificationExecutor<ConfigQuestionEntity>, JpaRepository<ConfigQuestionEntity, Long> {
@@ -28,5 +29,7 @@ public interface ConfigQuestionRepository extends JpaSpecificationExecutor<Confi
         """, nativeQuery = true)
     ExamQuestionNavigationView findNavigationByIdExam(@Param("examId") Long examId);
 
+    @EntityGraph(attributePaths = "configOptions")
+    List<ConfigQuestionEntity> findByExamIdOrderByOrderNum(long examId);
 }
 

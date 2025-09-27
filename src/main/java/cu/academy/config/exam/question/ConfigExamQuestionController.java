@@ -2,11 +2,14 @@ package cu.academy.config.exam.question;
 
 
 import cu.academy.config.exam.question.dto.ExamQuestionNavigationDto;
+import cu.academy.config.exam.question.dto.ExamQuestionOptionsDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 
 @RestController
@@ -25,9 +28,8 @@ public class ConfigExamQuestionController {
         return result != null ? ResponseEntity.ok(result) : ResponseEntity.notFound().build();
     }
 
-//    @GetMapping("/image_navegation/{classId}/{id}")
-//    public ResponseEntity<ClassImageNavigationDto> getImageWithNavigation(@PathVariable Long classId,@PathVariable Long id) {
-//        ClassImageNavigationDto image = service.getImageWithNavigation(classId,id);
-//        return image != null ? ResponseEntity.ok(image) : ResponseEntity.notFound().build();
-//    }
+    @GetMapping("/{examId}")
+    public List<ExamQuestionOptionsDto> getExamWithQuestionAndOptions(@PathVariable Long examId) {
+        return service.getExamWithQuestionAndOptions(examId);
+    }
 }
