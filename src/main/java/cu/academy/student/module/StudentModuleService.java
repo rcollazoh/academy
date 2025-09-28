@@ -90,7 +90,7 @@ public class StudentModuleService {
             StudentExamDto examDto = null;
             if (exam.isPresent()) {
                 examDto = new StudentExamDto(exam.get().getId(), exam.get().getStatus(),
-                        exam.get().getConfigExam().getId(), exam.get().getConfigExam().getTitle(), exam.get().getConfigExam().getRecourseUrl());
+                        exam.get().getConfigExam().getId(), exam.get().getConfigExam().getTitle(), exam.get().getConfigExam().getDurationMinutes());
             }
 
             // 5. create dto module
@@ -110,7 +110,7 @@ public class StudentModuleService {
 
 
 
-    public void updateModuleAndEvaluateCourse(StudentModuleEntity entityModule, EnumExamStatus statusModule) {
+    public boolean updateModuleAndEvaluateCourse(StudentModuleEntity entityModule, EnumExamStatus statusModule) {
 //        updateStatus(entityModule.getId(),EnumModuleStatus.valueOf(status.name()));
         entityModule.setStatus(EnumModuleStatus.valueOf(statusModule.name()));
         entityModule.setFechaExam(LocalDate.now());
@@ -155,6 +155,7 @@ public class StudentModuleService {
                     null
             );
         }
-    }
 
+        return allApproved;
+    }
 }

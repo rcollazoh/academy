@@ -16,6 +16,7 @@ public interface StudentClassRepository extends JpaSpecificationExecutor<Student
     @Query("SELECT sc FROM StudentClassEntity sc WHERE sc.studentModule.id = :moduleId")
         List<StudentClassEntity> findByModuleId(long moduleId);
 
+
         @Modifying
         @Transactional
         @Query("UPDATE StudentClassEntity s SET s.viewed = :viewed WHERE s.id = :id")

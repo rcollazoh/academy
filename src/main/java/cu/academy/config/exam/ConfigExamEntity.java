@@ -33,16 +33,30 @@ public class ConfigExamEntity {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @Size(max = 255)
-    @Column(name = "recourse_url")
-    private String recourseUrl;
+    @NotNull
+    @ColumnDefault("0")
+    @Column(name = "min_questions", nullable = false)
+    private Integer minQuestions;
 
-    public String getRecourseUrl() {
-        return recourseUrl;
+    @NotNull
+    @ColumnDefault("0")
+    @Column(name = "duration_minutes", nullable = false)
+    private Integer durationMinutes;
+
+    public Integer getDurationMinutes() {
+        return durationMinutes;
     }
 
-    public void setRecourseUrl(String recourseUrl) {
-        this.recourseUrl = recourseUrl;
+    public void setDurationMinutes(Integer durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public Integer getMinQuestions() {
+        return minQuestions;
+    }
+
+    public void setMinQuestions(Integer minQuestions) {
+        this.minQuestions = minQuestions;
     }
 
     public String getTitle() {

@@ -51,6 +51,7 @@ public class StudentModuleEntity {
         createdAt = now;
         updatedAt = now;
         status =  EnumModuleStatus.NEW;
+        intentos = 0;
     }
 
     @PreUpdate

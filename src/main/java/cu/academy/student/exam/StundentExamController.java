@@ -1,11 +1,14 @@
 package cu.academy.student.exam;
 
-import cu.academy.shared.enum_types.EnumExamStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.student.exam.dto.StudentExamDto;
+import cu.academy.student.exam.dto.StudentExamRequestDto;
+import cu.academy.student.exam.dto.StudentExamResponseDto;
 import cu.academy.student.exam.mapper.StudentExamMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/academy/student_exam")
@@ -25,9 +28,9 @@ public class StundentExamController {
         return entity != null ? ResponseEntity.ok(mapper.toDto(entity)) : ResponseEntity.notFound().build();
     }
 
-    @PutMapping(path = "/{id}/{status}")
-    public void updateStatus(@PathVariable("id") Long id,
-                       @PathVariable EnumExamStatus status) throws ArgumentException {
-        service.updateStatusAndModule(id, status);
+    @PutMapping(path = "/{id}")
+    public StudentExamResponseDto updateStatus(@PathVariable("id") Long id,
+                                               @RequestBody List<StudentExamRequestDto> requestExam) throws ArgumentException {
+       return service.updateStatusAndModule(id, requestExam);
     }
 }

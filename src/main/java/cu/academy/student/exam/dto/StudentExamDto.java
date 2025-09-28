@@ -7,5 +7,5 @@ public record StudentExamDto(Long id,
                              EnumExamStatus status,
                              Long configExamId,
                              String title,
-                             String recourseUrl) {
+                             Integer durationMinutes) {
 }

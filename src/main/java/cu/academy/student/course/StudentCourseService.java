@@ -229,7 +229,7 @@ public class StudentCourseService {
         StudentCourseEntity studentCourseinsert = insert(studentEntity);
 
 
-        List<ConfigModuleEntity> moduleEntities = configModuleService.getModuleByCourse(courseId);
+        List<ConfigModuleEntity> moduleEntities = configModuleService.getModuleByCourse(studentEntity.getCourse().getId());
         for (ConfigModuleEntity moduleEntity : moduleEntities) {
             StudentModuleEntity entityModuleTemp = new StudentModuleEntity();
             entityModuleTemp.setStudentCourse(studentCourseinsert);

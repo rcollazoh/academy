@@ -1,10 +1,10 @@
 package cu.academy.student.classes;
 
-import cu.academy.config.classes.ConfigClassEntity;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
+import cu.academy.student.module.StudentModuleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,14 +15,16 @@ import java.util.List;
 @Service
 public class StudentClassService {
     private final StudentClassRepository repository;
+    private final StudentModuleRepository repositoryModule;
 
 //    private final ModelMapper modelMapper;
 //    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
 //    }.getType();
 
     @Autowired
-    public StudentClassService(StudentClassRepository repository) {
+    public StudentClassService(StudentClassRepository repository, StudentModuleRepository repositoryModule) {
         this.repository = repository;
+        this.repositoryModule = repositoryModule;
     }
 
     @Transactional
@@ -33,6 +35,13 @@ public class StudentClassService {
     @Transactional
     public void updateViewed(Long id, boolean status) {
         repository.updateViewedById(id, status);
+
+        StudentClassEntity classEntity = getById(id);
+
+        boolean isCommonModule = repositoryModule.findModuleByIdCommon(classEntity.getStudentModule().getId());
+
+        if (isCommonModule)
+            repositoryModule.updateStatusById(classEntity.getStudentModule().getId(), EnumModuleStatus.APPROVED);
     }
 
     public StudentClassEntity getById(Long id) throws ArgumentException {

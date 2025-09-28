@@ -6,7 +6,11 @@ import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassService;
+import cu.academy.student.exam.dto.StudentExamRequestDto;
+import cu.academy.student.exam.dto.StudentExamResponseDto;
 import cu.academy.student.module.StudentModuleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -15,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 @Service
 public class StudentExamService {
+    private static final Logger log = LoggerFactory.getLogger(StudentExamService.class);
     private final StudentExamRepository repository;
     private final StudentModuleService studentModuleService;
 
@@ -34,9 +39,25 @@ public class StudentExamService {
     }
 
     @Transactional
-    public void updateStatusAndModule(Long id, EnumExamStatus status) {
-        updateStatus(id, status);
-        studentModuleService.updateModuleAndEvaluateCourse(getById(id).getStudentModule(), status);
+    public StudentExamResponseDto updateStatusAndModule(Long id, List<StudentExamRequestDto> requestExam) {
+
+        StudentExamEntity examEntity = getById(id); // Ej: devuelve 3
+
+        // count the approved.
+        long approvedCount = requestExam.stream()
+                .filter(dto -> dto.status() == EnumExamStatus.APPROVED)
+                .count();
+
+        // check logic
+        EnumExamStatus examStatus = approvedCount >= examEntity.getConfigExam().getDurationMinutes() ? EnumExamStatus.APPROVED : EnumExamStatus.NOT_APPROVED;
+
+        // update exam
+        updateStatus(id, examStatus);
+
+        //update module and course
+        boolean courseResponse = studentModuleService.updateModuleAndEvaluateCourse(getById(id).getStudentModule(), examStatus);
+        EnumExamStatus courseStatus = courseResponse ? EnumExamStatus.APPROVED : EnumExamStatus.NOT_APPROVED;
+        return new StudentExamResponseDto(examStatus,courseStatus);
     }
 
     @Transactional
