@@ -2,10 +2,8 @@ package cu.academy.student.exam;
 
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumExamStatus;
-import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
-import cu.academy.student.classes.StudentClassService;
 import cu.academy.student.exam.dto.StudentExamRequestDto;
 import cu.academy.student.exam.dto.StudentExamResponseDto;
 import cu.academy.student.module.StudentModuleService;
@@ -68,7 +66,7 @@ public class StudentExamService {
 
     public StudentExamEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<StudentExamEntity> getAllSort() {

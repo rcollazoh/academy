@@ -72,7 +72,7 @@ public class AuthenticationService {
             }
 
             if (user.getPassword() == null)
-                throw new BadCredentialsException(Translator.toLocale(TranslatorCode.NO_PASSWORD));
+                throw new BadCredentialsException(Translator.toLocale(TranslatorCode.NO_CONTRASENNA));
 
 //            // Verifica que el usuario sea del tipo de persona especificado
 //            personaService.validatePersonTypeForPerson(user, tipoPersona);

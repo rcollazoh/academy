@@ -1,8 +1,5 @@
 package cu.academy.config.course;
 
-import cu.academy.nom.area.NomAreaEntity;
-import cu.academy.nom.area.NomAreaRepository;
-import cu.academy.nom.practice.NomPracticeEntity;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
@@ -28,7 +25,7 @@ public class ConfigCourseService {
 
     public ConfigCourseEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<ConfigCourseEntity> getAllSort() {
@@ -44,7 +41,7 @@ public class ConfigCourseService {
         if (repository.existsById(id)) {
             repository.deleteById(id);
         } else {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
     }
 
@@ -56,7 +53,7 @@ public class ConfigCourseService {
     @Transactional
     public ConfigCourseEntity update(Long id, ConfigCourseEntity entity) throws ArgumentException {
         if (!repository.existsById(id)) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
         return repository.save(entity);
     }

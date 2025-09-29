@@ -10,7 +10,6 @@ import cu.academy.person.mapper.PersonMapper;
 import cu.academy.role.RoleRepository;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumRole;
-import cu.academy.shared.enum_types.EnumTipoPersona;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +48,7 @@ public class PersonService {
 
     public PersonEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<PersonEntity> getAllSort() {
@@ -61,7 +60,7 @@ public class PersonService {
         if (repository.existsById(id)) {
             repository.deleteById(id);
         } else {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
     }
 
@@ -91,16 +90,10 @@ public class PersonService {
     @Transactional
     public PersonEntity updatePerson(Long id, PersonEntity entity) throws ArgumentException {
         if (!repository.existsById(id)) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
 
         return repository.save(entity);
-    }
-
-    public void validatePersonTypeForPerson(PersonEntity person, EnumTipoPersona tipoPersona) throws ArgumentException {
-        if (person != null && tipoPersona != null)
-            if ((!person.getIsClient() && tipoPersona.equals(EnumTipoPersona.CLIENT)))
-                throw new ArgumentException(Translator.toLocale(TranslatorCode.INVALID_PERSON_TYPE));
     }
 
     private void checkEmailNotExist(String email) throws ArgumentException {

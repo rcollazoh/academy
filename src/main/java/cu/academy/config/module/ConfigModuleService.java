@@ -25,7 +25,7 @@ public class ConfigModuleService {
 
     public ConfigModuleEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<ConfigModuleEntity> getAllSort() {
@@ -41,7 +41,7 @@ public class ConfigModuleService {
         if (repository.existsById(id)) {
             repository.deleteById(id);
         } else {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
     }
 
@@ -53,7 +53,7 @@ public class ConfigModuleService {
     @Transactional
     public ConfigModuleEntity update(Long id, ConfigModuleEntity entity) throws ArgumentException {
         if (!repository.existsById(id)) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
         return repository.save(entity);
     }

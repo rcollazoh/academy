@@ -1,6 +1,5 @@
 package cu.academy.config.classes;
 
-import cu.academy.config.module.ConfigModuleEntity;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
@@ -26,7 +25,7 @@ public class ConfigClassService {
 
     public ConfigClassEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<ConfigClassEntity> getAllSort() {
@@ -40,7 +39,7 @@ public class ConfigClassService {
     @Transactional
     public ConfigClassEntity update(Long id, ConfigClassEntity entity) throws ArgumentException {
         if (!repository.existsById(id)) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
         return repository.save(entity);
     }

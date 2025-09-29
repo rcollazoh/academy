@@ -25,20 +25,11 @@ public class AccountAgencyService {
 
     public AccountAgencyEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<AccountAgencyEntity> getAllSort() {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
-    }
-
-    @Transactional
-    public void deleteConfig(Long id) throws ArgumentException {
-        if (repository.existsById(id)) {
-            repository.deleteById(id);
-        } else {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
-        }
     }
 
     @Transactional
@@ -49,7 +40,7 @@ public class AccountAgencyService {
     @Transactional
     public AccountAgencyEntity updateConfig(Long id, AccountAgencyEntity entity) throws ArgumentException {
         if (!repository.existsById(id)) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
         return repository.save(entity);
     }

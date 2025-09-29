@@ -1,6 +1,5 @@
 package cu.academy.student.module;
 
-import cu.academy.config.course.ConfigCourseService;
 import cu.academy.config.parameter.ConfigParameterService;
 import cu.academy.email.EmailService;
 import cu.academy.person.PersonRepository;
@@ -65,7 +64,7 @@ public class StudentModuleService {
 
     public StudentModuleEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<StudentModuleEntity> getAllSort() {

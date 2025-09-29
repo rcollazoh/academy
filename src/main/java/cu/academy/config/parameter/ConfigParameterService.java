@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ConfigParameterService {
@@ -27,7 +26,7 @@ public class ConfigParameterService {
 
     public ConfigParameterEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<ConfigParameterEntity> getAllSort() {
@@ -39,7 +38,7 @@ public class ConfigParameterService {
         if (repository.existsById(id)) {
             repository.deleteById(id);
         } else {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
     }
 
@@ -51,7 +50,7 @@ public class ConfigParameterService {
     @Transactional
     public ConfigParameterEntity update(Long id, ConfigParameterEntity entity) throws ArgumentException {
         if (!repository.existsById(id)) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
         return repository.save(entity);
     }

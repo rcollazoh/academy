@@ -25,7 +25,7 @@ public class NomAreaService {
 
     public NomAreaEntity getById(Long id) throws ArgumentException {
         return (repository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<NomAreaEntity> getAllSort() {
@@ -37,7 +37,7 @@ public class NomAreaService {
         if (repository.existsById(id)) {
             repository.deleteById(id);
         } else {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
     }
 
@@ -49,7 +49,7 @@ public class NomAreaService {
     @Transactional
     public NomAreaEntity update(Long id, NomAreaEntity entity) throws ArgumentException {
         if (!repository.existsById(id)) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
         return repository.save(entity);
     }

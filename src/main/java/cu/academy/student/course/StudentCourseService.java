@@ -23,14 +23,11 @@ import cu.academy.shared.utils.DateUtils;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassEntity;
 import cu.academy.student.classes.StudentClassService;
-import cu.academy.student.course.dto.StudentCourseDto;
 import cu.academy.student.course.mapper.StudentCourseMapper;
 import cu.academy.student.exam.StudentExamEntity;
 import cu.academy.student.exam.StudentExamRepository;
 import cu.academy.student.module.StudentModuleEntity;
 import cu.academy.student.module.StudentModuleRepository;
-import cu.academy.trace.TraceEntity;
-import cu.academy.trace.dto.TraceDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -85,7 +82,7 @@ public class StudentCourseService {
 
     public StudentCourseEntity getById(Long id) throws ArgumentException {
         return (studentCourserepository.findById(id))
-                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION)));
+                .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT)));
     }
 
     public List<StudentCourseEntity> getAllSort() {
@@ -149,7 +146,7 @@ public class StudentCourseService {
         if (studentCourserepository.existsById(id)) {
             studentCourserepository.deleteById(id);
         } else {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
     }
 
@@ -161,7 +158,7 @@ public class StudentCourseService {
     @Transactional
     public StudentCourseEntity update(Long id, StudentCourseEntity entity) throws ArgumentException {
         if (!studentCourserepository.existsById(id)) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_TIPO_APLICACION));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
         return studentCourserepository.save(entity);
     }
