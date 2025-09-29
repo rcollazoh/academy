@@ -5,6 +5,6 @@ import cu.academy.shared.enum_types.EnumExamStatus;
 
 public record StudentExamRequestDto(Long questionId,
                                     Long optionId,
-                                    EnumExamStatus status
+                                    boolean isCorrect
 ) {
 }

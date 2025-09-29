@@ -43,11 +43,11 @@ public class StudentExamService {
 
         // count the approved.
         long approvedCount = requestExam.stream()
-                .filter(dto -> dto.status() == EnumExamStatus.APPROVED)
+                .filter(StudentExamRequestDto::isCorrect)
                 .count();
 
         // check logic
-        EnumExamStatus examStatus = approvedCount >= examEntity.getConfigExam().getDurationMinutes() ? EnumExamStatus.APPROVED : EnumExamStatus.NOT_APPROVED;
+        EnumExamStatus examStatus = approvedCount >= examEntity.getConfigExam().getMinQuestions() ? EnumExamStatus.APPROVED : EnumExamStatus.NOT_APPROVED;
 
         // update exam
         updateStatus(id, examStatus);
