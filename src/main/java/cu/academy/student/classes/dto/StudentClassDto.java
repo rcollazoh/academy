@@ -5,6 +5,5 @@ public record StudentClassDto(Long id,
                               Boolean viewed,
                               Integer configClassId,
                               String title,
-                              String type,
-                              String recourseUrl) {
+                              String type) {
 }

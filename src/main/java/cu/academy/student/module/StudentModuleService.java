@@ -83,13 +83,14 @@ public class StudentModuleService {
             for (StudentClassEntity classEntity : classes) {
                 classDtos.add(new StudentClassDto(classEntity.getId(),
                         classEntity.getViewed(), classEntity.getConfigClass().getId(),
-                        classEntity.getConfigClass().getTitle(), classEntity.getConfigClass().getType(), classEntity.getConfigClass().getRecourseUrl()));
+                        classEntity.getConfigClass().getTitle(), classEntity.getConfigClass().getType()));
             }
 
             StudentExamDto examDto = null;
             if (exam.isPresent()) {
                 examDto = new StudentExamDto(exam.get().getId(), exam.get().getStatus(),
-                        exam.get().getConfigExam().getId(), exam.get().getConfigExam().getTitle(), exam.get().getConfigExam().getDurationMinutes());
+                        exam.get().getConfigExam().getId(), exam.get().getConfigExam().getTitle(),
+                        exam.get().getConfigExam().getDurationMinutes(), exam.get().getConfigExam().getMinQuestions());
             }
 
             // 5. create dto module
@@ -108,12 +109,11 @@ public class StudentModuleService {
     }
 
 
-
     public boolean updateModuleAndEvaluateCourse(StudentModuleEntity entityModule, EnumExamStatus statusModule) {
 //        updateStatus(entityModule.getId(),EnumModuleStatus.valueOf(status.name()));
         entityModule.setStatus(EnumModuleStatus.valueOf(statusModule.name()));
         entityModule.setFechaExam(LocalDate.now());
-        entityModule.setIntentos(entityModule.getIntentos()+1);
+        entityModule.setIntentos(entityModule.getIntentos() + 1);
         //update
         insert(entityModule);
 //

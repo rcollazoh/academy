@@ -7,5 +7,6 @@ public record StudentExamDto(Long id,
                              EnumExamStatus status,
                              Long configExamId,
                              String title,
-                             Integer durationMinutes) {
+                             Integer durationMinutes,
+                             Integer minQuestions) {
 }

@@ -29,10 +29,6 @@ public class ConfigClassEntity {
     @Column(name = "type")
     private String type;
 
-    @Lob
-    @Column(name = "recourse_url")
-    private String recourseUrl;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "module_id")
     private ConfigModuleEntity module;
@@ -87,14 +83,6 @@ public class ConfigClassEntity {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public String getRecourseUrl() {
-        return recourseUrl;
-    }
-
-    public void setRecourseUrl(String recourseUrl) {
-        this.recourseUrl = recourseUrl;
     }
 
     public ConfigModuleEntity getModule() {
