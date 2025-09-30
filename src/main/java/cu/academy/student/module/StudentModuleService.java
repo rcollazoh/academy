@@ -90,7 +90,9 @@ public class StudentModuleService {
             if (exam.isPresent()) {
                 examDto = new StudentExamDto(exam.get().getId(), exam.get().getStatus(),
                         exam.get().getConfigExam().getId(), exam.get().getConfigExam().getTitle(),
-                        exam.get().getConfigExam().getDurationMinutes(), exam.get().getConfigExam().getMinQuestions());
+                        exam.get().getConfigExam().getDurationMinutes(),
+                        exam.get().getConfigExam().getMinQuestions(),
+                        exam.get().getConfigExam().getQuestions());
             }
 
             // 5. create dto module

@@ -8,5 +8,6 @@ public record StudentExamDto(Long id,
                              Long configExamId,
                              String title,
                              Integer durationMinutes,
-                             Integer minQuestions) {
+                             Integer minQuestions,
+                             Integer questions) {
 }

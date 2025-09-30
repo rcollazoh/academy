@@ -43,6 +43,19 @@ public class ConfigExamEntity {
     @Column(name = "duration_minutes", nullable = false)
     private Integer durationMinutes;
 
+    @NotNull
+    @ColumnDefault("0")
+    @Column(name = "questions", nullable = false)
+    private Integer questions;
+
+    public Integer getQuestions() {
+        return questions;
+    }
+
+    public void setQuestions(Integer questions) {
+        this.questions = questions;
+    }
+
     public Integer getDurationMinutes() {
         return durationMinutes;
     }
