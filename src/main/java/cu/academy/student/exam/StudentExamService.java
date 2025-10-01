@@ -53,8 +53,7 @@ public class StudentExamService {
         updateStatus(id, examStatus);
 
         //update module and course
-        boolean courseResponse = studentModuleService.updateModuleAndEvaluateCourse(getById(id).getStudentModule(), examStatus);
-        EnumExamStatus courseStatus = courseResponse ? EnumExamStatus.APPROVED : EnumExamStatus.NOT_APPROVED;
+        EnumExamStatus courseStatus = studentModuleService.updateModuleAndEvaluateCourse(getById(id).getStudentModule(), examStatus);
         return new StudentExamResponseDto(examStatus,courseStatus);
     }
 

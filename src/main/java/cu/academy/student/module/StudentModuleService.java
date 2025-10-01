@@ -110,8 +110,8 @@ public class StudentModuleService {
         return result;
     }
 
-
-    public boolean updateModuleAndEvaluateCourse(StudentModuleEntity entityModule, EnumExamStatus statusModule) {
+    @Transactional
+    public EnumExamStatus updateModuleAndEvaluateCourse(StudentModuleEntity entityModule, EnumExamStatus statusModule) {
 //        updateStatus(entityModule.getId(),EnumModuleStatus.valueOf(status.name()));
         entityModule.setStatus(EnumModuleStatus.valueOf(statusModule.name()));
         entityModule.setFechaExam(LocalDate.now());
@@ -126,6 +126,9 @@ public class StudentModuleService {
 
         boolean allApproved = statuses.stream()
                 .allMatch(status -> status == EnumModuleStatus.APPROVED);
+
+        boolean allFinalized = statuses.stream()
+                .allMatch(status -> status == EnumModuleStatus.APPROVED || status == EnumModuleStatus.NOT_APPROVED);
 
         if (hasNotApproved) {
             emailService.sendMessage(
@@ -156,7 +159,6 @@ public class StudentModuleService {
                     null
             );
         }
-
-        return allApproved;
+        return allFinalized ? (!allApproved ? EnumExamStatus.NOT_APPROVED : EnumExamStatus.APPROVED) : EnumExamStatus.ACTIVE;
     }
 }
