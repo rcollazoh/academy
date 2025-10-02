@@ -20,7 +20,18 @@ public class ImagesController {
 
     @GetMapping
     public ResponseEntity<byte[]> getImage(@RequestParam("filename") String filename) {
-        return ResponseEntity.ok().contentType(MediaType.valueOf("image/svg+xml")).body(storageService.getFile(filename));
+        String contentType;
+        filename = filename.toLowerCase();
+
+        if (filename.endsWith(".svg")) {
+            contentType = "image/svg+xml";
+        } else {
+            contentType = "image/jpeg";
+        }
+
+        return ResponseEntity.ok()
+                .contentType(MediaType.valueOf(contentType))
+                .body(storageService.getFile(filename));
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

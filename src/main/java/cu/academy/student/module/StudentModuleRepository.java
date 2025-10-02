@@ -18,8 +18,8 @@ public interface StudentModuleRepository extends JpaSpecificationExecutor<Studen
     @Query("SELECT m.status FROM StudentModuleEntity m WHERE m.studentCourse.id = :courseId")
     List<EnumModuleStatus> findStatusesByCourseId(@Param("courseId") Long courseId);
 
-    @Query("SELECT  CASE WHEN COUNT(m) > 0 THEN true ELSE false END  FROM StudentModuleEntity m WHERE m.id = :moduleId and m.module.isCommon = true ")
-     boolean findModuleByIdCommon(@Param("moduleId") Long moduleId);
+//    @Query("SELECT  CASE WHEN COUNT(m) > 0 THEN true ELSE false END  FROM StudentModuleEntity m WHERE m.id = :moduleId and m.module.orderNum = 0 ")
+//     boolean findModuleByIdCommon(@Param("moduleId") Long moduleId);
 
     @Modifying
     @Transactional

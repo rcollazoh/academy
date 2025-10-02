@@ -20,6 +20,9 @@ public interface PersonMapper {
     PersonEntity toEntity(PersonInsertDto dto);
     @Mapping(target = "idNumber", source = "idNumber")
     PersonEntity toEntity(PersonRegisterDTO dto);
+    @Mapping(target = "idNumber", source = "idNumber")
+    @Mapping(target = "areaId", source = "area.id")
+    @Mapping(target = "practiceId", source = "practice.id")
     PersonProfileDto toProfileDto(PersonEntity person);
     @Mapping(target = "idNumber", source = "idNumber")
     void updateEntity(PersonUpdateDto dto, @MappingTarget PersonEntity entity);

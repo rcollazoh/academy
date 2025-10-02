@@ -144,8 +144,8 @@ public class StudentModuleService {
             StudentCourseEntity byIdCourse = entityModule.getStudentCourse();
             byIdCourse.setStatus(EnumCourseStatus.APPROVED);
             byIdCourse.setEndDate(LocalDate.now());
-
             studentCourseService.update(entityModule.getStudentCourse().getId().longValue(), byIdCourse);
+
             emailService.sendMessage(
                     personRepository.getReferenceById(byIdCourse.getPersonId()).getEmail(),
                     "Curso ha finalizado satisfactoriamente",

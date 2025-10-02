@@ -9,5 +9,10 @@ public record PersonProfileDto(Long id,
                                String phone,
                                String status,
                                LocalDate birthday,
-                               String workplace) {
+                               String workplace,
+                               String idNumber,
+                               Long areaId,
+                               Long practiceId
+
+) {
 }

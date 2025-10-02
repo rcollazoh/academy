@@ -22,7 +22,7 @@ public class TraceEntity {
     @Column(name = "full_name", nullable = false, length = 512)
     private String fullName;
 
-    @Column(name = "mobile_phone", nullable = false, length = 15)
+    @Column(name = "mobile_phone", length = 15)
     private String mobilePhone;
 
     @Column(name = "context", length = 100)

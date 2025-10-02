@@ -38,9 +38,7 @@ public class StudentClassService {
 
         StudentClassEntity classEntity = getById(id);
 
-        boolean isCommonModule = repositoryModule.findModuleByIdCommon(classEntity.getStudentModule().getId());
-
-        if (isCommonModule)
+        if ("Clase introductoria del curso".equals(classEntity.getConfigClass().getDescription()))
             repositoryModule.updateStatusById(classEntity.getStudentModule().getId(), EnumModuleStatus.APPROVED);
     }
 
