@@ -55,7 +55,7 @@ jobs:
           port: 22
           command_timeout: 1m
           script: |
-            cd /home/deploy/app/
+            cd /home/deploy/app/target/
             pgrep java
             kill -9 $(pgrep java)
             java -Dspring.profiles.active=digitalOcean -jar academy-api-rest-0.0.1-SNAPSHOT.jar &
