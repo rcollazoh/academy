@@ -10,6 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -26,12 +27,17 @@ public class SimpleCORSFilter implements Filter {
 
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) res;
+        String origin = request.getHeader("Origin");
 
-        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        List<String> allowedOrigins = List.of("http://164.92.71.78", "https://miapp.com");
+        if (allowedOrigins.contains(origin)) {
+            response.setHeader("Access-Control-Allow-Origin", origin);
+        }
+
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, PATCH, PUT, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "*");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, X-Requested-With");
         response.setHeader("Access-Control-Expose-Headers", "Content-Type, Connection, Accept, access_token, refresh_token");
 
         log.info("CORS --- Access-Control-Allow-Methods: POST, PATCH, PUT, GET, OPTIONS, DELETE");
