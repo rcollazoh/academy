@@ -21,9 +21,9 @@ public class ImagesController {
     @GetMapping
     public ResponseEntity<byte[]> getImage(@RequestParam("filename") String filename) {
         String contentType;
-        filename = filename.toLowerCase();
+        String filenameLowerCase = filename.toLowerCase();
 
-        if (filename.endsWith(".svg")) {
+        if (filenameLowerCase.endsWith(".svg")) {
             contentType = "image/svg+xml";
         } else {
             contentType = "image/jpeg";
