@@ -61,7 +61,7 @@ public class PersonController {
         }
         mapper.updateEntity(dto,entity);
 
-        if (dto.password() != null)
+        if (dto.password() != null && dto.password().isEmpty())
             entity.setPassword( passwordEncoder.encode(dto.password()));
 
         return ResponseEntity.ok(mapper.toProfileDto(service.updatePerson(id,entity)));
