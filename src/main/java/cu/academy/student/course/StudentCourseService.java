@@ -28,6 +28,8 @@ import cu.academy.student.exam.StudentExamEntity;
 import cu.academy.student.exam.StudentExamRepository;
 import cu.academy.student.module.StudentModuleEntity;
 import cu.academy.student.module.StudentModuleRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,6 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class StudentCourseService {
@@ -58,6 +61,8 @@ public class StudentCourseService {
     private final FilesStorageService filesStorageService;
     private final StudentCourseMapper mapper;
 
+
+    private static final Logger log = LoggerFactory.getLogger(StudentCourseService.class);
 
 //    private final ModelMapper modelMapper;
 //    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
@@ -105,8 +110,8 @@ public class StudentCourseService {
     public PagingResponseList<StudentCourseEntity> get(Specification<StudentCourseEntity> spec, Pageable pageable) {
         Page<StudentCourseEntity> page = studentCourserepository.findAll(spec, pageable);
         List<StudentCourseEntity> content = page.getContent();
-        return new PagingResponseList<>((int)page.getTotalElements(), page.getNumber(),
-                page.getNumberOfElements(), (int)pageable.getOffset(), page.getTotalPages(), content);
+        return new PagingResponseList<>((int) page.getTotalElements(), page.getNumber(),
+                page.getNumberOfElements(), (int) pageable.getOffset(), page.getTotalPages(), content);
     }
 
     public List<StudentCourseEntity> getFindByPersonId(long personId) {
@@ -167,14 +172,19 @@ public class StudentCourseService {
     public void applyStudentCourse(Long personId, Long courseId, EnumPaymentMethod paymentMethod, MultipartFile paymentPhoto) {
         StudentCourseEntity studentEntity = new StudentCourseEntity();
         String extension = filesStorageService.getExtension(paymentPhoto);
-        emailService.sendMessageAndAttachmentWithFile(
-                parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-                "Confirmación de aplicación a curso",
-                "Aplico un estudiante",
-                paymentPhoto,
-                EnumImagenType.PAYMENT.name().concat(".").concat(extension)
-        );
-
+        try {
+            emailService.sendMessageAndAttachmentWithFile(
+                    parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
+                    "Confirmación de aplicación a curso",
+                    "Aplico un estudiante",
+                    paymentPhoto,
+                    EnumImagenType.PAYMENT.name().concat(".").concat(extension)
+            );
+            log.info("Correo enviado correctamente de aplicar.");
+        } catch (Exception e) {
+            log.warn("No se pudo enviar el correo para aplicar: " + e.getMessage());
+            // Opcional: registrar en BD o sistema de alertas
+        }
         String receiptUrl = EnumImagenType.PAYMENT.name().
                 concat("/").
                 concat(DateUtils.getCurrentDateFormat("yyyyMMddHHmmss")).
@@ -192,34 +202,23 @@ public class StudentCourseService {
 
         filesStorageService.save(paymentPhoto, receiptUrl);
 
-//        emailService.sendMessage(
-//                personRepository.getReferenceById(personId).getEmail(),
-//                "Confirmación de aplicación a curso",
-//                "Estimado/a estudiante,\n\nUsted ha aplicado exitosamente a un nuevo curso en Prod Academy.\n\nPor favor, espere un próximo correo de confirmación una vez que el profesor haya aprobado su solicitud.\n\nGracias por confiar en nosotros.\n\nAtentamente,\nEl equipo de Prod Academy",
-//                null
-//        );
-
-        // crear notificacion  y correo para Acedemy.
-//        emailService.sendMessageAndAttachmentWithFile(
-//                parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-//                "Confirmación de aplicación a curso",
-//                "Aplico un estudiante",
-//                paymentPhoto,
-//                EnumImagenType.PAYMENT.name().concat(".").concat(extension)
-//        );
-//       insertFotoTransferencia(depositoInserted, fotoTransferencia);
-
     }
 
     @Transactional
     public void activeStudentCourse(Long personId, Long courseId) {
-        emailService.sendMessage(
-                personRepository.getReferenceById(personId).getEmail(),
-                "Confirmación de aprobación de curso",
-                "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prod Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prod Academy",
-                null
-        );
+        try {
+            emailService.sendMessage(
+                    personRepository.getReferenceById(personId).getEmail(),
+                    "Confirmación de aprobación de curso",
+                    "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prod Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prod Academy",
+                    null
+            );
 
+            log.info("Correo enviado correctamente de activar.");
+        } catch (Exception e) {
+            log.warn("No se pudo enviar el correo de activar: " + e.getMessage());
+            // Opcional: registrar en BD o sistema de alertas
+        }
         StudentCourseEntity studentEntity = getById(courseId);
         studentEntity.setStatus(EnumCourseStatus.ACTIVATED);
         studentEntity.setStartDate(LocalDate.now());
@@ -261,16 +260,21 @@ public class StudentCourseService {
     @Transactional
     public void rejectCourse(long personId, long courseId) {
         studentCourserepository.updateStatusById(courseId, EnumCourseStatus.REJECTED);
-
-        emailService.sendMessage(
-                personRepository.getReferenceById(personId).getEmail(),
-                "Su curso fue rechazado",
-                "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prod Academy",
-                null
-        );
+        try {
+            emailService.sendMessage(
+                    personRepository.getReferenceById(personId).getEmail(),
+                    "Su curso fue rechazado",
+                    "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prod Academy",
+                    null
+            );
+            log.info("Correo enviado correctamente rechazar.");
+        } catch (Exception e) {
+            log.warn("No se pudo enviar el correo de rechazar: " + e.getMessage());
+            // Opcional: registrar en BD o sistema de alertas
+        }
     }
 
-    public void findExpiredActivatedCourses(){
+    public void findExpiredActivatedCourses() {
         List<StudentCourseEntity> resultCourses = studentCourserepository.findExpiredActivatedCourses();
         for (StudentCourseEntity expiredActivatedCours : resultCourses) {
             List<EnumModuleStatus> statuses = studentModuleRepository.findStatusesByCourseId(expiredActivatedCours.getId().longValue());
@@ -280,7 +284,7 @@ public class StudentCourseService {
                     .allMatch(status -> status == EnumModuleStatus.APPROVED);
             if (allApproved) {
                 expiredActivatedCours.setStatus(EnumCourseStatus.APPROVED);
-            } else  {
+            } else {
                 expiredActivatedCours.setStatus(EnumCourseStatus.NOT_APPROVED);
             }
         }

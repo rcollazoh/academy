@@ -30,9 +30,9 @@ public class PersonController {
     @GetMapping
     public List<PersonProfileDto> getAllProfiles() {
         return service.getAllSort()
-                      .stream()
-                      .map(mapper::toProfileDto)
-                      .collect(Collectors.toList());
+                .stream()
+                .map(mapper::toProfileDto)
+                .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
@@ -59,11 +59,16 @@ public class PersonController {
         if (entity == null) {
             return ResponseEntity.notFound().build();
         }
-        mapper.updateEntity(dto,entity);
+        String passwordEntity = entity.getPassword();
+        mapper.updateEntity(dto, entity);
 
-        if (dto.password() != null && dto.password().isEmpty())
-            entity.setPassword( passwordEncoder.encode(dto.password()));
+        if (dto.password() != null && !dto.password().isEmpty()) {
+            entity.setPassword(passwordEncoder.encode(dto.password()));
+        } else {
+            entity.setPassword(passwordEntity);
+        }
 
-        return ResponseEntity.ok(mapper.toProfileDto(service.updatePerson(id,entity)));
+
+        return ResponseEntity.ok(mapper.toProfileDto(service.updatePerson(id, entity)));
     }
 }
