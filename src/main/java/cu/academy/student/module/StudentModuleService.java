@@ -18,6 +18,8 @@ import cu.academy.student.exam.StudentExamEntity;
 import cu.academy.student.exam.StudentExamRepository;
 import cu.academy.student.exam.dto.StudentExamDto;
 import cu.academy.student.module.dto.StudentModuleDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,8 @@ public class StudentModuleService {
     private final PersonRepository personRepository;
     private final ConfigParameterService parameterService;
     private final StudentCourseService studentCourseService;
+    private static final Logger log = LoggerFactory.getLogger(StudentModuleService.class);
+
 //    private final ModelMapper modelMapper;
 //    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
 //    }.getType();
@@ -131,12 +135,18 @@ public class StudentModuleService {
                 .allMatch(status -> status == EnumModuleStatus.APPROVED || status == EnumModuleStatus.NOT_APPROVED);
 
         if (hasNotApproved) {
-            emailService.sendMessage(
+            try {
+            emailService.sendEmail(
                     parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
                     "Estudiante con curso desaprobado",
                     "Un estudiante desaprobo un modulo",
-                    null
+                    null,null
             );
+                log.info("Correo enviado correctamente de desaprobado.");
+            } catch (Exception e) {
+                log.warn("No se pudo enviar el correo de desaprobado: " + e.getMessage());
+                // Opcional: registrar en BD o sistema de alertas
+            }
         }
 
         if (allApproved) {
@@ -145,19 +155,24 @@ public class StudentModuleService {
             byIdCourse.setStatus(EnumCourseStatus.APPROVED);
             byIdCourse.setEndDate(LocalDate.now());
             studentCourseService.update(entityModule.getStudentCourse().getId().longValue(), byIdCourse);
-
-            emailService.sendMessage(
+            try {
+            emailService.sendEmail(
                     personRepository.getReferenceById(byIdCourse.getPersonId()).getEmail(),
                     "Curso ha finalizado satisfactoriamente",
                     "Estimado/a estudiante,\n\nSu curso fue aprobado, espere un nuevo correo con su certifico.\n\nFelicidades.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prod Academy",
-                    null
+                    null,null
             );
-            emailService.sendMessage(
+            emailService.sendEmail(
                     parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
                     "Curso finalizado",
                     "Un estudiante ha finalizado un curso satisfactoriamente, enviar certifico.",
-                    null
+                    null,null
             );
+                log.info("Correo enviado correctamente de finalizar.");
+            } catch (Exception e) {
+                log.warn("No se pudo enviar el correo para finalizar: " + e.getMessage());
+                // Opcional: registrar en BD o sistema de alertas
+            }
         }
         return allFinalized ? (!allApproved ? EnumExamStatus.NOT_APPROVED : EnumExamStatus.APPROVED) : EnumExamStatus.ACTIVE;
     }

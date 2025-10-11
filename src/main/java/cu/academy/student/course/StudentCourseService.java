@@ -173,11 +173,11 @@ public class StudentCourseService {
         StudentCourseEntity studentEntity = new StudentCourseEntity();
         String extension = filesStorageService.getExtension(paymentPhoto);
         try {
-            emailService.sendMessageAndAttachmentWithFile(
+            emailService.sendEmail(
                     parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
                     "Confirmación de aplicación a curso",
                     "Aplico un estudiante",
-                    paymentPhoto,
+                    paymentPhoto.getBytes(),
                     EnumImagenType.PAYMENT.name().concat(".").concat(extension)
             );
             log.info("Correo enviado correctamente de aplicar.");
@@ -207,11 +207,11 @@ public class StudentCourseService {
     @Transactional
     public void activeStudentCourse(Long personId, Long courseId) {
         try {
-            emailService.sendMessage(
+            emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
                     "Confirmación de aprobación de curso",
                     "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prod Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prod Academy",
-                    null
+                    null,null
             );
 
             log.info("Correo enviado correctamente de activar.");
@@ -261,11 +261,11 @@ public class StudentCourseService {
     public void rejectCourse(long personId, long courseId) {
         studentCourserepository.updateStatusById(courseId, EnumCourseStatus.REJECTED);
         try {
-            emailService.sendMessage(
+            emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
                     "Su curso fue rechazado",
                     "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prod Academy",
-                    null
+                    null, null
             );
             log.info("Correo enviado correctamente rechazar.");
         } catch (Exception e) {
@@ -290,24 +290,4 @@ public class StudentCourseService {
         }
         studentCourserepository.saveAll(resultCourses);
     }
-
-//    public void testEmail() {
-//
-//
-//        emailService.sendMessage(
-//                personRepository.getReferenceById(personId).getEmail(),
-//                "Confirmación de aplicación a curso",
-//                "Estimado/a estudiante,\n\nUsted ha aplicado exitosamente a un nuevo curso en Prod Academy.\n\nPor favor, espere un próximo correo de confirmación una vez que el profesor haya aprobado su solicitud.\n\nGracias por confiar en nosotros.\n\nAtentamente,\nEl equipo de Prod Academy",
-//                null
-//        );
-//
-//        // crear notificacion  y correo para Acedemy.
-//        emailService.sendMessageAndAttachmentWithFile(
-//                parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-//                "Confirmación de aplicación a curso",
-//                "Aplico un estudiante",
-//                paymentPhoto,
-//                EnumImagenType.PAYMENT.name().concat(".").concat(extension)
-//        );
-//    }
 }
