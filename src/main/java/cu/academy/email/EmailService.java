@@ -1,13 +1,26 @@
 package cu.academy.email;
 
 
+import com.sendgrid.Method;
+import com.sendgrid.Request;
+import com.sendgrid.Response;
+import com.sendgrid.SendGrid;
+import com.sendgrid.helpers.mail.Mail;
+import com.sendgrid.helpers.mail.objects.Attachments;
+import com.sendgrid.helpers.mail.objects.Content;
+import com.sendgrid.helpers.mail.objects.Email;
 import com.sun.mail.util.MailConnectException;
+import cu.academy.config.parameter.ConfigParameterService;
 import cu.academy.images.FilesStorageServiceImpl;
 import cu.academy.person.PersonEntity;
 import cu.academy.shared.exceptions.ArgumentException;
+import cu.academy.student.exam.StudentExamService;
 import cu.academy.trace.TraceService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
@@ -18,18 +31,23 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 
 @Service
 public class EmailService {
     private final TraceService traceService;
     private final FilesStorageServiceImpl filesStorageService;
+    private final ConfigParameterService configParameterService;
     private static final String className = "ViajeServiceImpl";
     JavaMailSender javaMailSender;
+    private static final Logger log = LoggerFactory.getLogger(EmailService.class);
 
-    public EmailService(TraceService trazaLogSistemaService, FilesStorageServiceImpl filesStorageService, JavaMailSender javaMailSender) {
+    public EmailService(TraceService trazaLogSistemaService, FilesStorageServiceImpl filesStorageService, ConfigParameterService configParameterService, JavaMailSender javaMailSender) {
         this.traceService = trazaLogSistemaService;
         this.filesStorageService = filesStorageService;
+        this.configParameterService = configParameterService;
         this.javaMailSender = javaMailSender;
     }
 
@@ -243,5 +261,36 @@ public class EmailService {
                 "</body>" +
                 "</html>";
     }
+
+    @Value("${address.correo}")
+    private String fromEmail;
+
+    @Async
+    public void sendEmail(String to, String subject, String contentText, byte[] attachmentBytes, String attachmentName) throws IOException {
+        Email from = new Email(fromEmail);
+        Email toEmail = new Email(to);
+        Content content = new Content("text/plain", contentText);
+        Mail mail = new Mail(from, subject, toEmail, content);
+
+        if (attachmentBytes != null) {
+            Attachments attachments = new Attachments();
+            attachments.setContent(Base64.getEncoder().encodeToString(attachmentBytes));
+            attachments.setType("application/pdf"); // o el tipo MIME que corresponda
+            attachments.setFilename(attachmentName);
+            attachments.setDisposition("attachment");
+            mail.addAttachments(attachments);
+        }
+
+        SendGrid sg = new SendGrid(configParameterService.getBy("SENDGRID_API_KEY").getValue());
+        Request request = new Request();
+        request.setMethod(Method.POST);
+        request.setEndpoint("mail/send");
+        request.setBody(mail.build());
+        Response response = sg.api(request);
+        log.info("Enviar correo a :" + to + " satisfactoriamente");
+        log.info("Status: " + response.getStatusCode());
+        log.info("Body: " + response.getBody());
+    }
+
 
 }
