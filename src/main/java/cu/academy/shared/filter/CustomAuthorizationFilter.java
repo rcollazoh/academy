@@ -80,4 +80,14 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
         }
     }
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        return path.startsWith("/academy/person") ||
+                path.startsWith("/academy/area") ||
+                path.startsWith("/academy/practice") ||
+                path.equals("/academy/login") ||
+                "OPTIONS".equalsIgnoreCase(request.getMethod());
+    }
+
 }
