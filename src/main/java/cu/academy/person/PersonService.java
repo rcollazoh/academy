@@ -1,5 +1,6 @@
 package cu.academy.person;
 
+import cu.academy.config.parameter.ConfigParameterService;
 import cu.academy.email.EmailService;
 import cu.academy.nom.area.NomAreaEntity;
 import cu.academy.nom.area.NomAreaRepository;
@@ -11,7 +12,11 @@ import cu.academy.role.RoleRepository;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumRole;
 import cu.academy.shared.exceptions.ArgumentException;
+import cu.academy.shared.utils.StringUtils;
 import cu.academy.shared.utils.TranslatorCode;
+import cu.academy.student.module.StudentModuleService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -27,9 +32,10 @@ public class PersonService {
     private final NomAreaRepository nomAreaRepository;
     private final NomPracticeRepository nomPracticeRepository;
     private final RoleRepository roleRepository;
-
-    private final EmailService  emailService;
+    private final ConfigParameterService parameterService;
+    private final EmailService emailService;
     private final PersonMapper mapper;
+    private static final Logger log = LoggerFactory.getLogger(PersonService.class);
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 //    private final ModelMapper modelMapper;
@@ -37,12 +43,13 @@ public class PersonService {
 //    }.getType();
 
     @Autowired
-    public PersonService(PersonRepository repository, EmailService emailService, NomAreaRepository nomAreaRepository, NomPracticeRepository nomPracticeRepository, RoleRepository roleRepository, PersonMapper mapper) {
+    public PersonService(PersonRepository repository, EmailService emailService, NomAreaRepository nomAreaRepository, NomPracticeRepository nomPracticeRepository, RoleRepository roleRepository, ConfigParameterService parameterService, PersonMapper mapper) {
         this.repository = repository;
         this.emailService = emailService;
         this.nomAreaRepository = nomAreaRepository;
         this.nomPracticeRepository = nomPracticeRepository;
         this.roleRepository = roleRepository;
+        this.parameterService = parameterService;
         this.mapper = mapper;
     }
 
@@ -81,9 +88,9 @@ public class PersonService {
         entity.setPractice(practice);
         entity.setRole(roleRepository.findByName(EnumRole.STUDENT.name()).get());
         if (entity.getPassword() != null)
-            entity.setPassword( passwordEncoder.encode(entity.getPassword()));
+            entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 
-      //  emailService.sendMessage(entity.getEmail(), "Prod Acedemy", "We are testing new functionality", null);
+        //  emailService.sendMessage(entity.getEmail(), "Prod Acedemy", "We are testing new functionality", null);
         return repository.save(entity);
     }
 
@@ -104,5 +111,39 @@ public class PersonService {
 
     }
 
+
+    public String recoverKey(String email) throws ArgumentException {
+        try {
+            String mensaje = "";
+            PersonEntity person = repository.findByEmail(email).orElse(null);
+
+            //Se comprueba que el correo sea de la misma persona q el telefono.
+            if (person != null) {
+                StringUtils util = new StringUtils();
+                String passwordTemporal = util.generateRandomPass();
+                try {
+                    emailService.sendEmail(
+                            parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
+                            "Recuperar clave",
+                            "Su nueva clave es: " + passwordTemporal,
+                            null, null
+                    );
+                    log.info("Correo enviado correctamente de desaprobado.");
+                } catch (Exception e) {
+                    log.warn("No se pudo enviar el correo de desaprobado: " + e.getMessage());
+                    // Opcional: registrar en BD o sistema de alertas
+                }
+                person.setPassword(passwordEncoder.encode(passwordTemporal));
+                repository.save(person);
+            } else {
+                mensaje = "El correo: " + email + " no esta asignado a ningún estudiante";
+            }
+            return mensaje;
+        } catch (
+                Exception ex) {
+            // trazaLogSistemaService.insertLog(className, methodName, "Error al recuperar clave del telefono." + telefCelular, ex, 3);
+            throw ex;
+        }
+    }
 }
 

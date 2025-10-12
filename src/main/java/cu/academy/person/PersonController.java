@@ -5,6 +5,7 @@ import cu.academy.person.dto.PersonProfileDto;
 import cu.academy.person.dto.PersonRegisterDTO;
 import cu.academy.person.dto.PersonUpdateDto;
 import cu.academy.person.mapper.PersonMapper;
+import cu.academy.shared.utils.EndpointResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -67,8 +68,12 @@ public class PersonController {
         } else {
             entity.setPassword(passwordEntity);
         }
-
-
         return ResponseEntity.ok(mapper.toProfileDto(service.updatePerson(id, entity)));
     }
+
+    @GetMapping("/recover_key")
+    public ResponseEntity<EndpointResult> recoverKey(@RequestParam("email") String email) throws Exception {
+        return ResponseEntity.ok(new EndpointResult(service.recoverKey(email), null));
+    }
+
 }

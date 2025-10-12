@@ -8,6 +8,8 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cu.academy.authentication.dto.LogoutRequest;
 import cu.academy.authentication.dto.UserResponseDto;
+import cu.academy.config.parameter.ConfigParameterService;
+import cu.academy.email.EmailService;
 import cu.academy.person.PersonEntity;
 import cu.academy.person.PersonRepository;
 import cu.academy.person.PersonService;
@@ -20,6 +22,7 @@ import cu.academy.shared.filter.LoginDetails;
 import cu.academy.trace.TraceService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import cu.academy.shared.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -46,7 +49,7 @@ public class AuthenticationService {
     private final TraceService traceService;
 
     public AuthenticationService(PersonService personaService,
-                                 PersonRepository personRepository, TraceService traceService
+                                 PersonRepository personRepository, TraceService traceService, EmailService emailService, ConfigParameterService parameterService
 //                                ,EmailService emailService
     ) {
         this.personRepository = personRepository;
@@ -154,40 +157,4 @@ public class AuthenticationService {
         response.setHeader("refresh_token", newRefreshToken);
         response.setContentType(APPLICATION_JSON_VALUE);
     }
-
-    /**
-     * Verifica que el telefono y correo son de una misma persona y enviar la clave al correo. Es para el sitio web renetaxi
-     *
-     * @return
-     * @throws ArgumentException
-     */
-//    @Transactional(rollbackFor = RuntimeException.class)
-//    public String recuperarClave(String telefCelular, String correo) throws ArgumentException {
-//        String methodName = "recuperarClave";
-//        try {
-//            String mensaje = "";
-//            PersonEntity cliente = personRepository.findByPhone(telefCelular).orElse(null);
-//
-//            //Se comprueba que el correo sea de la misma persona q el telefono.
-//            if (cliente != null && cliente.getEmail() != null && cliente.getEmail().equals(correo)) {
-//                StringUtils util = new StringUtils();
-//                String passwordTemporal = util.generateRandomPass();
-//
-//                emailService.sendMenssaje(correo, "ReneTaxis-Recuperar clave", textMessage, cliente.getOtrosCorreos());
-//
-//                mensaje = textMessage;
-//                String passwordTemporalEncode = bCryptPasswordEncoder.encode(passwordTemporal);
-//                cliente.setPassword_temporal(passwordTemporalEncode);
-//                personRepository.save(cliente);
-//
-//            } else {
-//                mensaje = "El correo: " + correo + " no pertenece al usuario con número de télefono: " + telefCelular;
-//            }
-//            return mensaje;
-//        } catch (Exception ex) {
-//           // trazaLogSistemaService.insertLog(className, methodName, "Error al recuperar clave del telefono." + telefCelular, ex, 3);
-//            throw ex;
-//        }
-//
-//    }
 }

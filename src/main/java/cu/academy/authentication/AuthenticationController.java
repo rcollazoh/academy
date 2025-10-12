@@ -23,22 +23,6 @@ public class AuthenticationController {
         this.authService = authService;
     }
 
-//    @PostMapping("/login")
-//    public ResponseEntity<EndpointResult> login(@Valid @RequestBody LoginRequest userData) throws ArgumentException {
-//        try {
-//            UserResponseDto user = authService.login(userData);
-//            return ResponseEntity.ok(new EndpointResult(user, null));
-//        } catch (IllegalStateException ex) {
-//            return ResponseEntity.accepted().body(new EndpointResult(null, ex.getMessage()));
-//        }
-//    }
-
-//    @PostMapping("/turno_sesion")
-//    public ResponseEntity<EndpointResult> createTurnoAndSesion(@Valid @RequestBody LoginRequest userData) throws ArgumentException {
-//        UserResponseDto user = authService.createTurnoAndSesion(userData);
-//        return ResponseEntity.ok(new EndpointResult(user, null));
-//    }
-
     @PostMapping("/logout")
     public ResponseEntity<EndpointResult> logout(@Valid @RequestBody LogoutRequest logoutRequest,HttpServletRequest request) throws Exception {
         authService.logout(logoutRequest,request);
@@ -50,10 +34,4 @@ public class AuthenticationController {
         authService.refreshToken(request, response);
         return ResponseEntity.ok(new EndpointResult(null, null));
     }
-//
-//    @GetMapping("/recuperar_clave")
-//    public ResponseEntity<EndpointResult> recuperarClave(@RequestParam("telefCelular") String telefCelular, @RequestParam("correo") String correo) throws Exception {
-//        return ResponseEntity.ok(new EndpointResult(authService.recuperarClave(telefCelular, correo), null));
-//    }
-
 }
