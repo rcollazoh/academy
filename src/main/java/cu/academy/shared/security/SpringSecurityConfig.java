@@ -70,7 +70,7 @@ public class SpringSecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("http://164.92.71.78")); // o tu dominio
+        configuration.setAllowedOrigins(List.of("https://pradacademy.com")); // o tu dominio
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         configuration.setAllowedHeaders(List.of("Authorization", "Content-Type", "X-Requested-With"));
         configuration.setExposedHeaders(List.of("Content-Type", "Connection", "Accept", "access_token", "refresh_token"));
