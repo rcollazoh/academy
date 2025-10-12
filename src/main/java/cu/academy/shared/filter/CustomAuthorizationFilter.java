@@ -83,11 +83,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
-        return path.startsWith("/academy/person") ||
+        return "OPTIONS".equalsIgnoreCase(request.getMethod()) ||
+                path.startsWith("/academy/person") ||
                 path.startsWith("/academy/area") ||
                 path.startsWith("/academy/practice") ||
                 path.equals("/academy/login") ||
-                "OPTIONS".equalsIgnoreCase(request.getMethod());
+                path.equals("/academy/refresh_token");
     }
 
 }
