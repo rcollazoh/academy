@@ -50,7 +50,7 @@ public class SpringSecurityConfig {
         );
         customAuthenticationFilter.setFilterProcessesUrl("/academy/login");
         http
-                .cors(withDefaults()) // 🔥 Esto activa el bean anterior
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // 🔥 Esto activa el bean anterior
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
