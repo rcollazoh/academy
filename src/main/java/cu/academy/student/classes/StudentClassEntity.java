@@ -40,6 +40,19 @@ public class StudentClassEntity {
     @JoinColumn(name = "student_cmodule_id", nullable = false)
     private StudentModuleEntity studentModule;
 
+    @NotNull
+    @ColumnDefault("0")
+    @Column(name = "current_image_id", nullable = false)
+    private Integer currentImageId;
+
+    public Integer getCurrentImageId() {
+        return currentImageId;
+    }
+
+    public void setCurrentImageId(Integer currentImageId) {
+        this.currentImageId = currentImageId;
+    }
+
     @PrePersist
     protected void onCreate() {
         Instant now = Instant.now();

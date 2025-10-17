@@ -90,7 +90,7 @@ public class PersonService {
         if (entity.getPassword() != null)
             entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 
-        //  emailService.sendMessage(entity.getEmail(), "Prod Acedemy", "We are testing new functionality", null);
+        //  emailService.sendMessage(entity.getEmail(), "Prad Acedemy", "We are testing new functionality", null);
         return repository.save(entity);
     }
 

@@ -210,7 +210,7 @@ public class StudentCourseService {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
                     "Confirmación de aprobación de curso",
-                    "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prod Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prod Academy",
+                    "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prad Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prad Academy",
                     null,null
             );
 
@@ -264,7 +264,7 @@ public class StudentCourseService {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
                     "Su curso fue rechazado",
-                    "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prod Academy",
+                    "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prad Academy",
                     null, null
             );
             log.info("Correo enviado correctamente rechazar.");

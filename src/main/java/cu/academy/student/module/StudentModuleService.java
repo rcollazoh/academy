@@ -85,7 +85,7 @@ public class StudentModuleService {
             // 4. Mapear clases y examen a sus respectivos DTOs
             List<StudentClassDto> classDtos = new ArrayList<>();
             for (StudentClassEntity classEntity : classes) {
-                classDtos.add(new StudentClassDto(classEntity.getId(),
+                classDtos.add(new StudentClassDto(classEntity.getId(), classEntity.getCurrentImageId(),
                         classEntity.getViewed(), classEntity.getConfigClass().getId(),
                         classEntity.getConfigClass().getTitle(), classEntity.getConfigClass().getType()));
             }
@@ -159,7 +159,7 @@ public class StudentModuleService {
             emailService.sendEmail(
                     personRepository.getReferenceById(byIdCourse.getPersonId()).getEmail(),
                     "Curso ha finalizado satisfactoriamente",
-                    "Estimado/a estudiante,\n\nSu curso fue aprobado, espere un nuevo correo con su certifico.\n\nFelicidades.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prod Academy",
+                    "Estimado/a estudiante,\n\nSu curso fue aprobado, espere un nuevo correo con su certifico.\n\nFelicidades.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prad Academy",
                     null,null
             );
             emailService.sendEmail(
