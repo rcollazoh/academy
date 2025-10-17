@@ -123,7 +123,7 @@ public class PersonService {
                 String passwordTemporal = util.generateRandomPass();
                 try {
                     emailService.sendEmail(
-                            parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
+                            email,
                             "Recuperar clave",
                             "Su nueva clave es: " + passwordTemporal,
                             null, null

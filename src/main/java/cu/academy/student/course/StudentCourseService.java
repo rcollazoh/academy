@@ -290,4 +290,37 @@ public class StudentCourseService {
         }
         studentCourserepository.saveAll(resultCourses);
     }
+
+    @Transactional
+    public void uploadCertifyStudentCourse(Long personId, Long courseId,  MultipartFile certify) {
+        String extension = filesStorageService.getExtension(certify);
+        try {
+            emailService.sendEmail(
+                    personRepository.getReferenceById(personId).getEmail(),
+                    "Emitido Certifico",
+                    "Curso aprobado y enviado certifico adjunto. \n Revisar el adjunto y si presentara problema acceder al sistema y lo puede descargar",
+                    certify.getBytes(),
+                    EnumImagenType.CERTIFY.name().concat(".").concat(extension)
+            );
+            log.info("Correo enviado correctamente de aplicar.");
+        } catch (Exception e) {
+            log.warn("No se pudo enviar el correo para aplicar: " + e.getMessage());
+            // Opcional: registrar en BD o sistema de alertas
+        }
+        String receiptUrl = EnumImagenType.CERTIFY.name().
+                concat("/").
+                concat(DateUtils.getCurrentDateFormat("yyyyMMddHHmmss")).
+                concat("-").
+                concat(EnumImagenType.CERTIFY.name()).
+                concat(personId.toString());
+
+        StudentCourseEntity studentEntity = getById(courseId);
+        studentEntity.setCertifyUrl(receiptUrl.
+                concat(".").
+                concat(extension));
+        update(courseId, studentEntity);
+
+        filesStorageService.save(certify, receiptUrl);
+
+    }
 }

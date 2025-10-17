@@ -6,6 +6,7 @@ import cu.academy.shared.enum_types.EnumCourseStatus;
 import cu.academy.shared.enum_types.EnumPaymentMethod;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
@@ -61,6 +62,18 @@ public class StudentCourseEntity {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updated_at")
     private Instant updatedAt;
+
+    @Size(max = 255)
+    @Column(name = "certify_url")
+    private String certifyUrl;
+
+    public String getCertifyUrl() {
+        return certifyUrl;
+    }
+
+    public void setCertifyUrl(String certifyUrl) {
+        this.certifyUrl = certifyUrl;
+    }
 
 
     @PrePersist

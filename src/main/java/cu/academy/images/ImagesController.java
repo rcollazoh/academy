@@ -2,6 +2,7 @@ package cu.academy.images;
 
 import cu.academy.shared.utils.EndpointResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +47,19 @@ public class ImagesController {
         storageService.delete(type, filename);
         return ResponseEntity.ok(new EndpointResult("Imagen borrada", null));
     }
+
+    @GetMapping("/pdf")
+    public ResponseEntity<byte[]> getPdf(@RequestParam("filename") String filename) {
+        // Obtiene el contenido binario del PDF
+        byte[] pdfBytes = storageService.getFile(filename);
+
+        // Devuelve el PDF con el Content-Type y Content-Disposition adecuados
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_PDF)
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        "inline; filename=\"" + filename + "\"")
+                .body(pdfBytes);
+    }
+
 
 }

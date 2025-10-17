@@ -130,4 +130,13 @@ public class StudentCourseController {
         service.rejectCourse(personId, courseId);
         return null;
     }
+
+    @PostMapping(value = "/upload_certify", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<StudentCourseDto> uploadCertifyStudentCourse(@RequestParam("personId") Long personId,
+                                                               @RequestParam("courseId") Long courseId,
+                                                               @RequestParam(value = "certify") MultipartFile certify) {
+        service.uploadCertifyStudentCourse(personId, courseId, certify);
+        return null;
+    }
+
 }
