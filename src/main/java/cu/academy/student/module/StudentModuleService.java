@@ -153,7 +153,6 @@ public class StudentModuleService {
             // Aprobar el curso y notificar al profesor
             StudentCourseEntity byIdCourse = entityModule.getStudentCourse();
             byIdCourse.setStatus(EnumCourseStatus.APPROVED);
-            byIdCourse.setEndDate(LocalDate.now());
             studentCourseService.update(entityModule.getStudentCourse().getId().longValue(), byIdCourse);
             try {
             emailService.sendEmail(

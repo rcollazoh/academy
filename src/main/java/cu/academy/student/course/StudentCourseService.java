@@ -221,7 +221,8 @@ public class StudentCourseService {
         }
         StudentCourseEntity studentEntity = getById(courseId);
         studentEntity.setStatus(EnumCourseStatus.ACTIVATED);
-        studentEntity.setStartDate(LocalDate.now());
+        studentEntity.setStartDate(LocalDate.now().plusDays(1));
+        studentEntity.setEndDate(LocalDate.now().plusDays(studentEntity.getCourse().getDurationDays() + 1));
         StudentCourseEntity studentCourseinsert = insert(studentEntity);
 
 
@@ -278,7 +279,6 @@ public class StudentCourseService {
         List<StudentCourseEntity> resultCourses = studentCourserepository.findExpiredActivatedCourses();
         for (StudentCourseEntity expiredActivatedCours : resultCourses) {
             List<EnumModuleStatus> statuses = studentModuleRepository.findStatusesByCourseId(expiredActivatedCours.getId().longValue());
-            expiredActivatedCours.setEndDate(LocalDate.now());
 
             boolean allApproved = !statuses.isEmpty() && statuses.stream()
                     .allMatch(status -> status == EnumModuleStatus.APPROVED);
