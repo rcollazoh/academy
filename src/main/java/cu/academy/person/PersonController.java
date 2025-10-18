@@ -72,8 +72,8 @@ public class PersonController {
     }
 
     @GetMapping("/recover_key")
-    public ResponseEntity<EndpointResult> recoverKey(@RequestParam("email") String email) throws Exception {
-        return ResponseEntity.ok(new EndpointResult(service.recoverKey(email), null));
+    public ResponseEntity<EndpointResult> recoverKey(@RequestParam("email") String email,@RequestParam("idNumber") String idNumber) throws Exception {
+        return ResponseEntity.ok(new EndpointResult(service.recoverKey(email, idNumber), null));
     }
 
 }

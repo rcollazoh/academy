@@ -115,7 +115,7 @@ public class StudentCourseService {
     }
 
     public List<StudentCourseEntity> getFindByPersonId(long personId) {
-        return studentCourserepository.findByPersonId(personId);
+        return studentCourserepository.findByPersonIdOrderByCreatedAtDesc(personId);
     }
 
     public StudentCourseEntity getStudentCourseByAreaAndPractice(long personId, long areaId, long practiceId) {

@@ -28,7 +28,7 @@ public class BasicRolAuthorizationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         myLogger.info("Executing BasicRolAuthorizationFilter...");
-        if (request.getServletPath().equals("/academy/login") || request.getServletPath().equals("/academy/refresh_token"))
+        if (request.getServletPath().equals("/academy/login") || request.getServletPath().equals("/academy/refresh_token") || request.getServletPath().equals("/academy/person/recover_key"))
             filterChain.doFilter(request, response);
         else {
             String authorizationHeader = request.getHeader(AUTHORIZATION);

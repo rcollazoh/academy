@@ -16,7 +16,8 @@ public interface StudentCourseRepository extends JpaSpecificationExecutor<Studen
     @Query("SELECT sc FROM StudentCourseEntity sc WHERE sc.personId = :personId AND sc.status IN (:statuses)")
     List<StudentCourseEntity> findByPersonIdAndStatusIn(@Param("personId") long personId, @Param("statuses") List<EnumCourseStatus> statuses);
 
-    List<StudentCourseEntity> findByPersonId(long personId);
+    List<StudentCourseEntity> findByPersonIdOrderByCreatedAtDesc(long personId);
+
 
     @Modifying
     @Transactional
