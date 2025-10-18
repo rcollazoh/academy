@@ -108,14 +108,12 @@ public class PersonService {
         if (persona.isPresent()) {
             throw new ArgumentException(Translator.toLocale(TranslatorCode.PERSON_EXISTE_NUM_CEL));
         }
-
     }
 
-
-    public String recoverKey(String email) throws ArgumentException {
+    public String recoverKey(String email,String idNumber) throws ArgumentException {
         try {
             String mensaje = "";
-            PersonEntity person = repository.findByEmail(email).orElse(null);
+            PersonEntity person = repository.findByEmailAndIdNumber(email,idNumber).orElse(null);
 
             //Se comprueba que el correo sea de la misma persona q el telefono.
             if (person != null) {
@@ -136,7 +134,7 @@ public class PersonService {
                 person.setPassword(passwordEncoder.encode(passwordTemporal));
                 repository.save(person);
             } else {
-                mensaje = "El correo: " + email + " no esta asignado a ningún estudiante";
+                mensaje = "Los datos son incorrectos.";
             }
             return mensaje;
         } catch (
