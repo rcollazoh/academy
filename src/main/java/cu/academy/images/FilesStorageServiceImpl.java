@@ -31,7 +31,7 @@ import static java.util.stream.Collectors.toList;
 public class FilesStorageServiceImpl implements FilesStorageService {
 
     //    private final Map<EnumTipoDuenoImagen, Path> paths = new HashMap<>();
-    private final Path docsPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumImagenType.DOCUMENT);
+    private final Path docsPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumImagenType.CERTIFY );
     private final Path persPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumImagenType.PERSON);
     private final Path gastosPath = Paths.get(this.rootPath.toAbsolutePath() + File.separator + EnumImagenType.GASTOS);
     private final Path logo = Paths.get(this.rootPath.toAbsolutePath() + File.separator + "logo" +  File.separator + "logo.jpg");

@@ -33,9 +33,11 @@ public class StudentClassService {
     }
 
     @Transactional
-    public void updateViewed(Long id, boolean status) {
-        repository.updateViewedById(id, status);
-
+    public void updateViewedAndCurrentImageId(Long id, boolean status, Long currentImageId) {
+        if (status) {
+            repository.updateViewedById(id, status);
+        }
+        repository.updateCurrentImageIdById(id, currentImageId);
         StudentClassEntity classEntity = getById(id);
 
         if ("Clase introductoria del curso".equals(classEntity.getConfigClass().getDescription()))

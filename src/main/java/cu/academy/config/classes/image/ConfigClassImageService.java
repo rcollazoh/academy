@@ -6,6 +6,8 @@ import cu.academy.config.classes.image.mapper.ConfigClassImageMapper;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
+import cu.academy.student.classes.StudentClassEntity;
+import cu.academy.student.classes.StudentClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -32,11 +34,16 @@ public class ConfigClassImageService {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name"));
     }
 
-    //    public List<ConfigClassEntity> getClassByModule(long moduleId) {
-//        return repository.findClassesByModule(moduleId);
-//    }
-    public ClassImageNavigationDto getClassWithNavigation(Long classId) {
-        ClassImageNavigationView view = repository.findNavigationByIdClass(classId);
+    public ClassImageNavigationDto getClassWithNavigation(Long currentImageId, Long classId) {
+        ClassImageNavigationView view;
+        if (currentImageId == null) {
+            currentImageId = Long.valueOf(0);
+        }
+
+        view = (currentImageId == 0)
+                ? repository.findNavigationByIdClass(classId)
+                : repository.findNavigationById(classId, currentImageId);
+
         return mapper.toDto(view);
     }
 

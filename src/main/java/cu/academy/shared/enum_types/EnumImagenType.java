@@ -1,7 +1,7 @@
 package cu.academy.shared.enum_types;
 
 public enum EnumImagenType {
-    PERSON, DOCUMENT,GASTOS,OPERATIONS, PAYMENT;
+    PERSON, CERTIFY,GASTOS,OPERATIONS, PAYMENT;
 
 
     @Override
@@ -9,8 +9,8 @@ public enum EnumImagenType {
         switch (this) {
             case PERSON:
                 return "person";
-            case DOCUMENT:
-                return "documents";
+            case CERTIFY:
+                return "certify";
             case GASTOS:
                 return "gastos";
             case OPERATIONS:

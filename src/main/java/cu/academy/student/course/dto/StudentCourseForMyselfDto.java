@@ -10,5 +10,6 @@ public record StudentCourseForMyselfDto(Long id,
                                         String status,
                                         Boolean requiresInvoice,
                                         String receiptUrl,
-                                        String paymentMethod
+                                        String paymentMethod,
+                                        String certifyUrl
 ) {}

@@ -14,11 +14,15 @@ import java.util.List;
 @Repository
 public interface StudentClassRepository extends JpaSpecificationExecutor<StudentClassEntity>, JpaRepository<StudentClassEntity, Long> {
     @Query("SELECT sc FROM StudentClassEntity sc WHERE sc.studentModule.id = :moduleId")
-        List<StudentClassEntity> findByModuleId(long moduleId);
+    List<StudentClassEntity> findByModuleId(long moduleId);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE StudentClassEntity s SET s.viewed = :viewed WHERE s.id = :id")
+    void updateViewedById(@Param("id") long id, @Param("viewed") boolean viewed);
 
-        @Modifying
-        @Transactional
-        @Query("UPDATE StudentClassEntity s SET s.viewed = :viewed WHERE s.id = :id")
-        void updateViewedById(@Param("id") long id, @Param("viewed") boolean viewed);
+    @Modifying
+    @Transactional
+    @Query("UPDATE StudentClassEntity s SET s.currentImageId = :currentImageId WHERE s.id = :id")
+    void updateCurrentImageIdById(@Param("id") long id, @Param("currentImageId") Long currentImageId);
 }

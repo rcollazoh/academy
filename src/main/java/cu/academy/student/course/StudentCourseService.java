@@ -210,7 +210,7 @@ public class StudentCourseService {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
                     "Confirmación de aprobación de curso",
-                    "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prod Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prod Academy",
+                    "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prad Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prad Academy",
                     null,null
             );
 
@@ -264,7 +264,7 @@ public class StudentCourseService {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
                     "Su curso fue rechazado",
-                    "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prod Academy",
+                    "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prad Academy",
                     null, null
             );
             log.info("Correo enviado correctamente rechazar.");
@@ -289,5 +289,38 @@ public class StudentCourseService {
             }
         }
         studentCourserepository.saveAll(resultCourses);
+    }
+
+    @Transactional
+    public void uploadCertifyStudentCourse(Long personId, Long courseId,  MultipartFile certify) {
+        String extension = filesStorageService.getExtension(certify);
+        try {
+            emailService.sendEmail(
+                    personRepository.getReferenceById(personId).getEmail(),
+                    "Emitido Certifico",
+                    "Curso aprobado y enviado certifico adjunto. \n Revisar el adjunto y si presentara problema acceder al sistema y lo puede descargar",
+                    certify.getBytes(),
+                    EnumImagenType.CERTIFY.name().concat(".").concat(extension)
+            );
+            log.info("Correo enviado correctamente de aplicar.");
+        } catch (Exception e) {
+            log.warn("No se pudo enviar el correo para aplicar: " + e.getMessage());
+            // Opcional: registrar en BD o sistema de alertas
+        }
+        String receiptUrl = EnumImagenType.CERTIFY.name().
+                concat("/").
+                concat(DateUtils.getCurrentDateFormat("yyyyMMddHHmmss")).
+                concat("-").
+                concat(EnumImagenType.CERTIFY.name()).
+                concat(personId.toString());
+
+        StudentCourseEntity studentEntity = getById(courseId);
+        studentEntity.setCertifyUrl(receiptUrl.
+                concat(".").
+                concat(extension));
+        update(courseId, studentEntity);
+
+        filesStorageService.save(certify, receiptUrl);
+
     }
 }
