@@ -75,16 +75,6 @@ public class StudentCourseController {
         }
     }
 
-
-
-//    @GetMapping
-//    public List<StudentCourseDto> getAll() {
-//        return service.getAllSort()
-//                .stream()
-//                .map(mapper::toDto)
-//                .collect(Collectors.toList());
-//    }
-
     @GetMapping("/by-person/{personId}")
     public List<StudentCourseForMyselfDto> getAllStudentCourseByPerson(@PathVariable Long personId) {
         return service.getFindByPersonId(personId)
