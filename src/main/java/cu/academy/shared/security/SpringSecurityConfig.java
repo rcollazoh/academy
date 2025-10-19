@@ -56,7 +56,12 @@ public class SpringSecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/academy/person/**", "/academy/area/**", "/academy/practice/**").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**",
+                                "/academy/person/**",
+                                "/academy/area/**",
+                                "/academy/practice/**",
+                                "/academy/person/recover_key",
+                                "/academy/email/feedback").permitAll()
                         .anyRequest().authenticated()
 
                 )
