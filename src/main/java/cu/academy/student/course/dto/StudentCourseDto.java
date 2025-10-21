@@ -9,12 +9,15 @@ public record StudentCourseDto(Long id,
                                String personName,             // 👈 ejemplo: nombre de la persona
                                String personLastName,             // 👈 ejemplo: nombre de la persona
                                String personEmail,
-                               ConfigCourseDto course,
+                               String configCourseName,
                                LocalDate startDate,
                                LocalDate endDate,
                                String status,
                                Boolean requiresInvoice,
                                String receiptUrl,
                                String paymentMethod,
-                               String certifyUrl
+                               String certifyUrl,
+                               String area,
+                               String practice
+
 ) {}

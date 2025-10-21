@@ -13,10 +13,14 @@ public interface StudentCourseMapper {
     @Mapping(source = "person.name", target = "personName")
     @Mapping(source = "person.lastName", target = "personLastName")
     @Mapping(source = "person.email", target = "personEmail")
+    @Mapping(source = "course.name", target = "configCourseName")
+    @Mapping(source = "course.area.name", target = "area")
+    @Mapping(source = "course.practice.name", target = "practice")
         // @Mapping(target = "status", expression = "java(EnumCourseStatus.translate(course.getStatus().name()))")
     StudentCourseDto toDto(StudentCourseEntity course);
 
-  //  @Mapping(target = "status", expression = "java(EnumCourseStatus.translate(course.getStatus().name()))")
+    @Mapping(source = "course.area.name", target = "area")
+    @Mapping(source = "course.practice.name", target = "practice")
     @Mapping(source = "course.name", target = "configCourseName")
     StudentCourseForMyselfDto toDtoMyself(StudentCourseEntity course);
 }
