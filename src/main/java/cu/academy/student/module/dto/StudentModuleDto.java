@@ -14,4 +14,5 @@ public record StudentModuleDto(Long id,
                                Integer orderNum,
                                List<StudentClassDto> classes,
                                StudentExamDto exam
+
 ) {}

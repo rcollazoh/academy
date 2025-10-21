@@ -2,7 +2,6 @@ package cu.academy.student.course;
 
 import cu.academy.config.classes.ConfigClassEntity;
 import cu.academy.config.classes.ConfigClassService;
-import cu.academy.config.course.ConfigCourseEntity;
 import cu.academy.config.course.ConfigCourseService;
 import cu.academy.config.exam.ConfigExamEntity;
 import cu.academy.config.exam.ConfigExamRepository;
@@ -118,30 +117,17 @@ public class StudentCourseService {
         return studentCourserepository.findByPersonIdOrderByCreatedAtDesc(personId);
     }
 
-    public StudentCourseEntity getStudentCourseByAreaAndPractice(long personId, long areaId, long practiceId) {
+    public StudentCourseEntity getStudentCourseActiveByPerson(long personId) {
         // Define the valid statuses to check for existing enrollments
         List<EnumCourseStatus> validStatuses = List.of(EnumCourseStatus.PENDING, EnumCourseStatus.ACTIVATED);
 
         // Look for any existing student course with matching personId and valid status
         List<StudentCourseEntity> existing = studentCourserepository.findByPersonIdAndStatusIn(personId, validStatuses);
-        StudentCourseEntity result;
+        StudentCourseEntity result = null;
 
         if (!existing.isEmpty()) {
             // The student already has a course in progress or pending — return it
             result = existing.get(0);
-        } else {
-            // No active or pending course found — look up the available course for the given area and practice
-            ConfigCourseEntity course = configCourseService.getCourseByAreaAndPractice(areaId, practiceId);
-            if (course == null) {
-                throw new ArgumentException("No course available for the given area and practice");
-            }
-
-            // Create a temporary course enrollment (not persisted) to suggest to the student
-            result = new StudentCourseEntity();
-            result.setPersonId(personId);
-            result.setCourse(course);
-            result.setStatus(EnumCourseStatus.NEW); // Simulated status, it is a flag
-            result.setStartDate(LocalDate.now());
         }
         return result;
     }
@@ -169,7 +155,7 @@ public class StudentCourseService {
     }
 
     @Transactional
-    public void applyStudentCourse(Long personId, Long courseId, EnumPaymentMethod paymentMethod, MultipartFile paymentPhoto) {
+    public void applyStudentCourse(Long personId, Long configCourseId, EnumPaymentMethod paymentMethod, MultipartFile paymentPhoto) {
         StudentCourseEntity studentEntity = new StudentCourseEntity();
         String extension = filesStorageService.getExtension(paymentPhoto);
         try {
@@ -192,7 +178,7 @@ public class StudentCourseService {
                 concat(EnumImagenType.PAYMENT.name()).
                 concat(personId.toString());
         studentEntity.setPersonId(personId);
-        studentEntity.setCourse(configCourseService.getById(courseId));
+        studentEntity.setCourse(configCourseService.getById(configCourseId));
         studentEntity.setStatus(EnumCourseStatus.PENDING);
         studentEntity.setPaymentMethod(paymentMethod);
         studentEntity.setReceiptUrl(receiptUrl.
