@@ -1,6 +1,7 @@
 package cu.academy.student.module.dto;
 
 
+import cu.academy.config.reference.dto.ConfigReferenceDto;
 import cu.academy.shared.enum_types.EnumModuleStatus;
 import cu.academy.student.classes.dto.StudentClassDto;
 import cu.academy.student.exam.dto.StudentExamDto;
@@ -13,6 +14,8 @@ public record StudentModuleDto(Long id,
                                String moduleName,
                                Integer orderNum,
                                List<StudentClassDto> classes,
-                               StudentExamDto exam
+                               StudentExamDto exam,
+                               List<ConfigReferenceDto> references
+
 
 ) {}
