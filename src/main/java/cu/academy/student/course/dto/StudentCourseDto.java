@@ -1,7 +1,9 @@
 package cu.academy.student.course.dto;
 
 import cu.academy.config.course.dto.ConfigCourseDto;
+import jakarta.persistence.Column;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public record StudentCourseDto(Long id,
@@ -18,6 +20,7 @@ public record StudentCourseDto(Long id,
                                String paymentMethod,
                                String certifyUrl,
                                String area,
-                               String practice
-
+                               String practice,
+                               Integer durationDays,
+                               BigDecimal price
 ) {}
