@@ -89,7 +89,7 @@ public class StudentCourseController {
         return person != null ? ResponseEntity.ok(mapper.toDto(person)) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("active-by-person/{personId}")
+    @GetMapping("/active-by-person/{personId}")
     public ResponseEntity<StudentCourseDto> getStudentCourseByPersonByAreaAndPractice(
             @PathVariable Long personId) {
         StudentCourseEntity courseResponse = service.getStudentCourseActiveByPerson(personId);

@@ -128,6 +128,11 @@ public class StudentCourseService {
         if (!existing.isEmpty()) {
             // The student already has a course in progress or pending — return it
             result = existing.get(0);
+        }else{
+            result = new StudentCourseEntity();
+            result.setPersonId(personId);
+            result.setStatus(EnumCourseStatus.NEW);
+
         }
         return result;
     }
