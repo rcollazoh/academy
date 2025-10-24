@@ -5,11 +5,13 @@ import cu.academy.config.course.dto.ConfigCourseDto;
 import cu.academy.nom.area.NomAreaEntity;
 import cu.academy.nom.area.dto.NomAreaDto;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface ConfigCourseMapper {
 
-    ConfigCourseEntity toEntity(ConfigCourseDto dto);
+    @Mapping(source = "area.name", target = "area")
+    @Mapping(source = "practice.name", target = "practice")
     ConfigCourseDto toDto(ConfigCourseEntity course);
 }

@@ -89,12 +89,10 @@ public class StudentCourseController {
         return person != null ? ResponseEntity.ok(mapper.toDto(person)) : ResponseEntity.notFound().build();
     }
 
-    @GetMapping("by-person/{personId}/by-area/{areaId}/by-practice/{practiceId}")
-    public ResponseEntity<StudentCourseDto> getStudentCourseByPersonByAreaAndPractice(
-            @PathVariable Long personId,
-            @PathVariable Long areaId,
-            @PathVariable Long practiceId) {
-        StudentCourseEntity courseResponse = service.getStudentCourseByAreaAndPractice(personId, areaId, practiceId);
+    @GetMapping("/active-by-person/{personId}")
+    public ResponseEntity<StudentCourseDto> getStudentCourseActiveByPerson(
+            @PathVariable Long personId) {
+        StudentCourseEntity courseResponse = service.getStudentCourseActiveByPerson(personId);
         return courseResponse != null ? ResponseEntity.ok(mapper.toDto(courseResponse)) : ResponseEntity.notFound().build();
     }
 

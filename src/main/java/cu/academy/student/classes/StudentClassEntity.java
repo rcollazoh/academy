@@ -59,6 +59,7 @@ public class StudentClassEntity {
         createdAt = now;
         updatedAt = now;
         viewed =  false;
+        currentImageId = 0;
     }
 
     @PreUpdate

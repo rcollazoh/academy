@@ -41,6 +41,7 @@ public class ConfigCourseEntity {
     @JoinColumn(name = "area_id")
     private NomAreaEntity area;
 
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "practice_id")
     private NomPracticeEntity practice;
