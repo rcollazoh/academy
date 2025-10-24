@@ -10,15 +10,13 @@ public class UserResponseDto extends User {
     private String surnames;
     private String email;
     private String mobilePhone;
-    private Long areaId;
-    private Long practiceId;
 
 //    private List<AccionDto> acciones;
 
 
     public UserResponseDto(String username, String password, Collection<? extends GrantedAuthority> authorities,
                            Long id, String surnames, String email,
-                           String mobilePhone, Long areaId, Long practiceId
+                           String mobilePhone
 //            , Boolean esVip, Boolean habilitado, EnumChoferEstado estado, Double geoLatitud, Double geoLongitud
     ) {
         super(username, password, authorities);
@@ -26,8 +24,6 @@ public class UserResponseDto extends User {
         this.surnames = surnames;
         this.email = email;
         this.mobilePhone = mobilePhone;
-        this.areaId = areaId;
-        this.practiceId = practiceId;
     }
 //
 //    public List<AccionDto> getAcciones() {
@@ -70,10 +66,4 @@ public class UserResponseDto extends User {
     public String getMobilePhone() {
         return mobilePhone;
     }
-
-    public Long getAreaId() {return areaId;}
-    public Long getPracticeId() {return practiceId;}
-    public void setAreaId(Long areaId) {this.areaId = areaId;}
-    public void setPracticeId(Long practiceId) {this.practiceId = practiceId;}
-
 }

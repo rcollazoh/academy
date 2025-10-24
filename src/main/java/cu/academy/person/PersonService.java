@@ -78,14 +78,6 @@ public class PersonService {
 
         PersonEntity entity = mapper.toEntity(dto);
 
-        NomAreaEntity area = nomAreaRepository.findById(dto.areaId())
-                .orElseThrow(() -> new ArgumentException("Area not found"));
-
-        NomPracticeEntity practice = nomPracticeRepository.findById(dto.practiceId())
-                .orElseThrow(() -> new ArgumentException("Practice not found"));
-
-        entity.setArea(area);
-        entity.setPractice(practice);
         entity.setRole(roleRepository.findByName(EnumRole.STUDENT.name()).get());
         if (entity.getPassword() != null)
             entity.setPassword(passwordEncoder.encode(entity.getPassword()));

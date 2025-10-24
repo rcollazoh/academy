@@ -9,14 +9,20 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = "spring", nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface StudentCourseMapper {
-    StudentCourseEntity toEntity(StudentCourseDto dto);
     @Mapping(source = "person.name", target = "personName")
     @Mapping(source = "person.lastName", target = "personLastName")
     @Mapping(source = "person.email", target = "personEmail")
+    @Mapping(source = "course.name", target = "configCourseName")
+    @Mapping(source = "course.area.name", target = "area")
+    @Mapping(source = "course.practice.name", target = "practice")
+    @Mapping(source = "course.durationDays", target = "durationDays")
+    @Mapping(source = "course.price", target = "price")
         // @Mapping(target = "status", expression = "java(EnumCourseStatus.translate(course.getStatus().name()))")
     StudentCourseDto toDto(StudentCourseEntity course);
+    StudentCourseEntity toEntity(StudentCourseDto dto);
 
-  //  @Mapping(target = "status", expression = "java(EnumCourseStatus.translate(course.getStatus().name()))")
+    @Mapping(source = "course.area.name", target = "area")
+    @Mapping(source = "course.practice.name", target = "practice")
     @Mapping(source = "course.name", target = "configCourseName")
     StudentCourseForMyselfDto toDtoMyself(StudentCourseEntity course);
 }

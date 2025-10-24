@@ -7,8 +7,6 @@ public record PersonRegisterDTO(
         String email,
         String phone,
         String idNumber,
-        Long areaId,
-        Long practiceId,
         String password
 ) {
 }

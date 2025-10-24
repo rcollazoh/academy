@@ -21,6 +21,7 @@ import jakarta.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.mail.MailAuthenticationException;
 import org.springframework.mail.MailSendException;
 import org.springframework.mail.SimpleMailMessage;
@@ -41,39 +42,18 @@ public class EmailService {
     private final FilesStorageServiceImpl filesStorageService;
     private final ConfigParameterService configParameterService;
     private static final String className = "ViajeServiceImpl";
+    private final HttpMessageConverters messageConverters;
     JavaMailSender javaMailSender;
     private static final Logger log = LoggerFactory.getLogger(EmailService.class);
+    @Value("${address.correo}")
+    private String fromEmail;
 
-    public EmailService(TraceService trazaLogSistemaService, FilesStorageServiceImpl filesStorageService, ConfigParameterService configParameterService, JavaMailSender javaMailSender) {
+    public EmailService(TraceService trazaLogSistemaService, FilesStorageServiceImpl filesStorageService, ConfigParameterService configParameterService, JavaMailSender javaMailSender, HttpMessageConverters messageConverters) {
         this.traceService = trazaLogSistemaService;
         this.filesStorageService = filesStorageService;
         this.configParameterService = configParameterService;
         this.javaMailSender = javaMailSender;
-    }
-
-    @Async
-    public void sendMessage(String to, String subject, String content, String ccEmails) {
-        String methodName = "sendMessaje";
-        try {
-            SimpleMailMessage email = new SimpleMailMessage();
-
-            email.setTo(to);
-            email.setSubject(subject);
-            email.setText(content);
-            // Add CC emails if provided
-            if (ccEmails != null && !ccEmails.trim().isEmpty()) {
-                // Split the CC emails by comma, trim whitespace, and filter out empty strings
-                String[] ccArray = Arrays.stream(ccEmails.split(","))
-                        .map(String::trim)
-                        .filter(emailAddress -> !emailAddress.isEmpty())
-                        .toArray(String[]::new);
-                email.setCc(ccArray); // Set the CC recipients
-            }
-
-            javaMailSender.send(email);
-        } catch (Exception e) {
-            //traceService.insertLog(className, methodName, "Error al enviar correo a: " + to, e, 3);
-        }
+        this.messageConverters = messageConverters;
     }
 
     public void sendMenssajeAndAttachment(String to, String subject, String content, String filePath, String ccEmails) {
@@ -155,22 +135,14 @@ public class EmailService {
         }
     }
 
-    /**
-     * Metodo para enviar correo ya sea con adjunto o sin el.
-     *
-     * @param person
-     * @param message
-     * @param subject
-     * @param pathPdf
-     */
-    public void sendEmail(PersonEntity person, String message, String subject, String pathPdf) {
-        String email = person.getEmail();
-        if (email == null)
-            return;
-        if (pathPdf == null)
-            sendMessage(email, subject, message, person.getEmail());
-        else
-            sendMenssajeAndAttachment(email, subject, message, pathPdf, person.getEmail());
+    public void sendFeedback(String personName, String message) {
+        try {
+            String messageBody = personName.concat(", \n ").concat(message);
+            String subject = "Feedback";
+            sendEmail(fromEmail, subject, messageBody, null, null);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public void sendEmailRecoverPassword(String to, String subject, String password, String ccEmails) {
@@ -262,9 +234,6 @@ public class EmailService {
                 "</html>";
     }
 
-    @Value("${address.correo}")
-    private String fromEmail;
-
     @Async
     public void sendEmail(String to, String subject, String contentText, byte[] attachmentBytes, String attachmentName) throws IOException {
         Email from = new Email(fromEmail);
@@ -291,6 +260,4 @@ public class EmailService {
         log.info("Status: " + response.getStatusCode());
         log.info("Body: " + response.getBody());
     }
-
-
 }

@@ -1,6 +1,9 @@
 package cu.academy.student.module;
 
 import cu.academy.config.parameter.ConfigParameterService;
+import cu.academy.config.reference.ConfigReferenceEntity;
+import cu.academy.config.reference.ConfigReferenceService;
+import cu.academy.config.reference.dto.ConfigReferenceDto;
 import cu.academy.email.EmailService;
 import cu.academy.person.PersonRepository;
 import cu.academy.shared.configs.text_messages.Translator;
@@ -39,6 +42,7 @@ public class StudentModuleService {
     private final PersonRepository personRepository;
     private final ConfigParameterService parameterService;
     private final StudentCourseService studentCourseService;
+    private final ConfigReferenceService configReferenceService ;
     private static final Logger log = LoggerFactory.getLogger(StudentModuleService.class);
 
 //    private final ModelMapper modelMapper;
@@ -46,7 +50,7 @@ public class StudentModuleService {
 //    }.getType();
 
     @Autowired
-    public StudentModuleService(StudentModuleRepository repository, StudentExamRepository examRepository, StudentClassService studentClassService, EmailService emailService, PersonRepository personRepository, ConfigParameterService parameterService, StudentCourseService studentCourseService) {
+    public StudentModuleService(StudentModuleRepository repository, StudentExamRepository examRepository, StudentClassService studentClassService, EmailService emailService, PersonRepository personRepository, ConfigParameterService parameterService, StudentCourseService studentCourseService, ConfigReferenceService configReferenceService) {
         this.repository = repository;
         this.examRepository = examRepository;
         this.studentClassService = studentClassService;
@@ -54,6 +58,7 @@ public class StudentModuleService {
         this.personRepository = personRepository;
         this.parameterService = parameterService;
         this.studentCourseService = studentCourseService;
+        this.configReferenceService = configReferenceService;
     }
 
     @Transactional
@@ -81,6 +86,7 @@ public class StudentModuleService {
         for (StudentModuleEntity module : modules) {
             List<StudentClassEntity> classes = studentClassService.getAllByModuleId(module.getId());
             Optional<StudentExamEntity> exam = examRepository.findByConfigModuleId(module.getId());
+            List<ConfigReferenceEntity> references = configReferenceService.getAllReferenceByModuleId(module.getModule().getId());
 
             // 4. Mapear clases y examen a sus respectivos DTOs
             List<StudentClassDto> classDtos = new ArrayList<>();
@@ -99,6 +105,12 @@ public class StudentModuleService {
                         exam.get().getConfigExam().getQuestions());
             }
 
+            List<ConfigReferenceDto> referencesDtos = new ArrayList<>();
+            for (ConfigReferenceEntity entity : references) {
+                referencesDtos.add(new ConfigReferenceDto(entity.getId(), entity.getTitle(),
+                        entity.getLink(), entity.getOrderNum()));
+            }
+
             // 5. create dto module
             StudentModuleDto dto = new StudentModuleDto(
                     module.getId(),
@@ -107,7 +119,8 @@ public class StudentModuleService {
                     module.getModule().getName(),
                     module.getModule().getOrderNum(),
                     classDtos,
-                    examDto
+                    examDto,
+                    referencesDtos
             );
             result.add(dto);
         }
@@ -153,7 +166,6 @@ public class StudentModuleService {
             // Aprobar el curso y notificar al profesor
             StudentCourseEntity byIdCourse = entityModule.getStudentCourse();
             byIdCourse.setStatus(EnumCourseStatus.APPROVED);
-            byIdCourse.setEndDate(LocalDate.now());
             studentCourseService.update(entityModule.getStudentCourse().getId().longValue(), byIdCourse);
             try {
             emailService.sendEmail(
