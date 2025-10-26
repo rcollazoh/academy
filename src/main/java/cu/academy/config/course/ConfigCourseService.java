@@ -29,7 +29,7 @@ public class ConfigCourseService {
     }
 
     public List<ConfigCourseEntity> getAllSort() {
-        return repository.findByActiveTrue(Sort.by(Sort.Direction.ASC, "name"));
+        return repository.findByActiveTrue(Sort.by(Sort.Direction.ASC, "orderNum"));
     }
 
     public ConfigCourseEntity getCourseByAreaAndPractice(long areaId,long practiceId) {
