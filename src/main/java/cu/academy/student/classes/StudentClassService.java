@@ -38,10 +38,10 @@ public class StudentClassService {
             repository.updateViewedById(id, status);
         }
         repository.updateCurrentImageIdById(id, currentImageId);
-        StudentClassEntity classEntity = getById(id);
+//        StudentClassEntity classEntity = getById(id);
 
-        if ("Clase introductoria del curso".equals(classEntity.getConfigClass().getDescription()))
-            repositoryModule.updateStatusById(classEntity.getStudentModule().getId(), EnumModuleStatus.APPROVED);
+//        if ("Clase introductoria del curso".equals(classEntity.getConfigClass().getDescription()))
+//            repositoryModule.updateStatusById(classEntity.getStudentModule().getId(), EnumModuleStatus.APPROVED);
     }
 
     public StudentClassEntity getById(Long id) throws ArgumentException {

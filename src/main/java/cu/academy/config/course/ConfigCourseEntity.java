@@ -54,6 +54,17 @@ public class ConfigCourseEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @Column(name = "order_num")
+    private Integer orderNum;
+
+    public Integer getOrderNum() {
+        return orderNum;
+    }
+
+    public void setOrderNum(Integer orderNum) {
+        this.orderNum = orderNum;
+    }
+
     public Integer getId() {
         return id;
     }
