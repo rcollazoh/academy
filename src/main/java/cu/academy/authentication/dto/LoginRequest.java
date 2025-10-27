@@ -25,7 +25,7 @@ public class LoginRequest {
     }
 
     public void setPassword(String password) throws ArgumentException {
-        this.password = Check.argumentNotNull(password, Translator.toLocale(TranslatorCode.NO_CONTRASENNA));
+        this.password = Check.argumentNotNull(password, Translator.toLocale(TranslatorCode.NO_PASSW));
     }
 
     public String getUsername() {
@@ -33,7 +33,7 @@ public class LoginRequest {
     }
 
     public void setUsername(String username) throws ArgumentException {
-        this.username = Check.argumentNotNull(username, Translator.toLocale(TranslatorCode.NO_NOMBRE_DE_USUARIO));
+        this.username = Check.argumentNotNull(username, Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
     }
 
     public String getTipoPersona() {

@@ -12,7 +12,6 @@ import cu.academy.student.feedback.module.StudentFeedbackModuleRepository;
 import cu.academy.student.feedback.module.dto.StudentFeedbackModuleDto;
 import cu.academy.student.feedback.module.mapper.StudentFeedbackModuleMapper;
 import cu.academy.student.module.StudentModuleEntity;
-import cu.academy.student.module.StudentModuleRepository;
 import cu.academy.student.module.StudentModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

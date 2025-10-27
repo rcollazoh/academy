@@ -1,7 +1,5 @@
 package cu.academy.config.classes.image;
 
-import cu.academy.config.classes.ConfigClassEntity;
-import cu.academy.config.classes.ConfigClassService;
 import cu.academy.config.classes.image.dto.ClassImageNavigationDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

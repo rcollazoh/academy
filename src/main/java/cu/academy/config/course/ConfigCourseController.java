@@ -17,8 +17,6 @@ public class ConfigCourseController {
 
     private final ConfigCourseService service;
     private final ConfigCourseMapper mapper;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     public ConfigCourseController(ConfigCourseService service, ConfigCourseMapper mapper) {
         this.service = service;

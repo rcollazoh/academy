@@ -45,10 +45,6 @@ public class StudentModuleService {
     private final ConfigReferenceService configReferenceService ;
     private static final Logger log = LoggerFactory.getLogger(StudentModuleService.class);
 
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
-
     @Autowired
     public StudentModuleService(StudentModuleRepository repository, StudentExamRepository examRepository, StudentClassService studentClassService, EmailService emailService, PersonRepository personRepository, ConfigParameterService parameterService, StudentCourseService studentCourseService, ConfigReferenceService configReferenceService) {
         this.repository = repository;
@@ -151,8 +147,8 @@ public class StudentModuleService {
             try {
             emailService.sendEmail(
                     parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-                    "Estudiante con curso desaprobado",
-                    "Un estudiante desaprobo un modulo",
+                    TranslatorCode.COURSE_DISAPPROVE_TOPIC,
+                    TranslatorCode.COURSE_DISAPPROVE_BODY,
                     null,null
             );
                 log.info("Correo enviado correctamente de desaprobado.");
@@ -170,14 +166,14 @@ public class StudentModuleService {
             try {
             emailService.sendEmail(
                     personRepository.getReferenceById(byIdCourse.getPersonId()).getEmail(),
-                    "Curso ha finalizado satisfactoriamente",
-                    "Estimado/a estudiante,\n\nSu curso fue aprobado, espere un nuevo correo con su certifico.\n\nFelicidades.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prad Academy",
+                    TranslatorCode.COURSE_APPROVE_TOPIC,
+                    TranslatorCode.COURSE_APPROVE_BODY,
                     null,null
             );
             emailService.sendEmail(
                     parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-                    "Curso finalizado",
-                    "Un estudiante ha finalizado un curso satisfactoriamente, enviar certifico.",
+                    TranslatorCode.COURSE_FINALIZED_TOPIC,
+                    TranslatorCode.COURSE_FINALIZED_BODY,
                     null,null
             );
                 log.info("Correo enviado correctamente de finalizar.");

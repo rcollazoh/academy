@@ -22,7 +22,6 @@ import cu.academy.shared.filter.LoginDetails;
 import cu.academy.trace.TraceService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import cu.academy.shared.utils.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -45,7 +44,6 @@ public class AuthenticationService {
     private final PersonService personaService;
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-    private static final String className = "AuthenticationService";
     private final TraceService traceService;
 
     public AuthenticationService(PersonService personaService,
@@ -62,23 +60,15 @@ public class AuthenticationService {
     public UserResponseDto login(String username, String password,
                                  LoginDetails loginDetails) throws ArgumentException {
         try {
-//            EnumTipoPersona tipoPersona = loginDetails.getPersonType();
-
-//            verifyIfConditionTrueThrowArgumentException(tipoPersona == null || username == null || password == null,
-//                    TranslatorCode.TIPO_PERSON_REQUERIDO);
-
             PersonEntity user = personRepository.findByEmail(username)
-                    .orElseThrow(() -> new UsernameNotFoundException(Translator.toLocale(TranslatorCode.NO_CLIENTE)));
+                    .orElseThrow(() -> new UsernameNotFoundException(Translator.toLocale(TranslatorCode.NO_CLIENT)));
 
             if (!passwordEncoder.matches(password, user.getPassword())) {
                 throw new BadCredentialsException(Translator.toLocale(TranslatorCode.INVALID_CREDENTIALS));
             }
 
             if (user.getPassword() == null)
-                throw new BadCredentialsException(Translator.toLocale(TranslatorCode.NO_CONTRASENNA));
-
-//            // Verifica que el usuario sea del tipo de persona especificado
-//            personaService.validatePersonTypeForPerson(user, tipoPersona);
+                throw new BadCredentialsException(Translator.toLocale(TranslatorCode.NO_PASSW));
 
             Collection<SimpleGrantedAuthority> grantedAuthorities = new ArrayList<>();
             grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole().getName()));
@@ -120,7 +110,7 @@ public class AuthenticationService {
                     String role = decodedJWT.getClaims().get("role").asString();
 
                     PersonEntity person = personRepository.findByEmail(username)
-                            .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_CLIENTE)));
+                            .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_CLIENT)));
 
 //                    refreshAndSetNewAccessAndRefreshTokens(request, response, algorithm, person.getPhone(),
 //                            new ArrayList<>(personaService.getRolesGrantedAuthorities(person)), origin, role);

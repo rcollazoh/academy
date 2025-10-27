@@ -6,8 +6,6 @@ import cu.academy.config.classes.image.mapper.ConfigClassImageMapper;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
-import cu.academy.student.classes.StudentClassEntity;
-import cu.academy.student.classes.StudentClassService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;

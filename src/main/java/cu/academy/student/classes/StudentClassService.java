@@ -15,16 +15,10 @@ import java.util.List;
 @Service
 public class StudentClassService {
     private final StudentClassRepository repository;
-    private final StudentModuleRepository repositoryModule;
-
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
 
     @Autowired
-    public StudentClassService(StudentClassRepository repository, StudentModuleRepository repositoryModule) {
+    public StudentClassService(StudentClassRepository repository) {
         this.repository = repository;
-        this.repositoryModule = repositoryModule;
     }
 
     @Transactional
@@ -38,10 +32,6 @@ public class StudentClassService {
             repository.updateViewedById(id, status);
         }
         repository.updateCurrentImageIdById(id, currentImageId);
-//        StudentClassEntity classEntity = getById(id);
-
-//        if ("Clase introductoria del curso".equals(classEntity.getConfigClass().getDescription()))
-//            repositoryModule.updateStatusById(classEntity.getStudentModule().getId(), EnumModuleStatus.APPROVED);
     }
 
     public StudentClassEntity getById(Long id) throws ArgumentException {

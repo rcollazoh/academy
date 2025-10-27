@@ -15,10 +15,6 @@ import java.util.List;
 public class ConfigParameterService {
     private final ConfigParameterRepository repository;
 
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
-
     @Autowired
     public ConfigParameterService(ConfigParameterRepository repository) {
         this.repository = repository;
@@ -58,7 +54,7 @@ public class ConfigParameterService {
     @Cacheable(value = "configParameter", key = "#name")
     public ConfigParameterEntity getBy(String name) throws ArgumentException {
         if (name == null || name.trim().isEmpty()) {
-            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_ARGUMENT));
+            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_EXISTE_ELEMENT));
         }
 
         return repository.findByName(name)

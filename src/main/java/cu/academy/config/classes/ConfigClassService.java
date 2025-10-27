@@ -14,10 +14,6 @@ import java.util.List;
 public class ConfigClassService {
     private final ConfigClassRepository repository;
 
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
-
     @Autowired
     public ConfigClassService(ConfigClassRepository repository) {
         this.repository = repository;
