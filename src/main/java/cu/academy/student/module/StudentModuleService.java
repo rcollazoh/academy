@@ -82,7 +82,9 @@ public class StudentModuleService {
         for (StudentModuleEntity module : modules) {
             List<StudentClassEntity> classes = studentClassService.getAllByModuleId(module.getId());
             Optional<StudentExamEntity> exam = examRepository.findByConfigModuleId(module.getId());
-            List<ConfigReferenceEntity> references = configReferenceService.getAllReferenceByModuleId(module.getModule().getId());
+            List<ConfigReferenceEntity> references = new ArrayList<>();
+            if (Translator.toLocale(TranslatorCode.NAME_MODULE_REFERENCE).equals(module.getModule().getName()))
+                references = configReferenceService.getAllReferenceByModuleId(module.getModule().getId());
 
             // 4. Mapear clases y examen a sus respectivos DTOs
             List<StudentClassDto> classDtos = new ArrayList<>();

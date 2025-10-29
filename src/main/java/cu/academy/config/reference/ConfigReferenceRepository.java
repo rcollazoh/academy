@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface ConfigReferenceRepository extends JpaSpecificationExecutor<ConfigReferenceEntity>, JpaRepository<ConfigReferenceEntity, Long> {
-    @Query("SELECT cr FROM ConfigReferenceEntity cr WHERE cr.module.id = :moduleId  order by cr.orderNum")
+    @Query("SELECT cr FROM ConfigReferenceEntity cr WHERE cr.module.id = :moduleId or cr.module.id  is null order by cr.orderNum")
     List<ConfigReferenceEntity> findByModuleAndOrderByOrderNumAsc(Long moduleId);
 
 }

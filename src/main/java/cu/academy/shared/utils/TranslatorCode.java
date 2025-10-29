@@ -31,6 +31,7 @@ public class TranslatorCode {
     public static final String COURSE_REJECT_BODY = "COURSE_REJECT_BODY";
     public static final String COURSE_ISSUED_TOPIC = "COURSE_ISSUED_TOPIC";
     public static final String COURSE_ISSUED_BODY = "COURSE_ISSUED_BODY";
+    public static final String NAME_MODULE_REFERENCE = "NAME_MODULE_REFERENCE";
 
 
 
