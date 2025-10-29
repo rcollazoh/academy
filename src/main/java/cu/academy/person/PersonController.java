@@ -42,12 +42,6 @@ public class PersonController {
         return person != null ? ResponseEntity.ok(mapper.toProfileDto(person)) : ResponseEntity.notFound().build();
     }
 
-//    @PostMapping
-//    public PersonProfileDto create(@RequestBody PersonInsertDto dto) {
-//        PersonEntity saved = service.insertPerson(dto);
-//        return mapper.toProfileDto(saved);
-//    }
-
     @PostMapping(path = "register")
     public PersonProfileDto register(@RequestBody PersonRegisterDTO dto) {
         PersonEntity saved = service.registerPerson(dto);

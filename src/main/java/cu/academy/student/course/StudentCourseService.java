@@ -58,17 +58,12 @@ public class StudentCourseService {
     private final ConfigExamRepository configExamRepository;
     private final ConfigParameterService parameterService;
     private final FilesStorageService filesStorageService;
-    private final StudentCourseMapper mapper;
 
 
     private static final Logger log = LoggerFactory.getLogger(StudentCourseService.class);
 
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
-
     @Autowired
-    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService, StudentCourseMapper mapper) {
+    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService) {
         this.studentCourserepository = repository;
         this.personRepository = personRepository;
         this.configCourseService = configCourseService;
@@ -81,7 +76,6 @@ public class StudentCourseService {
         this.configExamRepository = configExamRepository;
         this.parameterService = parameterService;
         this.filesStorageService = filesStorageService;
-        this.mapper = mapper;
     }
 
     public StudentCourseEntity getById(Long id) throws ArgumentException {
@@ -255,8 +249,8 @@ public class StudentCourseService {
         try {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
-                    "Su curso fue rechazado",
-                    "Estimado/a estudiante,\n\nPor los problemas presentados, la solicitud de curso fue rechazada.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\nAtentamente,\nEl equipo de Prad Academy",
+                    TranslatorCode.COURSE_REJECT_TOPIC,
+                    TranslatorCode.COURSE_REJECT_BODY,
                     null, null
             );
             log.info("Correo enviado correctamente rechazar.");
@@ -288,8 +282,8 @@ public class StudentCourseService {
         try {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
-                    "Emitido Certifico",
-                    "Curso aprobado y enviado certifico adjunto. \n Revisar el adjunto y si presentara problema acceder al sistema y lo puede descargar",
+                    TranslatorCode.COURSE_ISSUED_TOPIC,
+                    TranslatorCode.COURSE_ISSUED_BODY,
                     certify.getBytes(),
                     EnumImagenType.CERTIFY.name().concat(".").concat(extension)
             );

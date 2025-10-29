@@ -15,10 +15,6 @@ import java.util.List;
 public class NomPracticeService {
     private final NomPracticeRepository repository;
 
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
-
     @Autowired
     public NomPracticeService(NomPracticeRepository repository) {
         this.repository = repository;

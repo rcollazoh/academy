@@ -14,10 +14,6 @@ import java.util.List;
 public class ConfigReferenceService {
     private final ConfigReferenceRepository repository;
 
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
-
     @Autowired
     public ConfigReferenceService(ConfigReferenceRepository repository) {
         this.repository = repository;
@@ -57,15 +53,4 @@ public class ConfigReferenceService {
         }
         return repository.save(entity);
     }
-//
-//    @Cacheable(value = "configParameter", key = "#name")
-//    public ConfigParameterEntity getBy(String name) throws ArgumentException {
-//        if (name == null || name.trim().isEmpty()) {
-//            throw new ArgumentException(Translator.toLocale(TranslatorCode.NO_ARGUMENT));
-//        }
-//
-//        return repository.findByName(name)
-//                .orElseThrow(() -> new ArgumentException(
-//                        String.format(Translator.toLocale(TranslatorCode.NO_PARAMETER_X), name)));
-//    }
 }

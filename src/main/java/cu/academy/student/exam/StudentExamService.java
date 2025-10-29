@@ -17,13 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 @Service
 public class StudentExamService {
-    private static final Logger log = LoggerFactory.getLogger(StudentExamService.class);
     private final StudentExamRepository repository;
     private final StudentModuleService studentModuleService;
-
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
 
     @Autowired
     public StudentExamService(StudentExamRepository repository, StudentModuleService studentModuleService) {

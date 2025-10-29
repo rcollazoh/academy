@@ -16,12 +16,6 @@ public class StudentFeedbackController {
         this.service = service;
         this.mapper = mapper;
     }
-//
-//    @GetMapping("/{id}")
-//    public ResponseEntity<StudentClassDto> getById(@PathVariable Long id) {
-//        StudentFeedbackEntity entity = service.getById(id);
-//        return entity != null ? ResponseEntity.ok(mapper.toDto(entity)) : ResponseEntity.notFound().build();
-//    }
 
     @PostMapping
     public void insertFeedBackByStudentModule(@RequestBody StudentFeedbackDto studentFeedbackDto) throws ArgumentException {

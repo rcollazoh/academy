@@ -38,9 +38,6 @@ public class PersonService {
     private static final Logger log = LoggerFactory.getLogger(PersonService.class);
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
 
     @Autowired
     public PersonService(PersonRepository repository, EmailService emailService, NomAreaRepository nomAreaRepository, NomPracticeRepository nomPracticeRepository, RoleRepository roleRepository, ConfigParameterService parameterService, PersonMapper mapper) {
@@ -82,7 +79,6 @@ public class PersonService {
         if (entity.getPassword() != null)
             entity.setPassword(passwordEncoder.encode(entity.getPassword()));
 
-        //  emailService.sendMessage(entity.getEmail(), "Prad Acedemy", "We are testing new functionality", null);
         return repository.save(entity);
     }
 
@@ -107,26 +103,24 @@ public class PersonService {
             String mensaje = "";
             PersonEntity person = repository.findByEmailAndIdNumber(email,idNumber).orElse(null);
 
-            //Se comprueba que el correo sea de la misma persona q el telefono.
             if (person != null) {
                 StringUtils util = new StringUtils();
                 String passwordTemporal = util.generateRandomPass();
                 try {
                     emailService.sendEmail(
                             email,
-                            "Recuperar clave",
-                            "Su nueva clave es: " + passwordTemporal,
+                            TranslatorCode.RECOVER_CREDENTIALS,
+                            TranslatorCode.RECOVER_CREDENTIALS_TEXT_RETURN + passwordTemporal,
                             null, null
                     );
                     log.info("Correo enviado correctamente de desaprobado.");
                 } catch (Exception e) {
                     log.warn("No se pudo enviar el correo de desaprobado: " + e.getMessage());
-                    // Opcional: registrar en BD o sistema de alertas
                 }
                 person.setPassword(passwordEncoder.encode(passwordTemporal));
                 repository.save(person);
             } else {
-                mensaje = "Los datos son incorrectos.";
+                mensaje = TranslatorCode.RECOVER_CREDENTIALS_TEXT_MISS;
             }
             return mensaje;
         } catch (

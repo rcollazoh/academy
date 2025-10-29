@@ -50,10 +50,9 @@ public class ImagesController {
 
     @GetMapping("/pdf")
     public ResponseEntity<byte[]> getPdf(@RequestParam("filename") String filename) {
-        // Obtiene el contenido binario del PDF
         byte[] pdfBytes = storageService.getFile(filename);
 
-        // Devuelve el PDF con el Content-Type y Content-Disposition adecuados
+        // return PDF with Content-Type and Content-Disposition...
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_PDF)
                 .header(HttpHeaders.CONTENT_DISPOSITION,

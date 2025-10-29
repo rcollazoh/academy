@@ -1,10 +1,5 @@
 package cu.academy.nom.practice;
 
-
-import cu.academy.nom.area.NomAreaEntity;
-import cu.academy.nom.area.NomAreaService;
-import cu.academy.nom.area.dto.NomAreaDto;
-import cu.academy.nom.area.mapper.NomAreaMapper;
 import cu.academy.nom.practice.dto.NomPracticeDto;
 import cu.academy.nom.practice.mapper.NomPracticeMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +19,6 @@ public class NomPracticeController {
 
     private final NomPracticeService service;
     private final NomPracticeMapper mapper;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     public NomPracticeController(NomPracticeService service, NomPracticeMapper mapper) {
         this.service = service;

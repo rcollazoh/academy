@@ -14,10 +14,6 @@ import java.util.List;
 public class AccountAgencyService {
     private final AccountAgencyRepository repository;
 
-//    private final ModelMapper modelMapper;
-//    private static final Type listType = new TypeToken<List<NomAplicacionRespRedDto>>() {
-//    }.getType();
-
     @Autowired
     public AccountAgencyService(AccountAgencyRepository repository) {
         this.repository = repository;

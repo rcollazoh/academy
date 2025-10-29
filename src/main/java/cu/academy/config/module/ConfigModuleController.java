@@ -20,8 +20,6 @@ public class ConfigModuleController {
 
     private final ConfigModuleService service;
     private final ConfigModuleMapper mapper;
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     public ConfigModuleController(ConfigModuleService service, ConfigModuleMapper mapper) {
         this.service = service;
