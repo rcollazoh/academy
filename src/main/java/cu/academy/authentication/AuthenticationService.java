@@ -116,9 +116,9 @@ public class AuthenticationService {
 //                            new ArrayList<>(personaService.getRolesGrantedAuthorities(person)), origin, role);
                     new ObjectMapper().writeValue(response.getOutputStream(), new EndpointResult<>(null, null));
                 } catch (TokenExpiredException e) {
-                    logAndWriteResponseError(e, response, TranslatorCode.TOKEN_EXPIRED);
+                    logAndWriteResponseError(e, response, Translator.toLocale(TranslatorCode.TOKEN_EXPIRED));
                 } catch (Exception e) {
-                    logAndWriteResponseError(e, response, TranslatorCode.INVALID_CREDENTIALS);
+                    logAndWriteResponseError(e, response, Translator.toLocale(TranslatorCode.INVALID_CREDENTIALS));
                 }
             } else {
                 throw new RuntimeException("Refresh token is missing.");

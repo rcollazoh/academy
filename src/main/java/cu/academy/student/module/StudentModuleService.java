@@ -149,8 +149,8 @@ public class StudentModuleService {
             try {
             emailService.sendEmail(
                     parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-                    TranslatorCode.COURSE_DISAPPROVE_TOPIC,
-                    TranslatorCode.COURSE_DISAPPROVE_BODY,
+                    Translator.toLocale(TranslatorCode.COURSE_DISAPPROVE_TOPIC),
+                    Translator.toLocale(TranslatorCode.COURSE_DISAPPROVE_BODY),
                     null,null
             );
                 log.info("Correo enviado correctamente de desaprobado.");
@@ -168,14 +168,14 @@ public class StudentModuleService {
             try {
             emailService.sendEmail(
                     personRepository.getReferenceById(byIdCourse.getPersonId()).getEmail(),
-                    TranslatorCode.COURSE_APPROVE_TOPIC,
-                    TranslatorCode.COURSE_APPROVE_BODY,
+                    Translator.toLocale(TranslatorCode.COURSE_APPROVE_TOPIC),
+                    Translator.toLocale(TranslatorCode.COURSE_APPROVE_BODY),
                     null,null
             );
             emailService.sendEmail(
                     parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-                    TranslatorCode.COURSE_FINALIZED_TOPIC,
-                    TranslatorCode.COURSE_FINALIZED_BODY,
+                    Translator.toLocale(TranslatorCode.COURSE_FINALIZED_TOPIC),
+                    Translator.toLocale(TranslatorCode.COURSE_FINALIZED_BODY),
                     null,null
             );
                 log.info("Correo enviado correctamente de finalizar.");

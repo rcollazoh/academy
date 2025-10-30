@@ -32,6 +32,10 @@ public class TranslatorCode {
     public static final String COURSE_ISSUED_TOPIC = "COURSE_ISSUED_TOPIC";
     public static final String COURSE_ISSUED_BODY = "COURSE_ISSUED_BODY";
     public static final String NAME_MODULE_REFERENCE = "NAME_MODULE_REFERENCE";
+    public static final String COURSE_APPLY_TOPIC = "COURSE_APPLY_TOPIC";
+    public static final String COURSE_APPLY_BODY = "COURSE_APPLY_BODY";
+    public static final String COURSE_ACTIVE_TOPIC = "COURSE_ACTIVE_TOPIC";
+    public static final String COURSE_ACTIVE_BODY = "COURSE_ACTIVE_BODY";
 
 
 
