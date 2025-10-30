@@ -50,7 +50,7 @@ public class StudentModuleEntity {
         Instant now = Instant.now();
         createdAt = now;
         updatedAt = now;
-        status =  EnumModuleStatus.NEW;
+       // status =  EnumModuleStatus.NEW;
         intentos = 0;
     }
 

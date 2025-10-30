@@ -216,7 +216,7 @@ public class StudentCourseService {
             StudentModuleEntity entityModuleTemp = new StudentModuleEntity();
             entityModuleTemp.setStudentCourse(studentCourseinsert);
             entityModuleTemp.setModule(moduleEntity);
-            if (moduleEntity.getOrderNum() == 0)
+            if (Translator.toLocale(TranslatorCode.NAME_MODULE_REFERENCE).equals(moduleEntity.getName()))
                 entityModuleTemp.setStatus(EnumModuleStatus.APPROVED);
             else
                 entityModuleTemp.setStatus(EnumModuleStatus.NEW);
