@@ -22,7 +22,6 @@ import cu.academy.shared.utils.DateUtils;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassEntity;
 import cu.academy.student.classes.StudentClassService;
-import cu.academy.student.course.mapper.StudentCourseMapper;
 import cu.academy.student.exam.StudentExamEntity;
 import cu.academy.student.exam.StudentExamRepository;
 import cu.academy.student.module.StudentModuleEntity;
@@ -160,8 +159,8 @@ public class StudentCourseService {
         try {
             emailService.sendEmail(
                     parameterService.getBy("USUARIO_CORREO_EMISOR").getValue(),
-                    "Confirmación de aplicación a curso",
-                    "Aplico un estudiante",
+                    Translator.toLocale(TranslatorCode.COURSE_APPLY_TOPIC),
+                            Translator.toLocale(TranslatorCode.COURSE_APPLY_BODY),
                     paymentPhoto.getBytes(),
                     EnumImagenType.PAYMENT.name().concat(".").concat(extension)
             );
@@ -194,8 +193,8 @@ public class StudentCourseService {
         try {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
-                    "Confirmación de aprobación de curso",
-                    "Estimado/a estudiante,\n\nNos complace informarle que su solicitud para el curso ha sido aprobada por el profesor.\n\nYa puede acceder al contenido del curso y comenzar su formación en Prad Academy.\n\nSi tiene alguna duda o necesita asistencia, no dude en contactarnos.\n\n¡Le deseamos mucho éxito en su aprendizaje!\n\nAtentamente,\nEl equipo de Prad Academy",
+                    Translator.toLocale(TranslatorCode.COURSE_ACTIVE_TOPIC),
+                    Translator.toLocale(TranslatorCode.COURSE_ACTIVE_BODY),
                     null,null
             );
 
@@ -216,7 +215,7 @@ public class StudentCourseService {
             StudentModuleEntity entityModuleTemp = new StudentModuleEntity();
             entityModuleTemp.setStudentCourse(studentCourseinsert);
             entityModuleTemp.setModule(moduleEntity);
-            if (moduleEntity.getOrderNum() == 0)
+            if (Translator.toLocale(TranslatorCode.NAME_MODULE_REFERENCE).equals(moduleEntity.getName()))
                 entityModuleTemp.setStatus(EnumModuleStatus.APPROVED);
             else
                 entityModuleTemp.setStatus(EnumModuleStatus.NEW);
@@ -249,8 +248,8 @@ public class StudentCourseService {
         try {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
-                    TranslatorCode.COURSE_REJECT_TOPIC,
-                    TranslatorCode.COURSE_REJECT_BODY,
+                    Translator.toLocale(TranslatorCode.COURSE_REJECT_TOPIC),
+                    Translator.toLocale(TranslatorCode.COURSE_REJECT_BODY),
                     null, null
             );
             log.info("Correo enviado correctamente rechazar.");
@@ -282,8 +281,8 @@ public class StudentCourseService {
         try {
             emailService.sendEmail(
                     personRepository.getReferenceById(personId).getEmail(),
-                    TranslatorCode.COURSE_ISSUED_TOPIC,
-                    TranslatorCode.COURSE_ISSUED_BODY,
+                    Translator.toLocale(TranslatorCode.COURSE_ISSUED_TOPIC),
+                    Translator.toLocale(TranslatorCode.COURSE_ISSUED_BODY),
                     certify.getBytes(),
                     EnumImagenType.CERTIFY.name().concat(".").concat(extension)
             );

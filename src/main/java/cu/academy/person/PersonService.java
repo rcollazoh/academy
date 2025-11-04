@@ -109,8 +109,8 @@ public class PersonService {
                 try {
                     emailService.sendEmail(
                             email,
-                            TranslatorCode.RECOVER_CREDENTIALS,
-                            TranslatorCode.RECOVER_CREDENTIALS_TEXT_RETURN + passwordTemporal,
+                            Translator.toLocale(TranslatorCode.RECOVER_CREDENTIALS),
+                            Translator.toLocale(TranslatorCode.RECOVER_CREDENTIALS_TEXT_RETURN) + passwordTemporal,
                             null, null
                     );
                     log.info("Correo enviado correctamente de desaprobado.");
@@ -120,7 +120,7 @@ public class PersonService {
                 person.setPassword(passwordEncoder.encode(passwordTemporal));
                 repository.save(person);
             } else {
-                mensaje = TranslatorCode.RECOVER_CREDENTIALS_TEXT_MISS;
+                mensaje = Translator.toLocale(TranslatorCode.RECOVER_CREDENTIALS_TEXT_MISS);
             }
             return mensaje;
         } catch (
