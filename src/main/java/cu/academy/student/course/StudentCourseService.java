@@ -20,10 +20,9 @@ import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassEntity;
 import cu.academy.student.classes.StudentClassService;
 import cu.academy.student.exam.StudentExamEntity;
-import cu.academy.student.exam.StudentExamService;
+import cu.academy.student.exam.StudentExamRepository;
 import cu.academy.student.module.StudentModuleEntity;
 import cu.academy.student.module.StudentModuleRepository;
-import cu.academy.student.module.StudentModuleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +46,6 @@ public class StudentCourseService {
     private final PersonRepository personRepository;
     private final StudentModuleRepository studentModuleRepository;
     private final StudentClassService studentClassService;
-    private final StudentExamService studentExamService;
     private final ConfigCourseService configCourseService;
     private final ConfigModuleService configModuleService;
     private final ConfigClassService configClassService;
@@ -55,24 +53,25 @@ public class StudentCourseService {
     private final ConfigExamRepository configExamRepository;
     private final ConfigParameterService parameterService;
     private final FilesStorageService filesStorageService;
+    private final StudentExamRepository examRepository;
 
 
     private static final Logger log = LoggerFactory.getLogger(StudentCourseService.class);
 
     @Autowired
-    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamService studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService) {
+    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService, StudentExamRepository examRepository) {
         this.studentCourserepository = repository;
         this.personRepository = personRepository;
         this.configCourseService = configCourseService;
         this.studentModuleRepository = studentModuleService;
         this.studentClassService = studentClassService;
-        this.studentExamService = studentExamService;
         this.configModuleService = configModuleService;
         this.configClassService = configClassService;
         this.emailService = emailService;
         this.configExamRepository = configExamRepository;
         this.parameterService = parameterService;
         this.filesStorageService = filesStorageService;
+        this.examRepository = examRepository;
     }
 
     public StudentCourseEntity getById(Long id) throws ArgumentException {
@@ -235,7 +234,7 @@ public class StudentCourseService {
                 StudentExamEntity studentExamEntity = new StudentExamEntity();
                 studentExamEntity.setStudentModule(studentModuleInsert);
                 studentExamEntity.setConfigExam(byConfigModuleId.get());
-                studentExamService.insert(studentExamEntity);
+                examRepository.save(studentExamEntity);
             }
         }
     }
@@ -328,10 +327,13 @@ public class StudentCourseService {
 
         List<StudentModuleEntity> moduleEntities = studentModuleRepository.findFullModulesByStudentCourseId(studentEntity.getId());
         for (StudentModuleEntity moduleEntity : moduleEntities) {
-            //Aqui va el examen
-            StudentExamEntity exam = studentExamService.getById(moduleEntity.getId());
-            if (exam != null &&  exam.getStatus() == EnumExamStatus.NOT_APPROVED) {
-                studentExamService.updateStatus(exam.getId(), EnumExamStatus.NEW);
+            if(moduleEntity.getStatus() == EnumModuleStatus.NOT_APPROVED){
+                studentModuleRepository.updateStatusById(moduleEntity.getId(), EnumModuleStatus.NEW);
+                //Aqui va el examen
+                Optional<StudentExamEntity> exam = examRepository.findByConfigModuleId(moduleEntity.getId());
+                if (exam.isPresent() &&  exam.get().getStatus() == EnumExamStatus.NOT_APPROVED) {
+                    examRepository.updateStatusById(exam.get().getId(), EnumExamStatus.NEW);
+                }
             }
         }
     }
