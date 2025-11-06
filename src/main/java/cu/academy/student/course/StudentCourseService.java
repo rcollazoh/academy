@@ -13,10 +13,7 @@ import cu.academy.images.FilesStorageService;
 import cu.academy.person.PersonRepository;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.dto.PagingResponseList;
-import cu.academy.shared.enum_types.EnumCourseStatus;
-import cu.academy.shared.enum_types.EnumImagenType;
-import cu.academy.shared.enum_types.EnumModuleStatus;
-import cu.academy.shared.enum_types.EnumPaymentMethod;
+import cu.academy.shared.enum_types.*;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.DateUtils;
 import cu.academy.shared.utils.TranslatorCode;
@@ -39,6 +36,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +47,6 @@ public class StudentCourseService {
     private final PersonRepository personRepository;
     private final StudentModuleRepository studentModuleRepository;
     private final StudentClassService studentClassService;
-    private final StudentExamRepository studentExamRepository;
     private final ConfigCourseService configCourseService;
     private final ConfigModuleService configModuleService;
     private final ConfigClassService configClassService;
@@ -57,24 +54,25 @@ public class StudentCourseService {
     private final ConfigExamRepository configExamRepository;
     private final ConfigParameterService parameterService;
     private final FilesStorageService filesStorageService;
+    private final StudentExamRepository examRepository;
 
 
     private static final Logger log = LoggerFactory.getLogger(StudentCourseService.class);
 
     @Autowired
-    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService) {
+    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService, StudentExamRepository examRepository) {
         this.studentCourserepository = repository;
         this.personRepository = personRepository;
         this.configCourseService = configCourseService;
         this.studentModuleRepository = studentModuleService;
         this.studentClassService = studentClassService;
-        this.studentExamRepository = studentExamService;
         this.configModuleService = configModuleService;
         this.configClassService = configClassService;
         this.emailService = emailService;
         this.configExamRepository = configExamRepository;
         this.parameterService = parameterService;
         this.filesStorageService = filesStorageService;
+        this.examRepository = examRepository;
     }
 
     public StudentCourseEntity getById(Long id) throws ArgumentException {
@@ -237,7 +235,7 @@ public class StudentCourseService {
                 StudentExamEntity studentExamEntity = new StudentExamEntity();
                 studentExamEntity.setStudentModule(studentModuleInsert);
                 studentExamEntity.setConfigExam(byConfigModuleId.get());
-                studentExamRepository.save(studentExamEntity);
+                examRepository.save(studentExamEntity);
             }
         }
     }
@@ -305,6 +303,39 @@ public class StudentCourseService {
         update(courseId, studentEntity);
 
         filesStorageService.save(certify, receiptUrl);
+    }
 
+
+    @Transactional
+    public void reactivateStudentCourse(Long personId, Long courseId) {
+        try {
+            emailService.sendEmail(
+                    personRepository.getReferenceById(personId).getEmail(),
+                    Translator.toLocale(TranslatorCode.COURSE_ACTIVE_TOPIC),
+                    Translator.toLocale(TranslatorCode.COURSE_ACTIVE_BODY),
+                    null,null
+            );
+
+            log.info("Correo enviado correctamente de activar.");
+        } catch (Exception e) {
+            log.warn("No se pudo enviar el correo de activar: " + e.getMessage());
+            // Opcional: registrar en BD o sistema de alertas
+        }
+        StudentCourseEntity studentEntity = getById(courseId);
+        studentEntity.setStatus(EnumCourseStatus.ACTIVATED);
+        studentEntity.setEndDate(LocalDate.now().plusDays(5));
+        update(courseId,studentEntity);
+
+        List<StudentModuleEntity> moduleEntities = studentModuleRepository.findFullModulesByStudentCourseId(studentEntity.getId());
+        for (StudentModuleEntity moduleEntity : moduleEntities) {
+            if(moduleEntity.getStatus() == EnumModuleStatus.NOT_APPROVED){
+                studentModuleRepository.updateStatusById(moduleEntity.getId(), EnumModuleStatus.NEW);
+                //Aqui va el examen
+                Optional<StudentExamEntity> exam = examRepository.findByConfigModuleId(moduleEntity.getId());
+                if (exam.isPresent() &&  exam.get().getStatus() == EnumExamStatus.NOT_APPROVED) {
+                    examRepository.updateStatusById(exam.get().getId(), EnumExamStatus.NEW);
+                }
+            }
+        }
     }
 }

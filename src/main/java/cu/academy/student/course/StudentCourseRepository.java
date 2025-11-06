@@ -27,11 +27,9 @@ public interface StudentCourseRepository extends JpaSpecificationExecutor<Studen
     @Query(value = """
     SELECT sc.*
     FROM student_course sc
-    JOIN config_course cc ON sc.course_id = cc.id
     WHERE sc.status = 'ACTIVATED'
-      AND sc.start_date IS NOT NULL
-      AND cc.duration_days IS NOT NULL
-      AND DATE_ADD(sc.start_date, INTERVAL cc.duration_days DAY) < CURDATE()
+      AND sc.end_date IS NOT NULL
+      AND sc.end_date < CURDATE()
     """, nativeQuery = true)
     List<StudentCourseEntity> findExpiredActivatedCourses();
 

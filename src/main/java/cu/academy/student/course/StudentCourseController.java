@@ -106,10 +106,10 @@ public class StudentCourseController {
     }
 
     @PostMapping(value = "/active")
-    public ResponseEntity<StudentCourseDto> activeStudentCourse(@RequestParam("personId") Long personId,
-                                                               @RequestParam("courseId") Long courseId) {
+    public ResponseEntity<Void> activeStudentCourse(@RequestParam("personId") Long personId,
+                                                    @RequestParam("courseId") Long courseId) {
         service.activeStudentCourse(personId, courseId);
-        return null;
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping(value = "/reject")
@@ -121,10 +121,17 @@ public class StudentCourseController {
 
     @PostMapping(value = "/upload_certify", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<StudentCourseDto> uploadCertifyStudentCourse(@RequestParam("personId") Long personId,
-                                                               @RequestParam("courseId") Long courseId,
-                                                               @RequestParam(value = "certify") MultipartFile certify) {
+                                                                       @RequestParam("courseId") Long courseId,
+                                                                       @RequestParam(value = "certify") MultipartFile certify) {
         service.uploadCertifyStudentCourse(personId, courseId, certify);
         return null;
     }
 
+
+    @PostMapping(value = "/reactivate")
+    public ResponseEntity<Void> reactivateStudentCourse(@RequestParam("personId") Long personId,
+                                                        @RequestParam("courseId") Long courseId) {
+        service.reactivateStudentCourse(personId, courseId);
+        return ResponseEntity.noContent().build();
+    }
 }
