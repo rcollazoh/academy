@@ -112,8 +112,7 @@ public class AuthenticationService {
                     PersonEntity person = personRepository.findByEmail(username)
                             .orElseThrow(() -> new ArgumentException(Translator.toLocale(TranslatorCode.NO_CLIENT)));
 
-//                    refreshAndSetNewAccessAndRefreshTokens(request, response, algorithm, person.getPhone(),
-//                            new ArrayList<>(personaService.getRolesGrantedAuthorities(person)), origin, role);
+                    refreshAndSetNewAccessAndRefreshTokens(request, response, algorithm, person.getEmail(), new ArrayList<>());
                     new ObjectMapper().writeValue(response.getOutputStream(), new EndpointResult<>(null, null));
                 } catch (TokenExpiredException e) {
                     logAndWriteResponseError(e, response, Translator.toLocale(TranslatorCode.TOKEN_EXPIRED));

@@ -36,6 +36,8 @@ public class TranslatorCode {
     public static final String COURSE_APPLY_BODY = "COURSE_APPLY_BODY";
     public static final String COURSE_ACTIVE_TOPIC = "COURSE_ACTIVE_TOPIC";
     public static final String COURSE_ACTIVE_BODY = "COURSE_ACTIVE_BODY";
+    public static final String COURSE_REACTIVE_TOPIC = "COURSE_REACTIVE_TOPIC";
+    public static final String COURSE_REACTIVE_BODY = "COURSE_REACTIVE_BODY";
 
 
 

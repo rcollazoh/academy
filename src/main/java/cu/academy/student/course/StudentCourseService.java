@@ -13,19 +13,17 @@ import cu.academy.images.FilesStorageService;
 import cu.academy.person.PersonRepository;
 import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.dto.PagingResponseList;
-import cu.academy.shared.enum_types.EnumCourseStatus;
-import cu.academy.shared.enum_types.EnumImagenType;
-import cu.academy.shared.enum_types.EnumModuleStatus;
-import cu.academy.shared.enum_types.EnumPaymentMethod;
+import cu.academy.shared.enum_types.*;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.DateUtils;
 import cu.academy.shared.utils.TranslatorCode;
 import cu.academy.student.classes.StudentClassEntity;
 import cu.academy.student.classes.StudentClassService;
 import cu.academy.student.exam.StudentExamEntity;
-import cu.academy.student.exam.StudentExamRepository;
+import cu.academy.student.exam.StudentExamService;
 import cu.academy.student.module.StudentModuleEntity;
 import cu.academy.student.module.StudentModuleRepository;
+import cu.academy.student.module.StudentModuleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +47,7 @@ public class StudentCourseService {
     private final PersonRepository personRepository;
     private final StudentModuleRepository studentModuleRepository;
     private final StudentClassService studentClassService;
-    private final StudentExamRepository studentExamRepository;
+    private final StudentExamService studentExamService;
     private final ConfigCourseService configCourseService;
     private final ConfigModuleService configModuleService;
     private final ConfigClassService configClassService;
@@ -62,13 +60,13 @@ public class StudentCourseService {
     private static final Logger log = LoggerFactory.getLogger(StudentCourseService.class);
 
     @Autowired
-    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamRepository studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService) {
+    public StudentCourseService(StudentCourseRepository repository, PersonRepository personRepository, ConfigCourseService configCourseService, StudentModuleRepository studentModuleService, StudentClassService studentClassService, StudentExamService studentExamService, ConfigModuleService configModuleService, ConfigClassService configClassService, EmailService emailService, ConfigExamRepository configExamRepository, ConfigParameterService parameterService, FilesStorageService filesStorageService) {
         this.studentCourserepository = repository;
         this.personRepository = personRepository;
         this.configCourseService = configCourseService;
         this.studentModuleRepository = studentModuleService;
         this.studentClassService = studentClassService;
-        this.studentExamRepository = studentExamService;
+        this.studentExamService = studentExamService;
         this.configModuleService = configModuleService;
         this.configClassService = configClassService;
         this.emailService = emailService;
@@ -237,7 +235,7 @@ public class StudentCourseService {
                 StudentExamEntity studentExamEntity = new StudentExamEntity();
                 studentExamEntity.setStudentModule(studentModuleInsert);
                 studentExamEntity.setConfigExam(byConfigModuleId.get());
-                studentExamRepository.save(studentExamEntity);
+                studentExamService.insert(studentExamEntity);
             }
         }
     }
@@ -305,6 +303,36 @@ public class StudentCourseService {
         update(courseId, studentEntity);
 
         filesStorageService.save(certify, receiptUrl);
+    }
 
+
+    @Transactional
+    public void reactivateStudentCourse(Long personId, Long courseId) {
+        try {
+            emailService.sendEmail(
+                    personRepository.getReferenceById(personId).getEmail(),
+                    Translator.toLocale(TranslatorCode.COURSE_ACTIVE_TOPIC),
+                    Translator.toLocale(TranslatorCode.COURSE_ACTIVE_BODY),
+                    null,null
+            );
+
+            log.info("Correo enviado correctamente de activar.");
+        } catch (Exception e) {
+            log.warn("No se pudo enviar el correo de activar: " + e.getMessage());
+            // Opcional: registrar en BD o sistema de alertas
+        }
+        StudentCourseEntity studentEntity = getById(courseId);
+        studentEntity.setStatus(EnumCourseStatus.ACTIVATED);
+        studentEntity.setEndDate(studentEntity.getEndDate().plusDays(5));
+        update(courseId,studentEntity);
+
+        List<StudentModuleEntity> moduleEntities = studentModuleRepository.findFullModulesByStudentCourseId(studentEntity.getId());
+        for (StudentModuleEntity moduleEntity : moduleEntities) {
+            //Aqui va el examen
+            StudentExamEntity exam = studentExamService.getById(moduleEntity.getId());
+            if (exam != null &&  exam.getStatus() == EnumExamStatus.NOT_APPROVED) {
+                studentExamService.updateStatus(exam.getId(), EnumExamStatus.NEW);
+            }
+        }
     }
 }
