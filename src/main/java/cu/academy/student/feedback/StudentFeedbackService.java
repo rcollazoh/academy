@@ -5,7 +5,9 @@ import cu.academy.shared.configs.text_messages.Translator;
 import cu.academy.shared.enum_types.EnumExamStatus;
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.shared.utils.TranslatorCode;
+import cu.academy.student.exam.dto.StudentExamResponseDto;
 import cu.academy.student.feedback.dto.StudentFeedbackDto;
+import cu.academy.student.feedback.dto.StudentFeedbackResponseDto;
 import cu.academy.student.feedback.mapper.StudentFeedbackMapper;
 import cu.academy.student.feedback.module.StudentFeedbackModuleEntity;
 import cu.academy.student.feedback.module.StudentFeedbackModuleRepository;
@@ -54,7 +56,7 @@ public class StudentFeedbackService {
      * @param studentFeedbackDto DTO containing feedback and module evaluations.
      * @throws ArgumentException if module references are invalid.
      */
-    public void insertFeedBackByStudentModule(StudentFeedbackDto studentFeedbackDto) throws ArgumentException {
+    public StudentFeedbackResponseDto insertFeedBackByStudentModule(StudentFeedbackDto studentFeedbackDto) throws ArgumentException {
         StudentModuleEntity studentModuleEntity = serviceModule.getById(studentFeedbackDto.StudentModuleId());
         StudentFeedbackEntity feedbackEntity = mapper.toEntity(studentFeedbackDto);
         feedbackEntity.setModule(studentModuleEntity);
@@ -71,6 +73,8 @@ public class StudentFeedbackService {
         }
         repositoryFeedbackModule.saveAll(feedbackModuleEntities);
 
-        serviceModule.updateModuleAndEvaluateCourse(studentModuleEntity, EnumExamStatus.APPROVED);
+        EnumExamStatus courseStatus = serviceModule.updateModuleAndEvaluateCourse(studentModuleEntity, EnumExamStatus.APPROVED);
+
+        return new StudentFeedbackResponseDto(courseStatus);
     }
 }
