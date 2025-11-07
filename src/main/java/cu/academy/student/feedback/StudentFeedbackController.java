@@ -2,6 +2,7 @@ package cu.academy.student.feedback;
 
 import cu.academy.shared.exceptions.ArgumentException;
 import cu.academy.student.feedback.dto.StudentFeedbackDto;
+import cu.academy.student.feedback.dto.StudentFeedbackResponseDto;
 import cu.academy.student.feedback.mapper.StudentFeedbackMapper;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +19,7 @@ public class StudentFeedbackController {
     }
 
     @PostMapping
-    public void insertFeedBackByStudentModule(@RequestBody StudentFeedbackDto studentFeedbackDto) throws ArgumentException {
-        service.insertFeedBackByStudentModule(studentFeedbackDto);
+    public StudentFeedbackResponseDto insertFeedBackByStudentModule(@RequestBody StudentFeedbackDto studentFeedbackDto) throws ArgumentException {
+        return service.insertFeedBackByStudentModule(studentFeedbackDto);
     }
 }

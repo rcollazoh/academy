@@ -15,10 +15,12 @@ import java.util.List;
 @Service
 public class StudentClassService {
     private final StudentClassRepository repository;
+    private final StudentModuleRepository repositoryModule;
 
     @Autowired
-    public StudentClassService(StudentClassRepository repository) {
+    public StudentClassService(StudentClassRepository repository, StudentModuleRepository repositoryModule) {
         this.repository = repository;
+        this.repositoryModule = repositoryModule;
     }
 
     @Transactional
@@ -30,6 +32,9 @@ public class StudentClassService {
     public void updateViewedAndCurrentImageId(Long id, boolean status, Long currentImageId) {
         if (status) {
             repository.updateViewedById(id, status);
+            StudentClassEntity classEntity = getById(id);
+            if ("Clase introductoria del curso".equals(classEntity.getConfigClass().getDescription()))
+                repositoryModule.updateStatusById(classEntity.getStudentModule().getId(), EnumModuleStatus.APPROVED);
         }
         repository.updateCurrentImageIdById(id, currentImageId);
     }
